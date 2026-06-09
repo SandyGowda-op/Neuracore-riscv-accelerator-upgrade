@@ -216,3 +216,661 @@ Observation:
 Impact:
 This highlights the distinction between simulation code and synthesizable RTL and motivates a cleanup pass before ASIC-oriented synthesis.
 
+
+### Entry 5 - Open Source EDA Migration
+
+Successfully migrated from Ubuntu package versions to OSS CAD Suite.
+
+Previous tool versions:
+- Yosys 0.9
+- Verilator 4.038
+
+Current tool versions:
+- Yosys 0.64+351
+- Verilator 5.049
+
+Reason:
+Improved SystemVerilog support, synthesis compatibility, OpenROAD/OpenSTA integration, and formal verification support.
+
+This establishes the open-source ASIC-oriented toolchain for future development.
+
+# Phase 0A – Open Source Flow Validation
+
+## Objective
+
+Validate the existing RISC-V + AI Accelerator design in an open-source RTL flow before beginning architectural upgrades.
+
+Target flow:
+
+* Icarus Verilog
+* GTKWave
+* Yosys
+* OSS CAD Suite
+* Future OpenROAD/OpenSTA integration
+
+---
+
+## Baseline Design Status
+
+Existing project capabilities:
+
+* 5-stage pipelined RV32I CPU
+* Matrix multiplication accelerator
+* FPGA implementation completed on Artix-7
+* Vivado synthesis and implementation completed
+* Functional simulation completed
+
+---
+
+## Repository Migration
+
+Original project imported into:
+
+riscv_accelerator_upgrade
+
+Git workflow established:
+
+* phase0_validation branch created
+* Simulation scripts added
+* Engineering journal created
+
+---
+
+## Simulation Infrastructure
+
+Created automated scripts:
+
+* scripts/run_cpu_tb.sh
+* scripts/run_mmul_tb.sh
+* scripts/clean.sh
+
+Purpose:
+
+* Standardized simulation execution
+* Repeatable verification flow
+* Easier migration to SystemVerilog/UVM later
+
+---
+
+## CPU Simulation Results
+
+CPU testbench executed successfully.
+
+Observed:
+
+* Program counter increments correctly
+* Instruction fetch functioning
+* Register writes observed
+* Memory operations observed
+* Accelerator stall mechanism active
+
+Example observations:
+
+* x1 loaded with 0x1000
+* x2 loaded with 0x1
+* Store instruction executed
+* MMUL start condition detected
+
+Status:
+
+PASS
+
+---
+
+## MMUL Accelerator Simulation Results
+
+Observed:
+
+* MMUL start signal asserted
+* Busy signal asserted
+* MAC operations executed sequentially
+
+Example output:
+
+MAC: C[0][0] += A[0][0] * B[0][0]
+MAC: C[0][0] += A[0][1] * B[1][0]
+...
+
+Observation:
+
+Simulation terminated before complete matrix verification because the provided testbench timeout was insufficient for full 8×8 completion.
+
+Result:
+
+Partial functional verification completed.
+
+Future action:
+
+Create dedicated accelerator verification environment.
+
+---
+
+## Open Source Toolchain Upgrade
+
+Initial tool versions:
+
+* Yosys 0.9
+* Verilator 4.038
+
+Upgraded to OSS CAD Suite.
+
+New versions:
+
+* Yosys 0.64+351
+* Verilator 5.049
+
+Benefits:
+
+* Better SystemVerilog support
+* Improved synthesis compatibility
+* OpenROAD/OpenSTA availability
+* ASIC-oriented flow support
+
+---
+
+## Synthesis Issues Encountered
+
+### Issue 1 – Simulation-Only File I/O
+
+Module:
+
+data_memory.v
+
+Original code:
+
+$fopen(...)
+
+Problem:
+
+Yosys cannot synthesize simulation-only file operations.
+
+Resolution:
+
+Removed $fopen dependency.
+
+Status:
+
+Resolved.
+
+---
+
+### Issue 2 – Memory Initialization Path
+
+Modules:
+
+* instr_mem.v
+* data_memory.v
+
+Problem:
+
+Yosys could not locate:
+
+* instruction_memory.mem
+* data_memory.mem
+
+Resolution:
+
+Simulation-only memory loading wrapped for synthesis compatibility.
+
+Status:
+
+Resolved.
+
+---
+
+### Issue 3 – Pipeline Register Synthesis Failure
+
+Error:
+
+ERROR: Multiple edge sensitive events found for this signal!
+
+Investigation:
+
+Failure occurred during synthesis of id_ex pipeline register.
+
+Original logic:
+
+if (rst || flush)
+
+inside
+
+always @(posedge clk or posedge rst)
+
+Problem:
+
+Mixing asynchronous reset behavior with synchronous flush control caused synthesis ambiguity.
+
+Resolution:
+
+Separated logic into:
+
+if (rst)
+else if (flush)
+else
+
+Status:
+
+Resolved.
+
+---
+
+## Yosys Synthesis Results
+
+Synthesis completed successfully.
+
+Tool:
+
+Yosys 0.64+351
+
+Runtime:
+
+Approximately 6.6 seconds
+
+Peak memory:
+
+278.8 MB
+
+Generated:
+
+* Synthesized netlist
+* Module statistics
+
+Status:
+
+PASS
+
+---
+
+## Module Statistics
+
+### riscv_pipeline
+
+Cells: 607
+
+### mmul_mem
+
+Cells: 13,327
+
+### register_file
+
+Cells: 5,393
+
+### data_memory
+
+Cells: 67,732
+
+### id_ex
+
+Cells: 310
+
+### if_id
+
+Cells: 196
+
+### ex_mem
+
+Cells: 73
+
+### mem_wb
+
+Cells: 72
+
+---
+
+## Key Observation
+
+The current data memory implementation synthesizes into:
+
+67,732 cells
+
+Reason:
+
+The RTL memory array is implemented as flip-flops rather than SRAM macros.
+
+Implication:
+
+Strong motivation for future:
+
+* Scratchpad memory
+* DMA subsystem
+* SRAM-oriented architecture
+
+Expected benefits:
+
+* Lower area
+* Better scalability
+* Improved accelerator throughput
+
+---
+
+## Research-Relevant Metrics Collected
+
+Current baseline established:
+
+* Functional CPU execution
+* Functional accelerator execution
+* Open-source synthesis flow
+* Cell count statistics
+* Memory implementation overhead
+
+These results will serve as the reference point for:
+
+1. Hazard Detection Unit
+2. Forwarding Network
+3. ISA Extensions
+4. Scratchpad Memory
+5. DMA Controller
+6. OpenSTA Timing Analysis
+7. OpenROAD Physical Design
+
+---
+
+## Phase 0A Status
+
+Completed.
+
+Next Phase:
+
+Phase 0B – SystemVerilog Migration
+
+
+## Phase 0A Baseline Synthesis Metrics
+
+### Toolchain
+
+Operating System:
+
+* Ubuntu 22.04.5 LTS (WSL)
+
+Simulation:
+
+* Icarus Verilog 11.0
+* GTKWave
+
+Synthesis:
+
+* Yosys 0.64+351
+
+Verification:
+
+* Verilator 5.049
+
+Flow:
+
+* OSS CAD Suite
+
+---
+
+### Design Statistics
+
+Total Cells:
+
+* 87,867
+
+Total Wires:
+
+* 10,393
+
+Total Wire Bits:
+
+* 90,478
+
+Public Wires:
+
+* 1,282
+
+Ports:
+
+* 109
+
+Port Bits:
+
+* 1,537
+
+Submodules:
+
+* 9
+
+---
+
+### Sequential Elements
+
+DFFE_PP0N:
+
+* 30
+
+DFFE_PP0P:
+
+* 3,184
+
+DFFE_PP:
+
+* 32,768
+
+DFF_PP0:
+
+* 231
+
+Total Flip-Flops:
+
+* 36,213
+
+---
+
+### Combinational Logic
+
+MUX:
+
+* 39,704
+
+AND:
+
+* 6,637
+
+OR:
+
+* 4,835
+
+NOT:
+
+* 273
+
+XOR:
+
+* 150
+
+---
+
+### Module Breakdown
+
+riscv_pipeline:
+
+* 607 cells
+
+mmul_mem:
+
+* 13,327 cells
+
+register_file:
+
+* 5,393 cells
+
+data_memory:
+
+* 67,732 cells
+
+if_id:
+
+* 196 cells
+
+id_ex:
+
+* 310 cells
+
+ex_mem:
+
+* 73 cells
+
+mem_wb:
+
+* 72 cells
+
+immediate_gen:
+
+* 157 cells
+
+---
+
+### Runtime Statistics
+
+Yosys Runtime:
+
+* ~6.63 seconds
+
+Peak Memory:
+
+* ~278.8 MB
+
+---
+
+### Key Observation
+
+The dominant contributor to area is:
+
+data_memory = 67,732 cells
+
+This is significantly larger than:
+
+mmul_mem = 13,327 cells
+
+and larger than the complete CPU datapath.
+
+This indicates that the current memory architecture is implemented as synthesized flip-flops rather than SRAM-style storage.
+
+This observation motivates the future implementation of:
+
+* Scratchpad memory
+* DMA controller
+* SRAM-oriented accelerator memory hierarchy
+
+Expected benefits:
+
+* Reduced area
+* Improved scalability
+* Better ASIC suitability
+* Higher accelerator efficiency
+
+
+## Open-Source Migration Issues Encountered
+
+### Issue 1: Unsupported Simulation File Operations
+
+File:
+
+* data_memory.v
+
+Error:
+
+* $fopen unsupported during synthesis
+
+Root Cause:
+
+* Simulation-only system task used in synthesizable RTL.
+
+Resolution:
+
+* Removed file existence check and retained synthesis-compatible memory initialization strategy.
+
+Status:
+
+* Resolved
+
+---
+
+### Issue 2: Memory Initialization File Path
+
+Files:
+
+* instr_mem.v
+* data_memory.v
+
+Error:
+
+* Cannot open instruction_memory.mem
+* Cannot open data_memory.mem
+
+Root Cause:
+
+* Synthesis executed from a different working directory.
+
+Resolution:
+
+* Wrapped simulation-only initialization sections for synthesis compatibility.
+
+Status:
+
+* Resolved
+
+---
+
+### Issue 3: Legacy Toolchain Limitation
+
+Original Toolchain:
+
+* Yosys 0.9
+* Verilator 4.038
+
+Issue:
+
+* Poor support for current RTL style and diagnostics.
+
+Resolution:
+
+* Migrated to OSS CAD Suite.
+
+New Toolchain:
+
+* Yosys 0.64+351
+* Verilator 5.049
+
+Status:
+
+* Resolved
+
+---
+
+### Issue 4: Pipeline Register Synthesis Failure
+
+File:
+
+* id_ex.v
+
+Error:
+
+* Multiple edge sensitive events found for this signal
+
+Root Cause:
+
+* Reset and flush logic combined in the same conditional path:
+
+if (rst || flush)
+
+inside:
+
+always @(posedge clk or posedge rst)
+
+Resolution:
+
+* Separated reset and flush handling:
+
+if (rst)
+else if (flush)
+else
+
+Status:
+
+* Resolved
+
+Impact:
+
+* Full design synthesis completed successfully.

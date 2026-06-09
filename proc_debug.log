@@ -1,0 +1,753 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.64+351 (git sha1 c96d7bc99, Release, Clang /usr/bin/clang++ 18.1.8)
+
+-- Running command `
+read_verilog src/*.v
+hierarchy -check -top riscv_pipeline
+proc
+' --
+
+1. Executing Verilog-2005 frontend: src/alu.v
+Parsing Verilog input from `src/alu.v' to AST representation.
+Generating RTLIL representation for module `\alu'.
+Successfully finished Verilog frontend.
+
+2. Executing Verilog-2005 frontend: src/alu_control.v
+Parsing Verilog input from `src/alu_control.v' to AST representation.
+Generating RTLIL representation for module `\alu_control'.
+Successfully finished Verilog frontend.
+
+3. Executing Verilog-2005 frontend: src/data_memory.v
+Parsing Verilog input from `src/data_memory.v' to AST representation.
+Generating RTLIL representation for module `\data_memory'.
+Successfully finished Verilog frontend.
+
+4. Executing Verilog-2005 frontend: src/ex_mem.v
+Parsing Verilog input from `src/ex_mem.v' to AST representation.
+Generating RTLIL representation for module `\ex_mem'.
+Successfully finished Verilog frontend.
+
+5. Executing Verilog-2005 frontend: src/id_ex.v
+Parsing Verilog input from `src/id_ex.v' to AST representation.
+Generating RTLIL representation for module `\id_ex'.
+Successfully finished Verilog frontend.
+
+6. Executing Verilog-2005 frontend: src/if_id.v
+Parsing Verilog input from `src/if_id.v' to AST representation.
+Generating RTLIL representation for module `\if_id'.
+Successfully finished Verilog frontend.
+
+7. Executing Verilog-2005 frontend: src/immediate_gen.v
+Parsing Verilog input from `src/immediate_gen.v' to AST representation.
+Generating RTLIL representation for module `\immediate_gen'.
+Successfully finished Verilog frontend.
+
+8. Executing Verilog-2005 frontend: src/instr_mem.v
+Parsing Verilog input from `src/instr_mem.v' to AST representation.
+Generating RTLIL representation for module `\instr_mem'.
+Successfully finished Verilog frontend.
+
+9. Executing Verilog-2005 frontend: src/mem_wb.v
+Parsing Verilog input from `src/mem_wb.v' to AST representation.
+Generating RTLIL representation for module `\mem_wb'.
+Successfully finished Verilog frontend.
+
+10. Executing Verilog-2005 frontend: src/mmul_mem.v
+Parsing Verilog input from `src/mmul_mem.v' to AST representation.
+Generating RTLIL representation for module `\mmul_mem'.
+Warning: Replacing memory \C with list of registers. See src/mmul_mem.v:57, src/mmul_mem.v:38
+Warning: Deep recursion in AST simplifier.
+Does this design contain overly long or deeply nested expressions, or excessive recursion?
+Successfully finished Verilog frontend.
+
+11. Executing Verilog-2005 frontend: src/register_file.v
+Parsing Verilog input from `src/register_file.v' to AST representation.
+Generating RTLIL representation for module `\register_file'.
+Warning: Replacing memory \regs with list of registers. See src/register_file.v:22
+Successfully finished Verilog frontend.
+
+12. Executing Verilog-2005 frontend: src/riscv_pipeline.v
+Parsing Verilog input from `src/riscv_pipeline.v' to AST representation.
+Generating RTLIL representation for module `\riscv_pipeline'.
+Successfully finished Verilog frontend.
+
+13. Executing HIERARCHY pass (managing design hierarchy).
+
+13.1. Analyzing design hierarchy..
+Top module:  \riscv_pipeline
+Used module:     \mem_wb
+Used module:     \mmul_mem
+Used module:     \data_memory
+Used module:     \ex_mem
+Used module:     \id_ex
+Used module:     \immediate_gen
+Used module:     \register_file
+Used module:     \if_id
+Used module:     \instr_mem
+
+13.2. Analyzing design hierarchy..
+Top module:  \riscv_pipeline
+Used module:     \mem_wb
+Used module:     \mmul_mem
+Used module:     \data_memory
+Used module:     \ex_mem
+Used module:     \id_ex
+Used module:     \immediate_gen
+Used module:     \register_file
+Used module:     \if_id
+Used module:     \instr_mem
+Removing unused module `\alu_control'.
+Removing unused module `\alu'.
+Removed 2 unused modules.
+Module mmul_mem directly or indirectly displays text -> setting "keep" attribute.
+Module mem_wb directly or indirectly displays text -> setting "keep" attribute.
+Module if_id directly or indirectly displays text -> setting "keep" attribute.
+Module riscv_pipeline directly or indirectly displays text -> setting "keep" attribute.
+Module register_file directly or indirectly displays text -> setting "keep" attribute.
+
+14. Executing PROC pass (convert processes to netlists).
+
+14.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+14.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Removed 1 dead cases from process $proc$src/mmul_mem.v:46$175 in module mmul_mem.
+Marked 17 switch rules as full_case in process $proc$src/mmul_mem.v:46$175 in module mmul_mem.
+Marked 1 switch rules as full_case in process $proc$src/mem_wb.v:17$33 in module mem_wb.
+Marked 1 switch rules as full_case in process $proc$src/immediate_gen.v:8$31 in module immediate_gen.
+Marked 2 switch rules as full_case in process $proc$src/if_id.v:12$28 in module if_id.
+Marked 1 switch rules as full_case in process $proc$src/id_ex.v:37$26 in module id_ex.
+Marked 1 switch rules as full_case in process $proc$src/ex_mem.v:20$25 in module ex_mem.
+Marked 1 switch rules as full_case in process $proc$src/data_memory.v:22$23 in module data_memory.
+Marked 1 switch rules as full_case in process $proc$src/data_memory.v:19$16 in module data_memory.
+Marked 1 switch rules as full_case in process $proc$src/riscv_pipeline.v:24$688 in module riscv_pipeline.
+Removed 1 dead cases from process $proc$src/register_file.v:32$685 in module register_file.
+Marked 1 switch rules as full_case in process $proc$src/register_file.v:32$685 in module register_file.
+Removed 1 dead cases from process $proc$src/register_file.v:31$682 in module register_file.
+Marked 1 switch rules as full_case in process $proc$src/register_file.v:31$682 in module register_file.
+Marked 3 switch rules as full_case in process $proc$src/register_file.v:20$668 in module register_file.
+Removed a total of 3 dead cases.
+
+14.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 21 redundant assignments.
+Promoted 210 assignments to connections.
+
+14.4. Executing PROC_INIT pass (extract init attributes).
+Found init rule in `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+  Set init value: \c = 8
+  Set init value: \r = 8
+  Set init value: \C[0] = 0
+  Set init value: \C[1] = 0
+  Set init value: \C[2] = 0
+  Set init value: \C[3] = 0
+  Set init value: \C[4] = 0
+  Set init value: \C[5] = 0
+  Set init value: \C[6] = 0
+  Set init value: \C[7] = 0
+  Set init value: \C[8] = 0
+  Set init value: \C[9] = 0
+  Set init value: \C[10] = 0
+  Set init value: \C[11] = 0
+  Set init value: \C[12] = 0
+  Set init value: \C[13] = 0
+  Set init value: \C[14] = 0
+  Set init value: \C[15] = 0
+  Set init value: \C[16] = 0
+  Set init value: \C[17] = 0
+  Set init value: \C[18] = 0
+  Set init value: \C[19] = 0
+  Set init value: \C[20] = 0
+  Set init value: \C[21] = 0
+  Set init value: \C[22] = 0
+  Set init value: \C[23] = 0
+  Set init value: \C[24] = 0
+  Set init value: \C[25] = 0
+  Set init value: \C[26] = 0
+  Set init value: \C[27] = 0
+  Set init value: \C[28] = 0
+  Set init value: \C[29] = 0
+  Set init value: \C[30] = 0
+  Set init value: \C[31] = 0
+  Set init value: \C[32] = 0
+  Set init value: \C[33] = 0
+  Set init value: \C[34] = 0
+  Set init value: \C[35] = 0
+  Set init value: \C[36] = 0
+  Set init value: \C[37] = 0
+  Set init value: \C[38] = 0
+  Set init value: \C[39] = 0
+  Set init value: \C[40] = 0
+  Set init value: \C[41] = 0
+  Set init value: \C[42] = 0
+  Set init value: \C[43] = 0
+  Set init value: \C[44] = 0
+  Set init value: \C[45] = 0
+  Set init value: \C[46] = 0
+  Set init value: \C[47] = 0
+  Set init value: \C[48] = 0
+  Set init value: \C[49] = 0
+  Set init value: \C[50] = 0
+  Set init value: \C[51] = 0
+  Set init value: \C[52] = 0
+  Set init value: \C[53] = 0
+  Set init value: \C[54] = 0
+  Set init value: \C[55] = 0
+  Set init value: \C[56] = 0
+  Set init value: \C[57] = 0
+  Set init value: \C[58] = 0
+  Set init value: \C[59] = 0
+  Set init value: \C[60] = 0
+  Set init value: \C[61] = 0
+  Set init value: \C[62] = 0
+  Set init value: \C[63] = 0
+
+14.5. Executing PROC_ARST pass (detect async resets in processes).
+Found async reset \rst in `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+Found async reset \rst in `\mem_wb.$proc$src/mem_wb.v:17$33'.
+Found async reset \rst in `\if_id.$proc$src/if_id.v:12$28'.
+Found async reset \rst in `\ex_mem.$proc$src/ex_mem.v:20$25'.
+Found async reset \rst in `\riscv_pipeline.$proc$src/riscv_pipeline.v:24$688'.
+Found async reset \rst in `\register_file.$proc$src/register_file.v:20$668'.
+
+14.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+<suppressed ~28 debug messages>
+
+14.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+Creating decoders for process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+     1/139: $3\r[31:0]
+     2/139: $4$mem2reg_rd$\C$src/mmul_mem.v:82$46_DATA[31:0]$197
+     3/139: $3$mem2reg_wr$\C$src/mmul_mem.v:82$45_ADDR[5:0]$191
+     4/139: $3$mem2reg_wr$\C$src/mmul_mem.v:82$45_DATA[31:0]$192
+     5/139: $3$mem2reg_rd$\C$src/mmul_mem.v:82$46_DATA[31:0]$194
+     6/139: $3$mem2reg_rd$\C$src/mmul_mem.v:82$46_ADDR[5:0]$193
+     7/139: $2\r[31:0]
+     8/139: $2\c[31:0]
+     9/139: $2$mem2reg_rd$\C$src/mmul_mem.v:82$46_DATA[31:0]$189
+    10/139: $2$mem2reg_rd$\C$src/mmul_mem.v:82$46_ADDR[5:0]$188
+    11/139: $2$mem2reg_wr$\C$src/mmul_mem.v:82$45_DATA[31:0]$187
+    12/139: $2$mem2reg_wr$\C$src/mmul_mem.v:82$45_ADDR[5:0]$186
+    13/139: $1\r[31:0]
+    14/139: $1$mem2reg_rd$\C$src/mmul_mem.v:82$46_DATA[31:0]$183
+    15/139: $1$mem2reg_rd$\C$src/mmul_mem.v:82$46_ADDR[5:0]$182
+    16/139: $1$mem2reg_wr$\C$src/mmul_mem.v:82$45_DATA[31:0]$181
+    17/139: $1$mem2reg_wr$\C$src/mmul_mem.v:82$45_ADDR[5:0]$180
+    18/139: $1\c[31:0]
+    19/139: $0\mmul_done[0:0]
+    20/139: $display$0x55555d077ad0:150$406_EN
+    21/139: $display$0x55555d077ad0:149$405_EN
+    22/139: $display$0x55555d077ad0:145$404_EN
+    23/139: $display$0x55555d077ad0:142$403_EN
+    24/139: $display$0x55555d077ad0:145$401_EN
+    25/139: $display$0x55555d077ad0:142$400_EN
+    26/139: $display$0x55555d077ad0:145$398_EN
+    27/139: $display$0x55555d077ad0:142$397_EN
+    28/139: $display$0x55555d077ad0:145$395_EN
+    29/139: $display$0x55555d077ad0:142$394_EN
+    30/139: $display$0x55555d077ad0:145$392_EN
+    31/139: $display$0x55555d077ad0:142$391_EN
+    32/139: $display$0x55555d077ad0:145$389_EN
+    33/139: $display$0x55555d077ad0:142$388_EN
+    34/139: $display$0x55555d077ad0:145$386_EN
+    35/139: $display$0x55555d077ad0:142$385_EN
+    36/139: $display$0x55555d077ad0:145$383_EN
+    37/139: $display$0x55555d077ad0:142$382_EN
+    38/139: $display$0x55555d077ad0:139$380_EN
+    39/139: $display$0x55555d077ad0:134$379_EN
+    40/139: $display$0x55555d077ad0:134$378_EN
+    41/139: $display$0x55555d077ad0:134$377_EN
+    42/139: $display$0x55555d077ad0:134$376_EN
+    43/139: $display$0x55555d077ad0:134$375_EN
+    44/139: $display$0x55555d077ad0:134$374_EN
+    45/139: $display$0x55555d077ad0:134$373_EN
+    46/139: $display$0x55555d077ad0:134$372_EN
+    47/139: $display$0x55555d077ad0:132$371_EN
+    48/139: $display$0x55555d077ad0:127$362_EN
+    49/139: $display$0x55555d077ad0:127$353_EN
+    50/139: $display$0x55555d077ad0:127$344_EN
+    51/139: $display$0x55555d077ad0:127$335_EN
+    52/139: $display$0x55555d077ad0:127$326_EN
+    53/139: $display$0x55555d077ad0:127$317_EN
+    54/139: $display$0x55555d077ad0:127$308_EN
+    55/139: $display$0x55555d077ad0:127$299_EN
+    56/139: $display$0x55555d077ad0:125$298_EN
+    57/139: $display$0x55555d077ad0:120$289_EN
+    58/139: $display$0x55555d077ad0:120$280_EN
+    59/139: $display$0x55555d077ad0:120$271_EN
+    60/139: $display$0x55555d077ad0:120$262_EN
+    61/139: $display$0x55555d077ad0:120$253_EN
+    62/139: $display$0x55555d077ad0:120$244_EN
+    63/139: $display$0x55555d077ad0:120$235_EN
+    64/139: $display$0x55555d077ad0:120$226_EN
+    65/139: $display$0x55555d077ad0:118$225_EN
+    66/139: $display$0x55555d077ad0:115$224_EN
+    67/139: $display$0x55555d077ad0:114$223_EN
+    68/139: $display$0x55555d077ad0:113$222_EN
+    69/139: $display$0x55555d077ad0:84$208_EN
+    70/139: $display$0x55555d077ad0:75$190_EN
+    71/139: $0\C[63][31:0]
+    72/139: $0\C[62][31:0]
+    73/139: $0\C[61][31:0]
+    74/139: $0\C[60][31:0]
+    75/139: $0\C[59][31:0]
+    76/139: $0\C[58][31:0]
+    77/139: $0\C[57][31:0]
+    78/139: $0\C[56][31:0]
+    79/139: $0\C[55][31:0]
+    80/139: $0\C[54][31:0]
+    81/139: $0\C[53][31:0]
+    82/139: $0\C[52][31:0]
+    83/139: $0\C[51][31:0]
+    84/139: $0\C[50][31:0]
+    85/139: $0\C[49][31:0]
+    86/139: $0\C[48][31:0]
+    87/139: $0\C[47][31:0]
+    88/139: $0\C[46][31:0]
+    89/139: $0\C[45][31:0]
+    90/139: $0\C[44][31:0]
+    91/139: $0\C[43][31:0]
+    92/139: $0\C[42][31:0]
+    93/139: $0\C[41][31:0]
+    94/139: $0\C[40][31:0]
+    95/139: $0\C[39][31:0]
+    96/139: $0\C[38][31:0]
+    97/139: $0\C[37][31:0]
+    98/139: $0\C[36][31:0]
+    99/139: $0\C[35][31:0]
+   100/139: $0\C[34][31:0]
+   101/139: $0\C[33][31:0]
+   102/139: $0\C[32][31:0]
+   103/139: $0\C[31][31:0]
+   104/139: $0\C[30][31:0]
+   105/139: $0\C[29][31:0]
+   106/139: $0\C[28][31:0]
+   107/139: $0\C[27][31:0]
+   108/139: $0\C[26][31:0]
+   109/139: $0\C[25][31:0]
+   110/139: $0\C[24][31:0]
+   111/139: $0\C[23][31:0]
+   112/139: $0\C[22][31:0]
+   113/139: $0\C[21][31:0]
+   114/139: $0\C[20][31:0]
+   115/139: $0\C[19][31:0]
+   116/139: $0\C[18][31:0]
+   117/139: $0\C[17][31:0]
+   118/139: $0\C[16][31:0]
+   119/139: $0\C[15][31:0]
+   120/139: $0\C[14][31:0]
+   121/139: $0\C[13][31:0]
+   122/139: $0\C[12][31:0]
+   123/139: $0\C[11][31:0]
+   124/139: $0\C[10][31:0]
+   125/139: $0\C[9][31:0]
+   126/139: $0\C[8][31:0]
+   127/139: $0\C[7][31:0]
+   128/139: $0\C[6][31:0]
+   129/139: $0\C[5][31:0]
+   130/139: $0\C[4][31:0]
+   131/139: $0\C[3][31:0]
+   132/139: $0\C[2][31:0]
+   133/139: $0\C[1][31:0]
+   134/139: $0\C[0][31:0]
+   135/139: $0\finish_pending[0:0]
+   136/139: $0\k[2:0]
+   137/139: $0\j[2:0]
+   138/139: $0\mmul_busy[0:0]
+   139/139: $0\i[2:0]
+Creating decoders for process `\mem_wb.$proc$src/mem_wb.v:17$33'.
+     1/6: $display$0x55555d03fd60:32$34_EN
+     2/6: $0\alu_result_out[31:0]
+     3/6: $0\mem_data_out[31:0]
+     4/6: $0\reg_write_out[0:0]
+     5/6: $0\mem_to_reg_out[0:0]
+     6/6: $0\rd_out[4:0]
+Creating decoders for process `\immediate_gen.$proc$src/immediate_gen.v:8$31'.
+     1/1: $1\imm_out[31:0]
+Creating decoders for process `\if_id.$proc$src/if_id.v:12$28'.
+     1/4: $display$0x55555d061110:23$30_EN
+     2/4: $display$0x55555d061110:19$29_EN
+     3/4: $0\instr_out[31:0]
+     4/4: $0\pc_out[31:0]
+Creating decoders for process `\id_ex.$proc$src/id_ex.v:37$26'.
+     1/13: $0\reg_write_out[0:0]
+     2/13: $0\mem_to_reg_out[0:0]
+     3/13: $0\mem_write_out[0:0]
+     4/13: $0\mem_read_out[0:0]
+     5/13: $0\alu_src_out[0:0]
+     6/13: $0\opcode_out[6:0]
+     7/13: $0\rd_out[4:0]
+     8/13: $0\rs2_addr_out[4:0]
+     9/13: $0\rs1_addr_out[4:0]
+    10/13: $0\imm_out[31:0]
+    11/13: $0\rs2_out[31:0]
+    12/13: $0\rs1_out[31:0]
+    13/13: $0\pc_out[31:0]
+Creating decoders for process `\ex_mem.$proc$src/ex_mem.v:20$25'.
+     1/7: $0\reg_write_out[0:0]
+     2/7: $0\mem_to_reg_out[0:0]
+     3/7: $0\mem_write_out[0:0]
+     4/7: $0\mem_read_out[0:0]
+     5/7: $0\rd_out[4:0]
+     6/7: $0\rs2_data_out[31:0]
+     7/7: $0\alu_out[31:0]
+Creating decoders for process `\data_memory.$proc$src/data_memory.v:22$23'.
+     1/1: $1\read_data[31:0]
+Creating decoders for process `\data_memory.$proc$src/data_memory.v:19$16'.
+     1/3: $1$memwr$\mem$src/data_memory.v:20$15_EN[31:0]$22
+     2/3: $1$memwr$\mem$src/data_memory.v:20$15_DATA[31:0]$21
+     3/3: $1$memwr$\mem$src/data_memory.v:20$15_ADDR[9:0]$20
+Creating decoders for process `\riscv_pipeline.$proc$src/riscv_pipeline.v:24$688'.
+     1/1: $0\pc_reg[31:0]
+Creating decoders for process `\register_file.$proc$src/register_file.v:32$685'.
+     1/1: $1$mem2reg_rd$\regs$src/register_file.v:32$667_DATA[31:0]$687
+Creating decoders for process `\register_file.$proc$src/register_file.v:31$682'.
+     1/1: $1$mem2reg_rd$\regs$src/register_file.v:31$666_DATA[31:0]$684
+Creating decoders for process `\register_file.$proc$src/register_file.v:20$668'.
+     1/38: $2$mem2reg_wr$\regs$src/register_file.v:25$665_ADDR[4:0]$675
+     2/38: $2$mem2reg_wr$\regs$src/register_file.v:25$665_DATA[31:0]$676
+     3/38: $1$mem2reg_wr$\regs$src/register_file.v:25$665_DATA[31:0]$672
+     4/38: $1$mem2reg_wr$\regs$src/register_file.v:25$665_ADDR[4:0]$671
+     5/38: $1\i[31:0]
+     6/38: $display$0x55555d4f9620:27$677_EN
+     7/38: $0\regs[31][31:0]
+     8/38: $0\regs[30][31:0]
+     9/38: $0\regs[29][31:0]
+    10/38: $0\regs[28][31:0]
+    11/38: $0\regs[27][31:0]
+    12/38: $0\regs[26][31:0]
+    13/38: $0\regs[25][31:0]
+    14/38: $0\regs[24][31:0]
+    15/38: $0\regs[23][31:0]
+    16/38: $0\regs[22][31:0]
+    17/38: $0\regs[21][31:0]
+    18/38: $0\regs[20][31:0]
+    19/38: $0\regs[19][31:0]
+    20/38: $0\regs[18][31:0]
+    21/38: $0\regs[17][31:0]
+    22/38: $0\regs[16][31:0]
+    23/38: $0\regs[15][31:0]
+    24/38: $0\regs[14][31:0]
+    25/38: $0\regs[13][31:0]
+    26/38: $0\regs[12][31:0]
+    27/38: $0\regs[11][31:0]
+    28/38: $0\regs[10][31:0]
+    29/38: $0\regs[9][31:0]
+    30/38: $0\regs[8][31:0]
+    31/38: $0\regs[7][31:0]
+    32/38: $0\regs[6][31:0]
+    33/38: $0\regs[5][31:0]
+    34/38: $0\regs[4][31:0]
+    35/38: $0\regs[3][31:0]
+    36/38: $0\regs[2][31:0]
+    37/38: $0\regs[1][31:0]
+    38/38: $0\regs[0][31:0]
+
+14.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$47_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$48_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$49_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$50_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$51_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$52_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$53_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$54_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$55_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$56_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$57_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$58_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$59_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$60_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$61_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$62_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$63_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$64_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$65_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$66_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$67_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$68_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$69_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$70_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$71_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$72_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$73_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$74_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$75_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$76_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$77_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$78_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$79_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$80_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$81_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$82_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$83_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$84_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$85_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$86_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$87_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$88_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$89_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$90_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$91_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$92_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$93_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$94_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$95_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$96_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$97_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$98_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$99_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$100_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$101_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$102_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$103_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$104_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$105_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$106_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$107_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$108_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$109_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$110_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$111_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$112_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$113_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$114_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$115_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$116_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$117_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$118_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$119_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$120_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$121_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$122_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$123_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$124_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$125_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$126_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$127_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$128_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$129_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$130_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$131_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$132_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$133_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$134_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$135_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$136_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$137_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$138_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$139_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$140_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$141_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$142_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$143_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$144_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$145_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$146_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$147_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$148_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$149_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$150_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$151_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$152_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$153_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$154_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$155_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$156_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$157_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$158_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$159_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$160_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$161_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$162_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$163_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$164_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$165_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$166_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$167_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$168_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$169_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$170_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$171_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$172_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\A$src/mmul_mem.v:36$173_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\mmul_mem.$memwr$\B$src/mmul_mem.v:37$174_EN' from process `\mmul_mem.$proc$src/mmul_mem.v:33$535'.
+No latch inferred for signal `\immediate_gen.\imm_out' from process `\immediate_gen.$proc$src/immediate_gen.v:8$31'.
+No latch inferred for signal `\data_memory.\read_data' from process `\data_memory.$proc$src/data_memory.v:22$23'.
+No latch inferred for signal `\register_file.$mem2reg_rd$\regs$src/register_file.v:32$667_DATA' from process `\register_file.$proc$src/register_file.v:32$685'.
+No latch inferred for signal `\register_file.$mem2reg_rd$\regs$src/register_file.v:31$666_DATA' from process `\register_file.$proc$src/register_file.v:31$682'.
+
+14.9. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `\mmul_mem.\c' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4458' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\i' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4461' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\mmul_busy' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4464' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\mmul_done' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4467' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\r' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4470' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\j' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4473' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\k' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4476' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\finish_pending' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4479' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[0]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4482' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[1]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4485' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[2]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4488' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[3]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4491' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[4]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4494' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[5]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4497' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[6]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4500' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[7]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4503' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[8]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4506' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[9]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4509' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[10]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4512' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[11]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4515' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[12]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4518' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[13]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4521' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[14]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4524' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[15]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4527' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[16]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4530' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[17]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4533' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[18]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4536' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[19]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4539' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[20]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4542' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[21]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4545' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[22]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4548' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[23]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4551' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[24]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4554' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[25]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4557' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[26]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4560' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[27]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4563' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[28]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4566' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[29]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4569' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[30]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4572' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[31]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4575' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[32]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4578' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[33]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4581' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[34]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4584' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[35]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4587' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[36]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4590' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[37]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4593' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[38]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4596' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[39]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4599' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[40]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4602' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[41]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4605' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[42]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4608' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[43]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4611' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[44]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4614' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[45]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4617' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[46]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4620' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[47]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4623' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[48]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4626' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[49]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4629' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[50]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4632' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[51]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4635' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[52]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4638' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[53]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4641' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[54]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4644' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[55]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4647' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[56]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4650' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[57]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4653' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[58]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4656' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[59]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4659' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[60]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4662' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[61]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4665' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[62]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4668' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.\C[63]' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4671' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.$mem2reg_wr$\C$src/mmul_mem.v:82$45_ADDR' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4674' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.$mem2reg_wr$\C$src/mmul_mem.v:82$45_DATA' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4677' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.$mem2reg_rd$\C$src/mmul_mem.v:82$46_ADDR' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4680' with positive edge clock and positive level reset.
+Creating register for signal `\mmul_mem.$mem2reg_rd$\C$src/mmul_mem.v:82$46_DATA' using process `\mmul_mem.$proc$src/mmul_mem.v:46$175'.
+  created $adff cell `$procdff$4683' with positive edge clock and positive level reset.
+Creating register for signal `\mem_wb.\rd_out' using process `\mem_wb.$proc$src/mem_wb.v:17$33'.
+  created $adff cell `$procdff$4686' with positive edge clock and positive level reset.
+Creating register for signal `\mem_wb.\mem_to_reg_out' using process `\mem_wb.$proc$src/mem_wb.v:17$33'.
+  created $adff cell `$procdff$4689' with positive edge clock and positive level reset.
+Creating register for signal `\mem_wb.\reg_write_out' using process `\mem_wb.$proc$src/mem_wb.v:17$33'.
+  created $adff cell `$procdff$4692' with positive edge clock and positive level reset.
+Creating register for signal `\mem_wb.\mem_data_out' using process `\mem_wb.$proc$src/mem_wb.v:17$33'.
+  created $adff cell `$procdff$4695' with positive edge clock and positive level reset.
+Creating register for signal `\mem_wb.\alu_result_out' using process `\mem_wb.$proc$src/mem_wb.v:17$33'.
+  created $adff cell `$procdff$4698' with positive edge clock and positive level reset.
+Creating register for signal `\if_id.\pc_out' using process `\if_id.$proc$src/if_id.v:12$28'.
+  created $adff cell `$procdff$4701' with positive edge clock and positive level reset.
+Creating register for signal `\if_id.\instr_out' using process `\if_id.$proc$src/if_id.v:12$28'.
+  created $adff cell `$procdff$4704' with positive edge clock and positive level reset.
+Creating register for signal `\id_ex.\rd_out' using process `\id_ex.$proc$src/id_ex.v:37$26'.
+ERROR: Multiple edge sensitive events found for this signal!

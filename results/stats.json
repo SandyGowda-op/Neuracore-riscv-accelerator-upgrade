@@ -1,0 +1,352 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.64+351 (git sha1 c96d7bc99, Release, Clang /usr/bin/clang++ 18.1.8)
+
+-- Running command `
+read_verilog src/*.v
+hierarchy -top riscv_pipeline
+stat -json
+' --
+
+1. Executing Verilog-2005 frontend: src/alu.v
+Parsing Verilog input from `src/alu.v' to AST representation.
+Generating RTLIL representation for module `\alu'.
+Successfully finished Verilog frontend.
+
+2. Executing Verilog-2005 frontend: src/alu_control.v
+Parsing Verilog input from `src/alu_control.v' to AST representation.
+Generating RTLIL representation for module `\alu_control'.
+Successfully finished Verilog frontend.
+
+3. Executing Verilog-2005 frontend: src/data_memory.v
+Parsing Verilog input from `src/data_memory.v' to AST representation.
+Generating RTLIL representation for module `\data_memory'.
+Successfully finished Verilog frontend.
+
+4. Executing Verilog-2005 frontend: src/ex_mem.v
+Parsing Verilog input from `src/ex_mem.v' to AST representation.
+Generating RTLIL representation for module `\ex_mem'.
+Successfully finished Verilog frontend.
+
+5. Executing Verilog-2005 frontend: src/id_ex.v
+Parsing Verilog input from `src/id_ex.v' to AST representation.
+Generating RTLIL representation for module `\id_ex'.
+Successfully finished Verilog frontend.
+
+6. Executing Verilog-2005 frontend: src/if_id.v
+Parsing Verilog input from `src/if_id.v' to AST representation.
+Generating RTLIL representation for module `\if_id'.
+Successfully finished Verilog frontend.
+
+7. Executing Verilog-2005 frontend: src/immediate_gen.v
+Parsing Verilog input from `src/immediate_gen.v' to AST representation.
+Generating RTLIL representation for module `\immediate_gen'.
+Successfully finished Verilog frontend.
+
+8. Executing Verilog-2005 frontend: src/instr_mem.v
+Parsing Verilog input from `src/instr_mem.v' to AST representation.
+Generating RTLIL representation for module `\instr_mem'.
+Successfully finished Verilog frontend.
+
+9. Executing Verilog-2005 frontend: src/mem_wb.v
+Parsing Verilog input from `src/mem_wb.v' to AST representation.
+Generating RTLIL representation for module `\mem_wb'.
+Successfully finished Verilog frontend.
+
+10. Executing Verilog-2005 frontend: src/mmul_mem.v
+Parsing Verilog input from `src/mmul_mem.v' to AST representation.
+Generating RTLIL representation for module `\mmul_mem'.
+Warning: Replacing memory \C with list of registers. See src/mmul_mem.v:57, src/mmul_mem.v:38
+Warning: Deep recursion in AST simplifier.
+Does this design contain overly long or deeply nested expressions, or excessive recursion?
+Successfully finished Verilog frontend.
+
+11. Executing Verilog-2005 frontend: src/register_file.v
+Parsing Verilog input from `src/register_file.v' to AST representation.
+Generating RTLIL representation for module `\register_file'.
+Warning: Replacing memory \regs with list of registers. See src/register_file.v:22
+Successfully finished Verilog frontend.
+
+12. Executing Verilog-2005 frontend: src/riscv_pipeline.v
+Parsing Verilog input from `src/riscv_pipeline.v' to AST representation.
+Generating RTLIL representation for module `\riscv_pipeline'.
+Successfully finished Verilog frontend.
+
+13. Executing HIERARCHY pass (managing design hierarchy).
+
+13.1. Analyzing design hierarchy..
+Top module:  \riscv_pipeline
+Used module:     \mem_wb
+Used module:     \mmul_mem
+Used module:     \data_memory
+Used module:     \ex_mem
+Used module:     \id_ex
+Used module:     \immediate_gen
+Used module:     \register_file
+Used module:     \if_id
+Used module:     \instr_mem
+
+13.2. Analyzing design hierarchy..
+Top module:  \riscv_pipeline
+Used module:     \mem_wb
+Used module:     \mmul_mem
+Used module:     \data_memory
+Used module:     \ex_mem
+Used module:     \id_ex
+Used module:     \immediate_gen
+Used module:     \register_file
+Used module:     \if_id
+Used module:     \instr_mem
+Removing unused module `\alu_control'.
+Removing unused module `\alu'.
+Removed 2 unused modules.
+Module mmul_mem directly or indirectly displays text -> setting "keep" attribute.
+Module mem_wb directly or indirectly displays text -> setting "keep" attribute.
+Module if_id directly or indirectly displays text -> setting "keep" attribute.
+Module riscv_pipeline directly or indirectly displays text -> setting "keep" attribute.
+Module register_file directly or indirectly displays text -> setting "keep" attribute.
+{
+   "creator": "Yosys 0.64+351 (git sha1 c96d7bc99, Release, Clang /usr/bin/clang++ 18.1.8)",
+   "invocation": "stat -json ",
+   "modules": {
+      "\\mmul_mem": {
+         "num_wires":         711,
+         "num_wire_bits":     20055,
+         "num_pub_wires":     77,
+         "num_pub_wire_bits": 2191,
+         "num_ports":         7,
+         "num_port_bits":     69,
+         "num_memories":      2,
+         "num_memory_bits":   4096,
+         "num_processes":     2,
+         "num_cells":         342,
+         "num_submodules":       0,
+         "num_cells_by_type": {
+            "$add": 10,
+            "$eq": 8,
+            "$logic_and": 1,
+            "$logic_not": 1,
+            "$lt": 3,
+            "$meminit_v2": 128,
+            "$memrd": 132,
+            "$mul": 8,
+            "$print": 51
+         }
+      },
+      "\\mem_wb": {
+         "num_wires":         19,
+         "num_wire_bits":     217,
+         "num_pub_wires":     13,
+         "num_pub_wire_bits": 145,
+         "num_ports":         13,
+         "num_port_bits":     145,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     1,
+         "num_cells":         1,
+         "num_submodules":       0,
+         "num_cells_by_type": {
+            "$print": 1
+         }
+      },
+      "\\instr_mem": {
+         "num_wires":         3,
+         "num_wire_bits":     96,
+         "num_pub_wires":     2,
+         "num_pub_wire_bits": 64,
+         "num_ports":         2,
+         "num_port_bits":     64,
+         "num_memories":      1,
+         "num_memory_bits":   32768,
+         "num_processes":     0,
+         "num_cells":         1,
+         "num_submodules":       0,
+         "num_cells_by_type": {
+            "$memrd": 1
+         }
+      },
+      "\\immediate_gen": {
+         "num_wires":         5,
+         "num_wire_bits":     135,
+         "num_pub_wires":     3,
+         "num_pub_wire_bits": 71,
+         "num_ports":         2,
+         "num_port_bits":     64,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     1,
+         "num_cells":         0,
+         "num_submodules":       0,
+         "num_cells_by_type": {
+
+         }
+      },
+      "\\if_id": {
+         "num_wires":         12,
+         "num_wire_bits":     198,
+         "num_pub_wires":     8,
+         "num_pub_wire_bits": 132,
+         "num_ports":         8,
+         "num_port_bits":     132,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     1,
+         "num_cells":         2,
+         "num_submodules":       0,
+         "num_cells_by_type": {
+            "$print": 2
+         }
+      },
+      "\\id_ex": {
+         "num_wires":         42,
+         "num_wire_bits":     468,
+         "num_pub_wires":     29,
+         "num_pub_wire_bits": 313,
+         "num_ports":         29,
+         "num_port_bits":     313,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     1,
+         "num_cells":         0,
+         "num_submodules":       0,
+         "num_cells_by_type": {
+
+         }
+      },
+      "\\ex_mem": {
+         "num_wires":         23,
+         "num_wire_bits":     221,
+         "num_pub_wires":     16,
+         "num_pub_wire_bits": 148,
+         "num_ports":         16,
+         "num_port_bits":     148,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     1,
+         "num_cells":         0,
+         "num_submodules":       0,
+         "num_cells_by_type": {
+
+         }
+      },
+      "\\data_memory": {
+         "num_wires":         19,
+         "num_wire_bits":     449,
+         "num_pub_wires":     7,
+         "num_pub_wire_bits": 131,
+         "num_ports":         6,
+         "num_port_bits":     99,
+         "num_memories":      1,
+         "num_memory_bits":   32768,
+         "num_processes":     2,
+         "num_cells":         1,
+         "num_submodules":       0,
+         "num_cells_by_type": {
+            "$memrd": 1
+         }
+      },
+      "\\riscv_pipeline": {
+         "num_wires":         88,
+         "num_wire_bits":     1120,
+         "num_pub_wires":     59,
+         "num_pub_wire_bits": 905,
+         "num_ports":         12,
+         "num_port_bits":     229,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     1,
+         "num_cells":         28,
+         "num_submodules":       9,
+         "num_cells_by_type": {
+            "$add": 2,
+            "$and": 3,
+            "$eq": 8,
+            "$ge": 1,
+            "$logic_and": 1,
+            "$logic_not": 3,
+            "$lt": 1,
+            "$mux": 3,
+            "$ne": 1,
+            "$not": 2,
+            "$or": 3,
+            "data_memory": 1,
+            "ex_mem": 1,
+            "id_ex": 1,
+            "if_id": 1,
+            "immediate_gen": 1,
+            "instr_mem": 1,
+            "mem_wb": 1,
+            "mmul_mem": 1,
+            "register_file": 1
+         }
+      },
+      "\\register_file": {
+         "num_wires":         104,
+         "num_wire_bits":     2837,
+         "num_pub_wires":     47,
+         "num_pub_wire_bits": 1330,
+         "num_ports":         14,
+         "num_port_bits":     274,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     3,
+         "num_cells":         7,
+         "num_submodules":       0,
+         "num_cells_by_type": {
+            "$eq": 2,
+            "$logic_and": 1,
+            "$mux": 2,
+            "$ne": 1,
+            "$print": 1
+         }
+      }
+   },
+      "design": {
+         "num_wires":         1026,
+         "num_wire_bits":     25796,
+         "num_pub_wires":     261,
+         "num_pub_wire_bits": 5430,
+         "num_ports":         109,
+         "num_port_bits":     1537,
+         "num_memories":      4,
+         "num_memory_bits":   69632,
+         "num_processes":     13,
+         "num_cells":         382,
+         "num_submodules":       9,
+         "num_cells_by_type": {
+            "$add": 12,
+            "$and": 3,
+            "$eq": 18,
+            "$ge": 1,
+            "$logic_and": 3,
+            "$logic_not": 4,
+            "$lt": 4,
+            "$meminit_v2": 128,
+            "$memrd": 134,
+            "$mul": 8,
+            "$mux": 5,
+            "$ne": 2,
+            "$not": 2,
+            "$or": 3,
+            "$print": 55,
+            "data_memory": 1,
+            "ex_mem": 1,
+            "id_ex": 1,
+            "if_id": 1,
+            "immediate_gen": 1,
+            "instr_mem": 1,
+            "mem_wb": 1,
+            "mmul_mem": 1,
+            "register_file": 1
+         }
+      }
+}
+
+Warnings: 3 unique messages, 3 total
+End of script. Logfile hash: 424afc546e, time: 0.08s, user: 0.05s, system: 0.10s, MEM: 19.62 MB peak
+Yosys 0.64+351 (git sha1 c96d7bc99, Release, Clang /usr/bin/clang++ 18.1.8)
+Time spent: 96% 13x read_verilog (0 sec), 1% 1x stat (0 sec), ...

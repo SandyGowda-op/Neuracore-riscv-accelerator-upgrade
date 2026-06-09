@@ -1,11 +1,5 @@
 #!/bin/bash
 
-set -e
-
-echo "================================="
-echo " Running Yosys Synthesis"
-echo "================================="
-
 mkdir -p results
 
 yosys -p "
@@ -21,12 +15,4 @@ techmap
 opt
 stat
 write_verilog results/riscv_pipeline_netlist.v
-" | tee results/yosys.log
-
-echo ""
-echo "================================="
-echo " Synthesis Complete"
-echo "================================="
-echo ""
-
-grep -A20 "Number of cells" results/yosys.log || true
+" 2>&1 | tee results/yosys.log
