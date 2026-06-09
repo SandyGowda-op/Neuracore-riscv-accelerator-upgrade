@@ -143,3 +143,76 @@ Phase 5:
   - A.mem
   - B.mem
 - Beginning Phase 0 validation under open-source toolchain.
+
+### Entry 2 - Open Source Simulation Validation
+
+Successfully compiled and simulated the baseline FPGA design using Icarus Verilog under Ubuntu 22.04 WSL.
+
+Observations:
+
+* Instruction memory loaded successfully.
+* Data memory loaded successfully.
+* Program counter advanced correctly.
+* Register file writeback activity observed.
+* Pipeline execution verified.
+* AI accelerator launch sequence observed.
+* MMUL busy signaling verified.
+* MAC operations initiated successfully.
+
+Result:
+
+The original Vivado-validated design is now confirmed to execute correctly under the open-source simulation flow, establishing a golden reference for future upgrades.
+
+
+### Observation
+
+During Phase 0 validation, CPU execution and MMUL launch were successfully observed under Icarus Verilog.
+
+However, MMUL MAC outputs were all zero despite non-zero matrix initialization files.
+
+Preliminary analysis suggests that A.mem and B.mem were not present in the simulation working directory, causing matrix memories to initialize incorrectly.
+
+This issue will be investigated and resolved before accelerator baseline validation is closed.
+
+### MMUL Investigation
+
+The matrix multiplier does not currently use external memory files.
+
+Matrices A and B are initialized internally as diagonal matrices using an RTL initial block.
+
+This explains the predominantly zero-valued MAC operations observed during simulation.
+
+The external files A.mem and B.mem are currently unused and will later be replaced by a scratchpad SRAM + DMA based data-loading mechanism.
+
+### Entry 3 - Simulation Automation
+
+Created automated simulation infrastructure for the open-source verification flow.
+
+Scripts Added:
+
+* scripts/run_cpu_tb.sh
+* scripts/run_mmul_tb.sh
+* scripts/clean.sh
+
+Results:
+
+* CPU simulation successfully reproduced under Icarus Verilog.
+* MMUL simulation infrastructure established.
+* Manual simulation commands replaced by reusable automation scripts.
+
+Impact:
+This establishes the foundation for future regression testing, SystemVerilog migration, hazard verification, and coverage-driven verification.
+
+### Entry 4 - First Yosys Compatibility Issue
+
+During initial Yosys synthesis attempts, synthesis failed in data_memory.v due to the presence of simulation-only system tasks ($fopen).
+
+Observation:
+
+* The design simulates correctly under Icarus Verilog.
+* Vivado accepted the RTL.
+* Yosys rejected simulation-only file I/O constructs.
+
+Impact:
+This highlights the distinction between simulation code and synthesizable RTL and motivates a cleanup pass before ASIC-oriented synthesis.
+

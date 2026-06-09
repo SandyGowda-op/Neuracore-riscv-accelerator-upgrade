@@ -5,11 +5,13 @@ module instr_mem (
 
     reg [31:0] mem [0:1023];
 
-    initial begin
-        $display("instr_mem: attempting to load instruction_memory.mem...");
-        $readmemh("instruction_memory.mem", mem);
-        $display("instr_mem: load complete.");
-    end
+   `ifndef YOSYS
+initial begin
+    $display("instr_mem: attempting to load instruction_memory.mem...");
+    $readmemh("instruction_memory.mem", mem);
+    $display("instr_mem: load complete.");
+end
+`endif
 
     // ✅ CRITICAL FIX
     assign instr = mem[addr[31:2]];

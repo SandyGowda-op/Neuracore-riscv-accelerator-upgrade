@@ -9,13 +9,13 @@ module data_memory (
 );
     reg [31:0] mem [0:1023]; // 4KB
     integer i;
-    initial begin
-        if ($fopen("data_memory.mem") != 0) begin
-            $display("data_memory: attempting to load init file 'data_memory.mem' ...");
-            $readmemh("data_memory.mem", mem);
-            $display("data_memory: init complete (depth=1024 words).");
-        end
-    end
+    `ifndef YOSYS
+initial begin
+    $display("data_memory: attempting to load init file 'data_memory.mem' ...");
+    $readmemh("data_memory.mem", mem);
+    $display("data_memory: init complete (depth=1024 words).");
+end
+`endif
     always @(posedge clk) begin
         if (mem_write) mem[addr[11:2]] <= write_data;
     end
