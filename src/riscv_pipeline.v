@@ -113,6 +113,8 @@ module riscv_pipeline (
     // ID / EX
     // ============================================================
     wire [31:0] idex_rs1, idex_rs2, idex_imm;
+    wire [4:0]  idex_rs1_addr;
+    wire [4:0]  idex_rs2_addr;
     wire [4:0]  idex_rd;
     wire [6:0]  idex_opcode;
     wire        idex_mem_read, idex_mem_write, idex_mem_to_reg, idex_reg_write, idex_alu_src;
@@ -141,8 +143,8 @@ module riscv_pipeline (
         .rs1_out(idex_rs1),
         .rs2_out(idex_rs2),
         .imm_out(idex_imm),
-        .rs1_addr_out(),
-        .rs2_addr_out(),
+        .rs1_addr_out(idex_rs1_addr),
+        .rs2_addr_out(idex_rs2_addr),
         .rd_out(idex_rd),
         .opcode_out(idex_opcode),
 
