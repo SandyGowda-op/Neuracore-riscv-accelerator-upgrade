@@ -15,6 +15,7 @@ cp "mem files/data_memory.mem" build/cpu/
 iverilog -g2012 \
 -o build/cpu/cpu.out \
 src/*.v \
+src/*.sv \
 tb/riscv_pipeline_tb.v
 
 cd build/cpu

@@ -874,3 +874,272 @@ Status:
 Impact:
 
 * Full design synthesis completed successfully.
+
+
+# Phase 1 – Hazard Detection and Forwarding Network
+
+## Objective
+
+Improve pipeline correctness and performance by adding:
+
+* Data forwarding
+* Hazard detection
+* Stall generation
+* Future branch flush support
+
+The existing pipeline executes instructions correctly in simple cases but does not resolve RAW (Read After Write) hazards.
+
+---
+
+## Initial Datapath Analysis
+
+Pipeline stages:
+
+IF → ID → EX → MEM → WB
+
+Existing pipeline registers:
+
+* IF/ID
+* ID/EX
+* EX/MEM
+* MEM/WB
+
+Observation:
+
+The design already contains a stall mechanism used by the MMUL accelerator:
+
+cpu_stall = dbg_accel_busy
+
+This can later be extended to support load-use hazard stalls.
+
+---
+
+## Forwarding Requirements Identified
+
+Forwarding requires comparison between:
+
+Current instruction source registers:
+
+* rs1
+* rs2
+
+and older instruction destination registers:
+
+* rd in EX/MEM
+* rd in MEM/WB
+
+Observation:
+
+The destination register identifiers already existed:
+
+* idex_rd
+* exmem_rd
+* memwb_rd
+
+However, source register identifiers were discarded after the ID stage.
+
+---
+
+## Datapath Modification
+
+Added preservation of source register addresses across the ID/EX pipeline register.
+
+New signals:
+
+* idex_rs1_addr
+* idex_rs2_addr
+
+Changes:
+
+Previously:
+
+.rs1_addr_out()
+.rs2_addr_out()
+
+Updated:
+
+.rs1_addr_out(idex_rs1_addr)
+.rs2_addr_out(idex_rs2_addr)
+
+Purpose:
+
+Allow forwarding and hazard detection units to compare register identifiers rather than register values.
+
+---
+
+## Verification of Datapath Modification
+
+Simulation:
+
+PASS
+
+Synthesis:
+
+PASS
+
+Observation:
+
+No functional behavior changed.
+
+Only visibility of source register identifiers was added.
+
+---
+
+## Forwarding Unit Design
+
+Created:
+
+src/forwarding_unit.sv
+
+Inputs:
+
+* idex_rs1
+* idex_rs2
+* exmem_rd
+* exmem_reg_write
+* memwb_rd
+* memwb_reg_write
+
+Outputs:
+
+* forward_a[1:0]
+* forward_b[1:0]
+
+Encoding:
+
+00 = Normal register file path
+
+01 = Forward from MEM/WB
+
+10 = Forward from EX/MEM
+
+---
+
+## Forwarding Priority Decision
+
+EX/MEM forwarding receives higher priority than MEM/WB forwarding.
+
+Reason:
+
+EX/MEM contains newer instruction results.
+
+Example:
+
+addi x1,x0,5
+addi x1,x1,1
+addi x2,x1,1
+
+At execution of instruction 3:
+
+MEM/WB contains old x1 value
+
+EX/MEM contains newer x1 value
+
+Forwarding must select EX/MEM.
+
+---
+
+## Verification Infrastructure Updates
+
+Simulation scripts updated to compile:
+
+src/*.v
+src/*.sv
+
+Reason:
+
+Forwarding unit implemented in SystemVerilog.
+
+Toolchain:
+
+Icarus Verilog (SystemVerilog enabled via -g2012)
+
+---
+
+## Integration Status
+
+Forwarding unit instantiated within riscv_pipeline.
+
+Current status:
+
+Control signals generated:
+
+* forward_a
+* forward_b
+
+Forwarding muxes not yet connected.
+
+CPU functional behavior remains unchanged.
+
+Simulation:
+
+PASS
+
+Synthesis:
+
+PASS
+
+---
+
+## Lessons Learned
+
+Issue encountered:
+
+Yosys synthesis initially reported:
+
+Module forwarding_unit is not part of the design
+
+Root cause:
+
+SystemVerilog source file was not being read by synthesis flow.
+
+Resolution:
+
+Updated synthesis flow to include SystemVerilog sources.
+
+Result:
+
+Successful synthesis with forwarding unit present in hierarchy.
+
+---
+
+## Next Tasks
+
+1. Connect forwarding muxes to ALU inputs
+2. Verify EX/MEM forwarding
+3. Verify MEM/WB forwarding
+4. Implement load-use hazard detection
+5. Extend existing stall logic
+6. Add branch flush support
+7. Create directed forwarding test programs
+
+### Forwarding Unit Integration
+
+Forwarding control unit successfully integrated into riscv_pipeline.
+
+Signals added:
+
+* forward_a[1:0]
+* forward_b[1:0]
+
+Location:
+
+Forwarding unit instantiated after MEM/WB stage signal declarations and before module termination.
+
+Verification:
+
+Simulation PASS
+
+Synthesis PASS
+
+Forwarding unit appears in synthesized hierarchy.
+
+Current state:
+
+Forwarding control signals are generated but not yet connected to ALU operand selection muxes.
+
+This provides a safe intermediate verification checkpoint before modifying datapath functionality.
+
+Engineering rationale:
+
+Separating control generation verification from datapath modification reduces debugging complexity and allows isolation of integration issues.

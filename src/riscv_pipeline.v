@@ -155,6 +155,7 @@ module riscv_pipeline (
         .reg_write_out(idex_reg_write)
     );
 
+
     // ============================================================
     // EX stage (LUI FIX PRESERVED)
     // ============================================================
@@ -258,5 +259,28 @@ module riscv_pipeline (
     assign wb_we   = memwb_reg_write;
     assign wb_rd   = memwb_rd;
     assign wb_data = memwb_mem_to_reg ? memwb_mem : memwb_alu;
+
+        // ============================================================
+    // FORWARDING STAGE
+    // ============================================================  
+
+    wire [1:0] forward_a;
+    wire [1:0] forward_b;
+
+    forwarding_unit forwarding_unit_inst (
+
+    .idex_rs1(idex_rs1_addr),
+    .idex_rs2(idex_rs2_addr),
+
+    .exmem_rd(exmem_rd),
+    .exmem_reg_write(exmem_reg_write),
+
+    .memwb_rd(memwb_rd),
+    .memwb_reg_write(memwb_reg_write),
+
+    .forward_a(forward_a),
+    .forward_b(forward_b)
+
+    );
 
 endmodule

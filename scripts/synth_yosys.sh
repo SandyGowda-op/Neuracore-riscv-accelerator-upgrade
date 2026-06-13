@@ -4,6 +4,7 @@ mkdir -p results
 
 yosys -p "
 read_verilog src/*.v
+read_verilog -sv src/*.sv
 hierarchy -check -top riscv_pipeline
 proc
 opt
