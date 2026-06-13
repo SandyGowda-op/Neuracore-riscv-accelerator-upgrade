@@ -1196,3 +1196,148 @@ Synthesis PASS
 Result:
 
 Forwarding datapath successfully integrated into execution stage.
+
+## Forwarding Verification Plan
+
+Observation:
+
+Existing instruction memory program exercises:
+- LUI
+- ADDI
+- Store
+- MMUL trigger
+
+It does not generate RAW hazards.
+
+Therefore a dedicated forwarding validation program is required.
+
+Proposed sequence:
+
+addi x1,x0,5
+addi x2,x1,1
+addi x3,x2,1
+addi x4,x3,1
+
+Expected final register values:
+
+x1 = 5
+x2 = 6
+x3 = 7
+x4 = 8
+
+Purpose:
+
+Validate EX/MEM and MEM/WB forwarding paths using back-to-back dependent instructions.
+
+### Verification Infrastructure Improvement
+
+Observation:
+
+Current CPU testbench displays:
+
+* PC
+* Instruction
+* ALU result
+* x1
+* x2
+* Accelerator busy flag
+
+Limitation:
+
+Forwarding verification requires visibility of additional architectural registers.
+
+Planned enhancement:
+
+Expose and display:
+
+* x3
+* x4
+
+This enables direct observation of chained RAW dependency execution during forwarding validation.
+
+### Verification Visibility Enhancement
+
+Objective:
+
+Improve observability for forwarding verification.
+
+Changes:
+
+Exposed additional architectural registers:
+
+* x3 (dbg_r3)
+* x4 (dbg_r4)
+
+Path:
+
+register_file → riscv_pipeline → testbench
+
+Reason:
+
+Forwarding verification requires monitoring multiple dependent instructions:
+
+addi x1,x0,5
+addi x2,x1,1
+addi x3,x2,1
+addi x4,x3,1
+
+Expected:
+
+x1=5
+x2=6
+x3=7
+x4=8
+
+Result:
+
+Testbench now provides sufficient visibility to validate forwarding behavior directly from simulation output.
+
+
+## Forwarding Network Validation
+
+Objective:
+
+Verify correct resolution of RAW (Read After Write) hazards using forwarding.
+
+Test Program:
+
+addi x1,x0,5
+addi x2,x1,1
+addi x3,x2,1
+addi x4,x3,1
+
+Expected:
+
+x1 = 5
+x2 = 6
+x3 = 7
+x4 = 8
+
+Simulation Results:
+
+ALU outputs:
+
+5
+6
+7
+8
+
+Final register values:
+
+x1 = 5
+x2 = 6
+x3 = 7
+x4 = 8
+
+Observation:
+
+Dependent instructions executed correctly without waiting for register writeback.
+
+Conclusion:
+
+Forwarding network successfully resolves consecutive RAW hazards.
+
+Status:
+
+PASS
+Forwarding network validated.

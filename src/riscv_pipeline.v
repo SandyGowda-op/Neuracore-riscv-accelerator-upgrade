@@ -12,6 +12,7 @@ module riscv_pipeline (
     output wire [31:0] dbg_r1,
     output wire [31:0] dbg_r2,
     output wire [31:0] dbg_r3,
+    output wire [31:0] dbg_r4,
     output wire        dbg_accel_busy
 );
 
@@ -83,7 +84,7 @@ module riscv_pipeline (
         .dbg_r1(dbg_r1),
         .dbg_r2(dbg_r2),
         .dbg_r3(dbg_r3),
-        .dbg_r4(),
+        .dbg_r4(dbg_r4),
         .dbg_r5()
     );
 

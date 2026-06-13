@@ -15,6 +15,7 @@ module riscv_pipeline_tb;
     wire [31:0] dbg_r1;
     wire [31:0] dbg_r2;
     wire [31:0] dbg_r3;
+    wire [31:0] dbg_r4;
     wire dbg_accel_busy;
 
     // DUT
@@ -30,6 +31,7 @@ module riscv_pipeline_tb;
         .dbg_r1(dbg_r1),
         .dbg_r2(dbg_r2),
         .dbg_r3(dbg_r3),
+        .dbg_r4(dbg_r4),
         .dbg_accel_busy(dbg_accel_busy)
     );
 
@@ -54,13 +56,15 @@ module riscv_pipeline_tb;
             @(posedge clk);
             cycle = cycle + 1;
 
-            $display("CYCLE=%0d | PC=%h | INSTR=%h | ALU=%h | R1=%h | R2=%h | BUSY=%b",
+            $display("CYCLE=%0d | PC=%h | INSTR=%h | ALU=%h | R1=%h | R2=%h | R3=%h | R4=%h |BUSY=%b",
                 cycle,
                 dbg_pc,
                 dbg_instr,
                 dbg_alu,
                 dbg_r1,
                 dbg_r2,
+                dbg_r3,
+                dbg_r4,
                 dbg_accel_busy
             );
         end

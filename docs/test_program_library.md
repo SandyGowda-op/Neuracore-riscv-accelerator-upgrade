@@ -66,48 +66,115 @@ Verify:
 
 # Test 2 – Forwarding Verification
 
-## Purpose
+# Forwarding Verification Procedure
 
-Verify:
+## Setup
 
-* EX/MEM forwarding
-* Consecutive RAW hazard handling
-* MEM/WB forwarding path
+Backup the current MMUL program if required.
 
-Assembly:
+Copy the forwarding test program into:
 
-```assembly
-addi x1,x0,5
-addi x2,x1,1
-addi x3,x2,1
-addi x4,x3,1
-jal  x0,0
-```
+mem files/instruction_memory.mem
 
 Program:
 
-```text
 00500093
 00108113
 00110193
 00118213
 0000006F
-```
 
-## Expected Register Values
+Run:
 
-| Register | Value |
-| -------- | ----- |
-| x1       | 5     |
-| x2       | 6     |
-| x3       | 7     |
-| x4       | 8     |
-
-Expected Result:
-
-PASS if all values are correct.
+./scripts/run_cpu_tb.sh
 
 ---
+
+## Expected Architectural State
+
+| Register | Expected Value |
+| -------- | -------------- |
+| x1       | 5              |
+| x2       | 6              |
+| x3       | 7              |
+| x4       | 8              |
+
+---
+
+## Hazard Chain
+
+Instruction 1:
+
+addi x1,x0,5
+
+Instruction 2:
+
+addi x2,x1,1
+
+RAW Dependency:
+
+x2 depends on x1
+
+Expected Forwarding:
+
+EX/MEM → EX
+
+---
+
+Instruction 3:
+
+addi x3,x2,1
+
+RAW Dependency:
+
+x3 depends on x2
+
+Expected Forwarding:
+
+EX/MEM or MEM/WB → EX
+
+---
+
+Instruction 4:
+
+addi x4,x3,1
+
+RAW Dependency:
+
+x4 depends on x3
+
+Expected Forwarding:
+
+EX/MEM or MEM/WB → EX
+
+---
+
+## Pass Criteria
+
+PASS if:
+
+x1 = 5
+x2 = 6
+x3 = 7
+x4 = 8
+
+and no unexpected values appear during execution.
+
+---
+
+## Failure Indicators
+
+Potential forwarding failure:
+
+x1 = 5
+x2 = 1
+x3 = 1
+x4 = 1
+
+or any incorrect dependent register value.
+
+Such behavior indicates stale register-file reads and missing forwarding paths.
+
 
 # Test 3 – Reserved for Load-Use Hazard Verification
 
