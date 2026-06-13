@@ -1143,3 +1143,56 @@ This provides a safe intermediate verification checkpoint before modifying datap
 Engineering rationale:
 
 Separating control generation verification from datapath modification reduces debugging complexity and allows isolation of integration issues.
+
+
+## Forwarding Datapath Integration
+
+Objective:
+Connect forwarding control signals to ALU operand selection.
+
+Changes:
+
+Added:
+- forwarded_rs1
+- forwarded_rs2
+
+Forwarding sources:
+
+EX/MEM:
+- exmem_alu
+
+MEM/WB:
+- wb_data
+
+Selection logic:
+
+forward_a:
+00 -> idex_rs1
+01 -> wb_data
+10 -> exmem_alu
+
+forward_b:
+00 -> idex_rs2
+01 -> wb_data
+10 -> exmem_alu
+
+ALU updates:
+
+Previous:
+
+ALU_A = idex_rs1
+ALU_B = idex_rs2 or immediate
+
+Updated:
+
+ALU_A = forwarded_rs1
+ALU_B = forwarded_rs2 or immediate
+
+Verification:
+
+Simulation PASS
+Synthesis PASS
+
+Result:
+
+Forwarding datapath successfully integrated into execution stage.

@@ -110,6 +110,12 @@ module riscv_pipeline (
     wire id_alu_src    = (id_opcode != 7'b0110011);
 
     // ============================================================
+    // FORWARDING WIRES (INSTANTIATION AT END)
+    // ============================================================
+    wire [1:0] forward_a;
+    wire [1:0] forward_b;
+
+    // ============================================================
     // ID / EX
     // ============================================================
     wire [31:0] idex_rs1, idex_rs2, idex_imm;
@@ -155,22 +161,34 @@ module riscv_pipeline (
         .reg_write_out(idex_reg_write)
     );
 
+    wire [31:0] forwarded_rs1; //FORWARDED REGISTER VALUES
+    wire [31:0] forwarded_rs2;
+    wire [31:0] exmem_alu;//EX/MEM VALUE BUT HAD TO DECLARE IT BEFORE
+    // ============================================================
+    // EX stage (LUI FIX PRESERVED)(FORWARDING DONE)
+    // ============================================================
+    assign forwarded_rs1 =
+    (forward_a == 2'b10) ? exmem_alu :
+    (forward_a == 2'b01) ? wb_data   :
+                           idex_rs1;
 
-    // ============================================================
-    // EX stage (LUI FIX PRESERVED)
-    // ============================================================
-    wire [31:0] alu_b = idex_alu_src ? idex_imm : idex_rs2;
+    assign forwarded_rs2 =
+    (forward_b == 2'b10) ? exmem_alu :
+    (forward_b == 2'b01) ? wb_data   :
+                           idex_rs2;
+
+    wire [31:0] alu_b = idex_alu_src ? idex_imm : forwarded_rs2;
 
     wire [31:0] alu_result_ex =
         (idex_opcode == 7'b0110111) ? idex_imm :
-                                      (idex_rs1 + alu_b);
+                                      (forwarded_rs1 + alu_b);
 
     assign dbg_alu = alu_result_ex;
 
     // ============================================================
     // EX / MEM
     // ============================================================
-    wire [31:0] exmem_alu;
+    
     wire [31:0] exmem_rs2;
     wire [4:0]  exmem_rd;
     wire        exmem_mem_read, exmem_mem_write, exmem_mem_to_reg, exmem_reg_write;
@@ -264,8 +282,7 @@ module riscv_pipeline (
     // FORWARDING STAGE
     // ============================================================  
 
-    wire [1:0] forward_a;
-    wire [1:0] forward_b;
+
 
     forwarding_unit forwarding_unit_inst (
 
