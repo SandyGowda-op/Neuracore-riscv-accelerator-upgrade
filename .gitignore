@@ -1,0 +1,6 @@
+build/
+results/
+
+*.vcd
+*.out
+*.log
