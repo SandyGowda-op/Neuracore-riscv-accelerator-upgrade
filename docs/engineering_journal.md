@@ -1341,3 +1341,39 @@ Status:
 
 PASS
 Forwarding network validated.
+
+## Hazard Detection Unit Design
+
+Purpose:
+
+Detect load-use hazards that cannot be resolved through forwarding.
+
+Inputs:
+
+- ifid_rs1
+- ifid_rs2
+- idex_rd
+- idex_mem_read
+
+Outputs:
+
+- pc_write
+- ifid_write
+- idex_flush
+
+Hazard condition:
+
+ID/EX instruction is a load
+AND
+IF/ID instruction requires the loaded register
+
+Response:
+
+Freeze PC
+Freeze IF/ID
+Insert bubble into ID/EX
+
+Status:
+
+RTL Created
+Not Yet Integrated
