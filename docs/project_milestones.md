@@ -1,0 +1,376 @@
+# RISC-V Accelerator Upgrade – Project Milestones
+
+## Overview
+
+This document tracks major architectural milestones, validation checkpoints, tags, and commit history throughout the development of the RISC-V Accelerator Upgrade project.
+
+---
+
+# Baseline FPGA Design
+
+Date: 2026-06-09
+
+Commit:
+
+1aa3d7f
+
+Tag:
+
+baseline_fpga
+
+Description:
+
+Initial FPGA implementation before upgrade work began.
+
+Status:
+
+PASS
+
+---
+
+# Phase 0A – Open Source Toolchain Validation
+
+Date:
+
+2026-06-09
+
+Commit:
+
+fac0d81
+
+Tag:
+
+phase0a_baseline
+
+Description:
+
+Validated the complete open-source development flow.
+
+Achievements:
+
+* OSS CAD Suite setup
+* Yosys synthesis validation
+* Icarus Verilog simulation validation
+* Automated script infrastructure
+* Documentation framework
+
+Status:
+
+PASS
+
+---
+
+# Phase 1 – Hazard Infrastructure Preparation
+
+Date:
+
+2026-06-12
+
+Commit:
+
+79348c0
+
+Description:
+
+Exposed source register addresses through the ID/EX pipeline register.
+
+Purpose:
+
+Enable forwarding and future hazard detection logic.
+
+Signals Added:
+
+* idex_rs1_addr
+* idex_rs2_addr
+
+Status:
+
+PASS
+
+---
+
+# Phase 1A – Forwarding Unit Infrastructure
+
+Date:
+
+2026-06-12
+
+Commit:
+
+6b18fae
+
+Description:
+
+Added forwarding unit module.
+
+Capabilities:
+
+* RAW hazard comparison logic
+* EX/MEM hazard detection
+* MEM/WB hazard detection
+* Forwarding priority resolution
+
+Outputs:
+
+* forward_a
+* forward_b
+
+Status:
+
+PASS
+
+---
+
+# Phase 1B – Forwarding Control Integration
+
+Date:
+
+2026-06-13
+
+Commit:
+
+1023fc8
+
+Description:
+
+Integrated forwarding control unit into the pipeline.
+
+Achievements:
+
+* Forwarding unit instantiated
+* Forwarding signals connected
+* Control path validated
+
+Status:
+
+PASS
+
+---
+
+# Phase 1C – Forwarding Datapath Integration
+
+Date:
+
+2026-06-13
+
+Commit:
+
+e2d962a
+
+Description:
+
+Connected forwarding muxes into the Execute stage.
+
+Added:
+
+* forwarded_rs1
+* forwarded_rs2
+
+Forwarding Sources:
+
+* EX/MEM
+* MEM/WB
+
+Status:
+
+PASS
+
+---
+
+# Phase 1D – Verification Infrastructure
+
+Date:
+
+2026-06-13
+
+Commit:
+
+a7f956b
+
+Description:
+
+Added instruction memory test library and forwarding verification programs.
+
+Added:
+
+* test_program_library.md
+* forwarding validation programs
+
+Status:
+
+PASS
+
+---
+
+# Phase 1E – Forwarding Network Validation
+
+Date:
+
+2026-06-13
+
+Commit:
+
+3d8f91c
+
+Description:
+
+Validated forwarding network using chained RAW hazards.
+
+Test Program:
+
+addi x1,x0,5
+addi x2,x1,1
+addi x3,x2,1
+addi x4,x3,1
+
+Observed Results:
+
+Cycle 3:
+
+ALU = 5
+
+Cycle 4:
+
+ALU = 6
+
+Cycle 5:
+
+ALU = 7
+
+Cycle 6:
+
+ALU = 8
+
+Final Register State:
+
+x1 = 5
+
+x2 = 6
+
+x3 = 7
+
+x4 = 8
+
+Conclusion:
+
+Forwarding network successfully resolves consecutive RAW hazards.
+
+Status:
+
+PASS
+
+---
+
+# Phase 1F – Repository Cleanup
+
+Date:
+
+2026-06-13
+
+Commit:
+
+27475dc
+
+Tag:
+
+v0.3-forwarding-complete
+
+Description:
+
+Added repository hygiene improvements.
+
+Changes:
+
+* Added .gitignore
+* Removed generated artifacts from version control workflow
+* Established forwarding-complete release checkpoint
+
+Status:
+
+PASS
+
+---
+
+# Release Timeline
+
+| Version                  | Commit  | Date       | Status               |
+| ------------------------ | ------- | ---------- | -------------------- |
+| baseline_fpga            | 1aa3d7f | 2026-06-09 | FPGA Baseline        |
+| phase0a_baseline         | fac0d81 | 2026-06-09 | Toolchain Validation |
+| v0.3-forwarding-complete | 27475dc | 2026-06-13 | Forwarding Complete  |
+
+---
+
+# Upcoming Milestones
+
+## v0.4
+
+Load-Use Hazard Detection
+
+Planned Features:
+
+* Hazard Detection Unit
+* Pipeline Stall Generation
+* Bubble Injection
+* Load-use verification suite
+
+---
+
+## v0.5
+
+Branch Hazard Handling
+
+Planned Features:
+
+* Branch flushing
+* Pipeline recovery
+* Control hazard validation
+
+---
+
+## v0.6
+
+Performance Evaluation
+
+Planned Features:
+
+* CPI measurement
+* Hazard statistics
+* Pipeline efficiency analysis
+
+---
+
+## v0.7
+
+Static Timing Analysis
+
+Planned Features:
+
+* OpenSTA flow
+* Critical path identification
+* Timing closure
+
+---
+
+## v0.8
+
+Physical Design
+
+Planned Features:
+
+* OpenROAD flow
+* Floorplanning
+* Placement and routing
+
+---
+
+## v1.0
+
+Research Release
+
+Planned Deliverables:
+
+* Complete RISC-V + Accelerator platform
+* Documentation
+* Benchmark results
+* Conference/publication material
