@@ -176,13 +176,69 @@ or any incorrect dependent register value.
 Such behavior indicates stale register-file reads and missing forwarding paths.
 
 
-# Test 3 – Reserved for Load-Use Hazard Verification
+# Test 3 – Load-Use Hazard Detection
 
-Status:
+Purpose:
 
-Not yet implemented.
+Verify that the hazard detection unit correctly inserts a single bubble when a load-use dependency occurs.
 
----
+Memory Initialization:
+
+Address 0:
+
+00000019
+
+(Decimal 25)
+
+Instruction Memory:
+
+00002083
+
+00008133
+
+0000006F
+
+Decoded Program:
+
+lw  x1,0(x0)
+
+add x2,x1,x0
+
+jal x0,0
+
+Expected Behavior:
+
+Without Hazard Detection:
+
+* ADD reaches EX stage before load data becomes available
+* x2 receives incorrect value
+
+With Hazard Detection:
+
+* Hazard detector identifies dependency
+* One bubble inserted
+* Load completes successfully
+* Forwarding supplies correct value to ADD
+* x2 receives correct value
+
+Expected Final Register Values:
+
+x1 = 25
+
+x2 = 25
+
+Observed Result:
+
+PASS
+
+Key Observation:
+
+Pipeline stalled for one cycle while the load instruction continued progressing through the pipeline.
+
+Learning Outcome:
+
+Forwarding alone cannot resolve load-use hazards because the memory value is not available early enough. Hazard detection and bubble insertion are required.
+
 
 # Test 4 – Reserved for Branch Flush Verification
 

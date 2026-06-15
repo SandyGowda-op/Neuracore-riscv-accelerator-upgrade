@@ -374,3 +374,82 @@ Planned Deliverables:
 * Documentation
 * Benchmark results
 * Conference/publication material
+
+# Phase 2 – Load-Use Hazard Detection Validation
+
+Date:
+
+2026-06-13
+
+Description:
+
+Implemented and validated a hazard detection unit capable of identifying load-use data hazards that cannot be resolved through forwarding alone.
+
+Motivation:
+
+Forwarding successfully resolves ALU-to-ALU RAW dependencies but cannot resolve dependencies where a load instruction has not yet completed its memory access.
+
+Example Hazard:
+
+lw  x1,0(x0)
+
+add x2,x1,x0
+
+Problem:
+
+The ADD instruction requires x1 in its EX stage before the load instruction has completed its MEM stage.
+
+Implementation:
+
+Hazard Detection Unit Inputs:
+
+* ifid_rs1
+* ifid_rs2
+* idex_rd
+* idex_mem_read
+
+Hazard Condition:
+
+idex_mem_read &&
+(idex_rd != 0) &&
+((idex_rd == ifid_rs1) ||
+(idex_rd == ifid_rs2))
+
+Control Actions:
+
+* pc_write = 0
+* ifid_write = 0
+* idex_flush = 1
+
+Effect:
+
+* Freeze Program Counter
+* Freeze IF/ID pipeline register
+* Insert NOP into ID/EX pipeline register
+
+Observed Results:
+
+Test Memory:
+
+mem[0] = 25
+
+Test Program:
+
+lw  x1,0(x0)
+
+add x2,x1,x0
+
+Observed Behavior:
+
+* Pipeline stall observed between Cycle 3 and Cycle 4
+* One bubble inserted
+* x1 updated to 25 at Cycle 6
+* x2 updated to 25 at Cycle 8
+
+Conclusion:
+
+Load-use hazards are now correctly detected and resolved through a combination of pipeline stalling and forwarding.
+
+Status:
+
+PASS

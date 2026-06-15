@@ -1377,3 +1377,24 @@ Status:
 
 RTL Created
 Not Yet Integrated
+
+Load-Use Hazard Validation
+
+Program:
+lw  x1,0(x0)
+add x2,x1,x0
+
+Memory[0] = 25
+
+Observed:
+Cycle 3-4: pipeline stall detected
+Cycle 6: x1 = 25
+Cycle 8: x2 = 25
+
+Result:
+Single-cycle bubble inserted.
+Dependent instruction delayed by one cycle.
+Correct result obtained.
+
+Conclusion:
+Load-use hazard detection and stall mechanism validated.
