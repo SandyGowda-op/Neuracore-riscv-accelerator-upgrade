@@ -453,3 +453,70 @@ Load-use hazards are now correctly detected and resolved through a combination o
 Status:
 
 PASS
+
+# Project Milestones
+
+## Baseline FPGA CPU
+
+Status: Complete
+
+Features:
+
+* RV32I pipeline operational
+* Instruction memory operational
+* Data memory operational
+* UART/MMIO framework prepared
+
+Git Tag:
+
+* baseline_fpga
+
+---
+
+## Phase 0A: Open Source Flow Validation
+
+Status: Complete
+
+Features:
+
+* Yosys synthesis validated
+* Icarus simulation validated
+* Open-source development flow established
+
+Git Tag:
+
+* phase0a_baseline
+
+---
+
+## Phase 1: Hazard Handling
+
+Status: Complete
+
+Features:
+
+* Forwarding unit implemented
+* EX/MEM forwarding
+* MEM/WB forwarding
+* Load-use hazard detection
+* Pipeline stall insertion
+* Branch decode
+* Branch target generation
+* Branch flush logic
+* Branch operand forwarding
+* Load-to-branch forwarding via MEM-stage data path
+
+Validated Through:
+
+* Forwarding tests
+* Load-use hazard tests
+* Branch taken tests
+* Branch not taken tests
+* Load-to-branch hazard tests
+
+Git Tag:
+
+* v0.3-forwarding-complete
+
+Outcome:
+Pipeline now resolves major RAW hazards without software-inserted NOPs.

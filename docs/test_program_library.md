@@ -240,13 +240,110 @@ Learning Outcome:
 Forwarding alone cannot resolve load-use hazards because the memory value is not available early enough. Hazard detection and bubble insertion are required.
 
 
-# Test 4 – Reserved for Branch Flush Verification
+# Test 4 – Branch Tests
 
-Status:
 
-Not yet implemented.
+## Branch Taken Test
+
+Assembly
+
+addi x1,x0,5
+addi x2,x0,5
+beq  x1,x2,target
+addi x3,x0,99
+target:
+addi x4,x0,7
+jal x0,0
+
+Machine Code
+
+00500093
+00500113
+00208463
+06300193
+00700213
+0000006F
+
+Expected
+
+R1 = 5
+R2 = 5
+R3 = 0
+R4 = 7
+
+Purpose
+
+Verify branch comparator, target generation and pipeline flush logic.
 
 ---
+
+## Branch Not Taken Test
+
+Assembly
+
+addi x1,x0,5
+addi x2,x0,6
+beq  x1,x2,target
+addi x3,x0,99
+target:
+addi x4,x0,7
+jal x0,0
+
+Machine Code
+
+00500093
+00600113
+00208463
+06300193
+00700213
+0000006F
+
+Expected
+
+R1 = 5
+R2 = 6
+R3 = 99
+R4 = 7
+
+Purpose
+
+Verify branch forwarding and correct comparator operation.
+
+---
+
+## Load-To-Branch Hazard Test
+
+Assembly
+
+lw   x1,0(x0)
+beq  x1,x0,target
+addi x3,x0,99
+target:
+addi x4,x0,7
+jal x0,0
+
+Machine Code
+
+00002083
+00008463
+06300193
+00700213
+0000006F
+
+Data Memory
+
+Address 0:
+00000019
+
+Expected
+
+R1 = 25
+R3 = 99
+R4 = 7
+
+Purpose
+
+Verify forwarding of memory data directly into the branch comparator and elimination of load-to-branch RAW hazards.
 
 # Test 5 – Reserved for Data Memory Verification
 

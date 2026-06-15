@@ -1398,3 +1398,71 @@ Correct result obtained.
 
 Conclusion:
 Load-use hazard detection and stall mechanism validated.
+
+Phase 3A
+
+Extended immediate generator to support B-type branch immediates.
+
+Added opcode:
+1100011
+
+Purpose:
+Enable future implementation of BEQ and branch target computation.
+
+Status:
+Implemented
+Validated by simulation and synthesis
+Branch execution not yet integrated.
+
+Observation:
+
+BEQ instructions immediately following arithmetic instructions
+may compare stale register values.
+
+Experiment:
+
+Inserted two NOPs before BEQ.
+
+Result:
+
+Branch behavior became correct.
+
+Conclusion:
+
+Branch comparator and branch flush logic are functional.
+Remaining issue is branch operand RAW hazard handling.
+
+## 2026-06-15 — Branch Hazard Completion
+
+Completed full branch hazard support for the RV32I pipeline.
+
+Implemented:
+
+* Branch decode
+* Branch target generation
+* IF/ID flush mechanism
+* Branch operand forwarding
+* MEM-stage load forwarding into branch comparator
+
+Debugging process revealed a load-to-branch RAW hazard.
+
+Initial implementation forwarded:
+
+* EX/MEM ALU results
+* MEM/WB values
+
+but branch instructions dependent on loads still failed because the loaded value existed only in the MEM stage when the branch comparator executed.
+
+Added forwarding path:
+
+dmem_rdata → Branch Comparator
+
+This eliminated the need for a second stall cycle and allowed correct branch execution without software-inserted NOPs.
+
+Final validation:
+
+* Branch taken test: PASS
+* Branch not taken test: PASS
+* Load-to-branch hazard test: PASS
+
+Pipeline hazard handling phase considered functionally complete for current CPU architecture.
