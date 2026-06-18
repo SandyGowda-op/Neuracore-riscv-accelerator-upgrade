@@ -8,8 +8,11 @@ module mmul_mem (
     input  wire [31:0] wdata,
     input  wire        we,
 
+    output reg  [31:0] rdata,
+
     output reg         mmul_busy,
-    output reg         mmul_done
+    output reg         mmul_done,
+    output reg         mmul_result_valid
 );
 
     // ============================================================
@@ -50,6 +53,7 @@ module mmul_mem (
             k <= 0;
             mmul_busy <= 1'b0;
             mmul_done <= 1'b0;
+            mmul_result_valid <= 1'b0;
             finish_pending <= 1'b0;
 
             for (r = 0; r < 8; r = r + 1)
@@ -64,6 +68,7 @@ module mmul_mem (
             // ====================================================
             if (we && !mmul_busy) begin
                 mmul_busy <= 1'b1;
+                mmul_result_valid <= 1'b0;
                 i <= 0;
                 j <= 0;
                 k <= 0;
@@ -108,6 +113,7 @@ module mmul_mem (
             // ====================================================
             if (finish_pending) begin
                 finish_pending <= 1'b0;
+                mmul_result_valid <= 1'b1;
                 mmul_done <= 1'b1;
 
                 $display("\n=================================");
@@ -151,5 +157,27 @@ module mmul_mem (
             end
         end
     end
+
+    //------------------------------------------------
+    // READ LOGIC
+    //------------------------------------------------
+    always @(*) begin
+
+    case (addr)
+
+        32'h00001004:
+            rdata = {30'b0,
+                     mmul_result_valid,
+                     mmul_busy};
+
+        32'h00001008:
+            rdata = 32'hDEADBEEF;   
+
+        default:
+            rdata = 32'b0;
+
+    endcase
+
+end
 
 endmodule

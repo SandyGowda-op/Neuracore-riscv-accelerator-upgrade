@@ -1466,3 +1466,382 @@ Final validation:
 * Load-to-branch hazard test: PASS
 
 Pipeline hazard handling phase considered functionally complete for current CPU architecture.
+
+## 2026-06-15 — Accelerator Structural Hazard Validation
+
+Performed first directed accelerator hazard test.
+
+Objective:
+
+Determine whether multiple MMUL launch requests can corrupt an ongoing matrix multiplication operation.
+
+Method:
+
+Issued two consecutive MMUL start requests with minimal instruction spacing.
+
+Observation:
+
+Only one MMUL START event was observed.
+
+Only one MMUL COMPLETE event was observed.
+
+Root Cause:
+
+The MMUL launch condition is protected by:
+
+if (we && !mmul_busy)
+
+which prevents a second operation from starting while the accelerator is active.
+
+Outcome:
+
+Structural Hazard Test #1 PASSED.
+
+The accelerator correctly behaves as a single shared computational resource and rejects concurrent launch attempts.
+
+## 2026-06-18 — Accelerator RAW Hazard Baseline
+
+Performed baseline RAW hazard validation for MMUL accelerator.
+
+Observation:
+
+During MMUL execution the program counter remained fixed and no further instructions executed.
+
+After MMUL completion, the program counter resumed normal operation.
+
+Root Cause:
+
+Global CPU stalling is tied directly to the MMUL busy signal.
+
+wire cpu_stall = dbg_accel_busy;
+
+Result:
+
+Accelerator RAW hazards are currently avoided through complete processor stalling.
+
+This serves as the baseline reference before introducing non-blocking execution and fine-grained accelerator hazard detection.
+
+# Engineering Journal Entry
+
+**Date:** 18 June 2026
+
+## Project
+
+RV32I Pipelined Processor with Memory-Mapped Matrix Multiplication (MMUL) Accelerator
+
+---
+
+## Objective
+
+Extend the MMUL accelerator interface from a write-only peripheral into a software-visible accelerator capable of:
+
+1. Reporting computation status through MMIO registers.
+2. Providing result availability information.
+3. Supporting future non-blocking CPU execution while MMUL computation is in progress.
+4. Detecting accelerator Read-After-Write (RAW) hazards before result consumption.
+
+---
+
+## Work Completed
+
+### 1. MMUL Status and Result Interface Verification
+
+The MMIO interface was previously extended with:
+
+| Address | Register | Purpose                  |
+| ------- | -------- | ------------------------ |
+| 0x1000  | CONTROL  | Start MMUL operation     |
+| 0x1004  | STATUS   | busy + result_valid bits |
+| 0x1008  | RESULT   | Read accelerator output  |
+
+Verification was performed using directed software tests.
+
+#### STATUS Register Test
+
+Program:
+
+```assembly
+lui x1,0x1
+lw  x3,4(x1)
+jal x0,0
+```
+
+Observed:
+
+```text
+REGFILE WRITE: we_addr=3 we_data=00000000
+```
+
+Result:
+
+```text
+PASS
+STATUS register correctly returned 0
+```
+
+---
+
+#### RESULT Register Test
+
+The RESULT register was temporarily forced to:
+
+```verilog
+rdata = 32'hDEADBEEF;
+```
+
+Program:
+
+```assembly
+lui x1,0x1
+lw  x3,8(x1)
+jal x0,0
+```
+
+Observed:
+
+```text
+R3 = DEADBEEF
+```
+
+Result:
+
+```text
+PASS
+RESULT register read path verified
+```
+
+---
+
+### 2. Accelerator RAW Hazard Detection
+
+A new hazard detection mechanism was introduced to identify software attempts to read MMUL results before they become available.
+
+Initial implementation:
+
+```verilog
+assign mmul_read_addr =
+    rf_rs1_data + id_imm;
+```
+
+The detector failed to trigger.
+
+---
+
+## Root Cause Investigation
+
+A directed test was executed:
+
+```assembly
+lui  x1,0x1
+addi x2,x0,1
+sw   x2,0(x1)
+lw   x3,8(x1)
+jal  x0,0
+```
+
+Expected:
+
+```text
+Accelerator RAW hazard detection
+```
+
+Observed:
+
+```text
+No detection
+```
+
+Analysis showed:
+
+```text
+rf_rs1_data contained stale data
+```
+
+because the LUI instruction had not yet written x1 back into the register file when the LW instruction entered Decode.
+
+Therefore:
+
+```text
+rf_rs1_data = 0
+id_imm      = 8
+address     = 0x00000008
+```
+
+instead of:
+
+```text
+0x00001008
+```
+
+---
+
+## Solution
+
+The hazard detector was modified to reuse the already verified branch forwarding network.
+
+Old implementation:
+
+```verilog
+assign mmul_read_addr =
+    rf_rs1_data + id_imm;
+```
+
+New implementation:
+
+```verilog
+assign mmul_read_addr =
+    branch_rs1_val + id_imm;
+```
+
+where:
+
+```verilog
+branch_rs1_val
+```
+
+contains forwarded values from:
+
+* EX/MEM stage
+* MEM/WB stage
+* Register file
+
+---
+
+## Verification Results
+
+After applying forwarding:
+
+Simulation output:
+
+```text
+ACCEL RAW HAZARD DETECTED
+```
+
+Observed immediately before:
+
+```assembly
+lw x3,8(x1)
+```
+
+entered execution.
+
+Result:
+
+```text
+PASS
+Accelerator RAW hazard correctly detected.
+```
+
+---
+
+## Key Technical Insight
+
+The MMUL hazard detector experienced the same class of issue previously observed during branch implementation.
+
+Both systems required:
+
+```text
+Decode-stage forwarding
+```
+
+because decisions are made before register writeback occurs.
+
+This demonstrates that hazard detection logic must operate on the most recent architectural value, not necessarily the value currently stored inside the register file.
+
+---
+
+## Architecture Status
+
+### Verified Features
+
+✓ Load-use hazard detection
+
+✓ Branch forwarding
+
+✓ Branch hazard resolution
+
+✓ MMIO CONTROL register
+
+✓ MMIO STATUS register
+
+✓ MMIO RESULT register
+
+✓ MMUL result_valid flag
+
+✓ Decode-stage accelerator RAW detection
+
+✓ Decode-stage forwarding reuse
+
+---
+
+## Current Accelerator Behaviour
+
+Current implementation:
+
+```text
+Start MMUL
+↓
+CPU globally stalls
+↓
+MMUL computes
+↓
+CPU resumes
+```
+
+Controlled by:
+
+```verilog
+wire cpu_stall = dbg_accel_busy;
+```
+
+---
+
+## Next Development Objective
+
+Replace global accelerator stalling with targeted RAW hazard stalling.
+
+Target behaviour:
+
+```text
+Start MMUL
+↓
+CPU continues executing
+↓
+MMUL computes in parallel
+↓
+CPU stalls ONLY if software attempts
+to read RESULT while result_valid = 0
+```
+
+Hazard condition:
+
+```verilog
+reading_mmul_result &&
+!mmul_result_valid
+```
+
+Planned stall actions:
+
+```verilog
+pc_write   = 0;
+ifid_write = 0;
+idex_flush = 1;
+```
+
+This will convert the MMUL from a blocking coprocessor into a non-blocking memory-mapped accelerator.
+
+---
+
+## Lessons Learned
+
+1. Accelerator hazards are architecturally identical to CPU RAW hazards.
+2. Decode-stage decisions frequently require forwarding paths.
+3. MMIO accelerators must expose CONTROL, STATUS, and RESULT interfaces to support software-driven synchronization.
+4. Data readiness (`result_valid`) is a more useful architectural signal than accelerator activity (`busy`) when determining whether a result may be consumed.
+5. Directed tests remain the fastest method for isolating pipeline and accelerator integration bugs.
+
+## Journal Status
+
+Milestone Achieved:
+
+**Successful implementation and verification of decode-stage MMUL RAW hazard detection using forwarded register values.**

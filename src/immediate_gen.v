@@ -24,6 +24,18 @@ module immediate_gen (
                 imm_out = {instr[31:12], 12'b0};
             end
 
+            // B-type (BEQ)
+             7'b1100011: begin
+                imm_out = {
+                {19{instr[31]}},
+                instr[31],      // imm[12]
+                instr[7],       // imm[11]
+                instr[30:25],   // imm[10:5]
+                instr[11:8],    // imm[4:1]
+                1'b0            // imm[0]
+                    };
+            end
+
             // Default
             default: begin
                 imm_out = 32'b0;

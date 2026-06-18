@@ -1,136 +1,1809 @@
 instr_mem: attempting to load instruction_memory.mem...
-WARNING: src/instr_mem.v:10: $readmemh(instruction_memory.mem): Not enough words in the file for the requested range [0:1023].
+WARNING: src/instr_mem.v:11: $readmemh(instruction_memory.mem): Not enough words in the file for the requested range [0:1023].
 instr_mem: load complete.
 data_memory: attempting to load init file 'data_memory.mem' ...
 data_memory: init complete (depth=1024 words).
 
 ================ PIPELINE DEMO START ================
 
+HZD: mem_read=0 idex_rd=0 ifid_rs1=x ifid_rs2=x stall=0
+HZD: mem_read=0 idex_rd=0 ifid_rs1=0 ifid_rs2=0 stall=0
 T=0 | PC=00000000 | INSTR=00000000 | ALU=00000000
+EXMEM_CAPTURE alu_result_ex=00000000 exmem_alu=00000000
+EXMEM_CAPTURE alu_result_ex=00000000 exmem_alu=00000000
 IFID: captured pc_in=00000000 instr_in=000010b7 at time 25000
 mem_wb: time=25000 mem_data_in=00000000 alu_result_in=00000000 rd_in=0 mem_to_reg=0 reg_write=0
-CYCLE=1 | PC=00000000 | INSTR=00000000 | ALU=00000000 | R1=00000000 | R2=00000000 | BUSY=0
+CYCLE=1 | PC=00000000 | INSTR=00000000 | ALU=00000000 | R1=00000000 | R2=00000000 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=00000000 exmem_alu=00000000
 T=25000 | PC=00000004 | INSTR=000010b7 | ALU=00000000
 mem_wb: time=35000 mem_data_in=00000000 alu_result_in=00000000 rd_in=0 mem_to_reg=0 reg_write=0
-IFID: captured pc_in=00000004 instr_in=00000013 at time 35000
-CYCLE=2 | PC=00000004 | INSTR=000010b7 | ALU=00000000 | R1=00000000 | R2=00000000 | BUSY=0
-T=35000 | PC=00000008 | INSTR=00000013 | ALU=00001000
-IFID: captured pc_in=00000008 instr_in=00000013 at time 45000
+IFID: captured pc_in=00000004 instr_in=00100113 at time 35000
+EXMEM_CAPTURE alu_result_ex=00000000 exmem_alu=00000000
+CYCLE=2 | PC=00000004 | INSTR=000010b7 | ALU=00000000 | R1=00000000 | R2=00000000 | R3=00000000 | R4=00000000 |BUSY=0|
+HZD: mem_read=0 idex_rd=1 ifid_rs1=0 ifid_rs2=0 stall=0
+HZD: mem_read=0 idex_rd=1 ifid_rs1=0 ifid_rs2=1 stall=0
+T=35000 | PC=00000008 | INSTR=00100113 | ALU=00001000
+IFID: captured pc_in=00000008 instr_in=0020a023 at time 45000
 mem_wb: time=45000 mem_data_in=00000000 alu_result_in=00000000 rd_in=0 mem_to_reg=0 reg_write=0
-CYCLE=3 | PC=00000008 | INSTR=00000013 | ALU=00001000 | R1=00000000 | R2=00000000 | BUSY=0
-T=45000 | PC=0000000c | INSTR=00000013 | ALU=00000000
+CYCLE=3 | PC=00000008 | INSTR=00100113 | ALU=00001000 | R1=00000000 | R2=00000000 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=00001000 exmem_alu=00000000
+HZD: mem_read=0 idex_rd=2 ifid_rs1=1 ifid_rs2=2 stall=0
+T=45000 | PC=0000000c | INSTR=0020a023 | ALU=00000001
 mem_wb: time=55000 mem_data_in=00000000 alu_result_in=00001000 rd_in=1 mem_to_reg=0 reg_write=1
-IFID: captured pc_in=0000000c instr_in=00100113 at time 55000
-CYCLE=4 | PC=0000000c | INSTR=00000013 | ALU=00000000 | R1=00000000 | R2=00000000 | BUSY=0
-T=55000 | PC=00000010 | INSTR=00100113 | ALU=00000000
-IFID: captured pc_in=00000010 instr_in=00000013 at time 65000
+IFID: captured pc_in=0000000c instr_in=0080a183 at time 55000
+EXMEM_CAPTURE alu_result_ex=00000001 exmem_alu=00001000
+CYCLE=4 | PC=0000000c | INSTR=0020a023 | ALU=00000001 | R1=00000000 | R2=00000000 | R3=00000000 | R4=00000000 |BUSY=0|
+HZD: mem_read=0 idex_rd=0 ifid_rs1=1 ifid_rs2=2 stall=0
+HZD: mem_read=0 idex_rd=0 ifid_rs1=1 ifid_rs2=8 stall=0
+ACCEL RAW HAZARD DETECTED
+T=55000 | PC=00000010 | INSTR=0080a183 | ALU=00001000
+IFID: captured pc_in=00000010 instr_in=0000006f at time 65000
 REGFILE WRITE: time=65000 we_en=1 we_addr=1 we_data=00001000
-mem_wb: time=65000 mem_data_in=00000000 alu_result_in=00000000 rd_in=0 mem_to_reg=0 reg_write=1
-CYCLE=5 | PC=00000010 | INSTR=00100113 | ALU=00000000 | R1=00000000 | R2=00000000 | BUSY=0
-T=65000 | PC=00000014 | INSTR=00000013 | ALU=00000001
-mem_wb: time=75000 mem_data_in=00000000 alu_result_in=00000000 rd_in=0 mem_to_reg=0 reg_write=1
-IFID: captured pc_in=00000014 instr_in=00000013 at time 75000
-CYCLE=6 | PC=00000014 | INSTR=00000013 | ALU=00000001 | R1=00001000 | R2=00000000 | BUSY=0
-T=75000 | PC=00000018 | INSTR=00000013 | ALU=00000000
-IFID: captured pc_in=00000018 instr_in=0020a023 at time 85000
-mem_wb: time=85000 mem_data_in=00000000 alu_result_in=00000001 rd_in=2 mem_to_reg=0 reg_write=1
-CYCLE=7 | PC=00000018 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000000 | BUSY=0
-T=85000 | PC=0000001c | INSTR=0020a023 | ALU=00000000
-mem_wb: time=95000 mem_data_in=00000000 alu_result_in=00000000 rd_in=0 mem_to_reg=0 reg_write=1
-REGFILE WRITE: time=95000 we_en=1 we_addr=2 we_data=00000001
-IFID: captured pc_in=0000001c instr_in=00000013 at time 95000
-CYCLE=8 | PC=0000001c | INSTR=0020a023 | ALU=00000000 | R1=00001000 | R2=00000000 | BUSY=0
-T=95000 | PC=00000020 | INSTR=00000013 | ALU=00001000
-IFID: captured pc_in=00000020 instr_in=00000013 at time 105000
-mem_wb: time=105000 mem_data_in=00000000 alu_result_in=00000000 rd_in=0 mem_to_reg=0 reg_write=1
-CYCLE=9 | PC=00000020 | INSTR=00000013 | ALU=00001000 | R1=00001000 | R2=00000001 | BUSY=0
-T=105000 | PC=00000024 | INSTR=00000013 | ALU=00000000
-mem_wb: time=115000 mem_data_in=00000000 alu_result_in=00001000 rd_in=0 mem_to_reg=0 reg_write=0
+mem_wb: time=65000 mem_data_in=00000000 alu_result_in=00000001 rd_in=2 mem_to_reg=0 reg_write=1
+CYCLE=5 | PC=00000010 | INSTR=0080a183 | ALU=00001000 | R1=00000000 | R2=00000000 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=00001000 exmem_alu=00000001
+LOAD_EX_DEBUG rs1=00001000 imm=00000008 alu_b=00000000 result=00001000
+HZD: mem_read=1 idex_rd=3 ifid_rs1=0 ifid_rs2=0 stall=0
+LOAD_EX_DEBUG rs1=00001000 imm=00000008 alu_b=00000008 result=00001008
+LOAD_EX_DEBUG rs1=00000000 imm=00000008 alu_b=00000008 result=00000008
+T=65000 | PC=00000014 | INSTR=0000006f | ALU=00000008
+mem_wb: time=75000 mem_data_in=00000000 alu_result_in=00001000 rd_in=0 mem_to_reg=0 reg_write=0
 
 === MMUL 8x8 START ===
-IFID: captured pc_in=00000024 instr_in=00000013 at time 115000
-CYCLE=10 | PC=00000024 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=0
-T=115000 | PC=00000028 | INSTR=00000013 | ALU=00000000
+REGFILE WRITE: time=75000 we_en=1 we_addr=2 we_data=00000001
+IFID: captured pc_in=00000014 instr_in=xxxxxxxx at time 75000
+EXMEM_CAPTURE alu_result_ex=00000008 exmem_alu=00001000
+CYCLE=6 | PC=00000014 | INSTR=0000006f | ALU=00000008 | R1=00001000 | R2=00000000 | R3=00000000 | R4=00000000 |BUSY=0|
+HZD: mem_read=0 idex_rd=0 ifid_rs1=0 ifid_rs2=0 stall=0
+HZD: mem_read=0 idex_rd=0 ifid_rs1=x ifid_rs2=x stall=0
+T=75000 | PC=00000018 | INSTR=xxxxxxxx | ALU=00000000
 MAC: C[0][0] += A[0][0] * B[0][0] = 0
-CYCLE=11 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=7 | PC=00000018 | INSTR=xxxxxxxx | ALU=00000000 | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=00000000 exmem_alu=00000008
+HZD: mem_read=x idex_rd=x ifid_rs1=x ifid_rs2=x stall=x
+T=85000 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx
 MAC: C[0][0] += A[0][1] * B[1][0] = 0
-CYCLE=12 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=00000000
+CYCLE=8 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][0] += A[0][2] * B[2][0] = 0
-CYCLE=13 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=9 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][0] += A[0][3] * B[3][0] = 0
-CYCLE=14 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=10 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][0] += A[0][4] * B[4][0] = 0
-CYCLE=15 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=11 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][0] += A[0][5] * B[5][0] = 0
-CYCLE=16 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=12 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][0] += A[0][6] * B[6][0] = 0
-CYCLE=17 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=13 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][0] += A[0][7] * B[7][0] = 0
-CYCLE=18 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=14 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][1] += A[0][0] * B[0][1] = 0
-CYCLE=19 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=15 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][1] += A[0][1] * B[1][1] = 0
-CYCLE=20 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=16 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][1] += A[0][2] * B[2][1] = 0
-CYCLE=21 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=17 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][1] += A[0][3] * B[3][1] = 0
-CYCLE=22 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=18 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][1] += A[0][4] * B[4][1] = 0
-CYCLE=23 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=19 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][1] += A[0][5] * B[5][1] = 0
-CYCLE=24 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=20 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][1] += A[0][6] * B[6][1] = 0
-CYCLE=25 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=21 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][1] += A[0][7] * B[7][1] = 0
-CYCLE=26 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=22 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][2] += A[0][0] * B[0][2] = 0
-CYCLE=27 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=23 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][2] += A[0][1] * B[1][2] = 0
-CYCLE=28 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=24 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][2] += A[0][2] * B[2][2] = 0
-CYCLE=29 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=25 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][2] += A[0][3] * B[3][2] = 0
-CYCLE=30 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=26 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][2] += A[0][4] * B[4][2] = 0
-CYCLE=31 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=27 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][2] += A[0][5] * B[5][2] = 0
-CYCLE=32 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=28 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][2] += A[0][6] * B[6][2] = 0
-CYCLE=33 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=29 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][2] += A[0][7] * B[7][2] = 0
-CYCLE=34 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=30 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][3] += A[0][0] * B[0][3] = 0
-CYCLE=35 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=31 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][3] += A[0][1] * B[1][3] = 0
-CYCLE=36 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=32 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][3] += A[0][2] * B[2][3] = 0
-CYCLE=37 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=33 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][3] += A[0][3] * B[3][3] = 0
-CYCLE=38 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=34 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][3] += A[0][4] * B[4][3] = 0
-CYCLE=39 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=35 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][3] += A[0][5] * B[5][3] = 0
-CYCLE=40 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=36 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][3] += A[0][6] * B[6][3] = 0
-CYCLE=41 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=37 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][3] += A[0][7] * B[7][3] = 0
-CYCLE=42 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=38 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][4] += A[0][0] * B[0][4] = 0
-CYCLE=43 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=39 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][4] += A[0][1] * B[1][4] = 0
-CYCLE=44 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=40 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][4] += A[0][2] * B[2][4] = 0
-CYCLE=45 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=41 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][4] += A[0][3] * B[3][4] = 0
-CYCLE=46 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=42 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][4] += A[0][4] * B[4][4] = 0
-CYCLE=47 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=43 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][4] += A[0][5] * B[5][4] = 0
-CYCLE=48 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=44 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
 MAC: C[0][4] += A[0][6] * B[6][4] = 0
-CYCLE=49 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+CYCLE=45 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
 MAC: C[0][4] += A[0][7] * B[7][4] = 0
-CYCLE=50 | PC=00000028 | INSTR=00000013 | ALU=00000000 | R1=00001000 | R2=00000001 | BUSY=1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=46 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[0][5] += A[0][0] * B[0][5] = 0
+CYCLE=47 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[0][5] += A[0][1] * B[1][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=48 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[0][5] += A[0][2] * B[2][5] = 0
+CYCLE=49 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[0][5] += A[0][3] * B[3][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=50 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[0][5] += A[0][4] * B[4][5] = 0
+CYCLE=51 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[0][5] += A[0][5] * B[5][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=52 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[0][5] += A[0][6] * B[6][5] = 0
+CYCLE=53 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[0][5] += A[0][7] * B[7][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=54 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[0][6] += A[0][0] * B[0][6] = 0
+CYCLE=55 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[0][6] += A[0][1] * B[1][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=56 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[0][6] += A[0][2] * B[2][6] = 0
+CYCLE=57 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[0][6] += A[0][3] * B[3][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=58 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[0][6] += A[0][4] * B[4][6] = 0
+CYCLE=59 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[0][6] += A[0][5] * B[5][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=60 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[0][6] += A[0][6] * B[6][6] = 0
+CYCLE=61 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[0][6] += A[0][7] * B[7][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=62 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[0][7] += A[0][0] * B[0][7] = 0
+CYCLE=63 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[0][7] += A[0][1] * B[1][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=64 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[0][7] += A[0][2] * B[2][7] = 0
+CYCLE=65 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[0][7] += A[0][3] * B[3][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=66 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[0][7] += A[0][4] * B[4][7] = 0
+CYCLE=67 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[0][7] += A[0][5] * B[5][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=68 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[0][7] += A[0][6] * B[6][7] = 0
+CYCLE=69 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[0][7] += A[0][7] * B[7][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=70 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][0] += A[1][0] * B[0][0] = 0
+CYCLE=71 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][0] += A[1][1] * B[1][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=72 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][0] += A[1][2] * B[2][0] = 0
+CYCLE=73 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][0] += A[1][3] * B[3][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=74 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][0] += A[1][4] * B[4][0] = 0
+CYCLE=75 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][0] += A[1][5] * B[5][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=76 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][0] += A[1][6] * B[6][0] = 0
+CYCLE=77 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][0] += A[1][7] * B[7][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=78 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][1] += A[1][0] * B[0][1] = 0
+CYCLE=79 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][1] += A[1][1] * B[1][1] = 1
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=80 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][1] += A[1][2] * B[2][1] = 0
+CYCLE=81 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][1] += A[1][3] * B[3][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=82 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][1] += A[1][4] * B[4][1] = 0
+CYCLE=83 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][1] += A[1][5] * B[5][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=84 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][1] += A[1][6] * B[6][1] = 0
+CYCLE=85 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][1] += A[1][7] * B[7][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=86 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][2] += A[1][0] * B[0][2] = 0
+CYCLE=87 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][2] += A[1][1] * B[1][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=88 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][2] += A[1][2] * B[2][2] = 0
+CYCLE=89 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][2] += A[1][3] * B[3][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=90 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][2] += A[1][4] * B[4][2] = 0
+CYCLE=91 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][2] += A[1][5] * B[5][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=92 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][2] += A[1][6] * B[6][2] = 0
+CYCLE=93 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][2] += A[1][7] * B[7][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=94 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][3] += A[1][0] * B[0][3] = 0
+CYCLE=95 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][3] += A[1][1] * B[1][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=96 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][3] += A[1][2] * B[2][3] = 0
+CYCLE=97 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][3] += A[1][3] * B[3][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=98 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][3] += A[1][4] * B[4][3] = 0
+CYCLE=99 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][3] += A[1][5] * B[5][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=100 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][3] += A[1][6] * B[6][3] = 0
+CYCLE=101 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][3] += A[1][7] * B[7][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=102 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][4] += A[1][0] * B[0][4] = 0
+CYCLE=103 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][4] += A[1][1] * B[1][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=104 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][4] += A[1][2] * B[2][4] = 0
+CYCLE=105 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][4] += A[1][3] * B[3][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=106 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][4] += A[1][4] * B[4][4] = 0
+CYCLE=107 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][4] += A[1][5] * B[5][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=108 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][4] += A[1][6] * B[6][4] = 0
+CYCLE=109 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][4] += A[1][7] * B[7][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=110 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][5] += A[1][0] * B[0][5] = 0
+CYCLE=111 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][5] += A[1][1] * B[1][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=112 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][5] += A[1][2] * B[2][5] = 0
+CYCLE=113 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][5] += A[1][3] * B[3][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=114 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][5] += A[1][4] * B[4][5] = 0
+CYCLE=115 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][5] += A[1][5] * B[5][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=116 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][5] += A[1][6] * B[6][5] = 0
+CYCLE=117 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][5] += A[1][7] * B[7][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=118 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][6] += A[1][0] * B[0][6] = 0
+CYCLE=119 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][6] += A[1][1] * B[1][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=120 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][6] += A[1][2] * B[2][6] = 0
+CYCLE=121 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][6] += A[1][3] * B[3][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=122 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][6] += A[1][4] * B[4][6] = 0
+CYCLE=123 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][6] += A[1][5] * B[5][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=124 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][6] += A[1][6] * B[6][6] = 0
+CYCLE=125 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][6] += A[1][7] * B[7][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=126 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][7] += A[1][0] * B[0][7] = 0
+CYCLE=127 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][7] += A[1][1] * B[1][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=128 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][7] += A[1][2] * B[2][7] = 0
+CYCLE=129 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][7] += A[1][3] * B[3][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=130 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][7] += A[1][4] * B[4][7] = 0
+CYCLE=131 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][7] += A[1][5] * B[5][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=132 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[1][7] += A[1][6] * B[6][7] = 0
+CYCLE=133 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[1][7] += A[1][7] * B[7][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=134 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][0] += A[2][0] * B[0][0] = 0
+CYCLE=135 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][0] += A[2][1] * B[1][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=136 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][0] += A[2][2] * B[2][0] = 0
+CYCLE=137 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][0] += A[2][3] * B[3][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=138 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][0] += A[2][4] * B[4][0] = 0
+CYCLE=139 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][0] += A[2][5] * B[5][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=140 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][0] += A[2][6] * B[6][0] = 0
+CYCLE=141 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][0] += A[2][7] * B[7][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=142 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][1] += A[2][0] * B[0][1] = 0
+CYCLE=143 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][1] += A[2][1] * B[1][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=144 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][1] += A[2][2] * B[2][1] = 0
+CYCLE=145 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][1] += A[2][3] * B[3][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=146 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][1] += A[2][4] * B[4][1] = 0
+CYCLE=147 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][1] += A[2][5] * B[5][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=148 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][1] += A[2][6] * B[6][1] = 0
+CYCLE=149 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][1] += A[2][7] * B[7][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=150 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][2] += A[2][0] * B[0][2] = 0
+CYCLE=151 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][2] += A[2][1] * B[1][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=152 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][2] += A[2][2] * B[2][2] = 4
+CYCLE=153 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][2] += A[2][3] * B[3][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=154 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][2] += A[2][4] * B[4][2] = 0
+CYCLE=155 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][2] += A[2][5] * B[5][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=156 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][2] += A[2][6] * B[6][2] = 0
+CYCLE=157 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][2] += A[2][7] * B[7][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=158 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][3] += A[2][0] * B[0][3] = 0
+CYCLE=159 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][3] += A[2][1] * B[1][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=160 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][3] += A[2][2] * B[2][3] = 0
+CYCLE=161 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][3] += A[2][3] * B[3][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=162 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][3] += A[2][4] * B[4][3] = 0
+CYCLE=163 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][3] += A[2][5] * B[5][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=164 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][3] += A[2][6] * B[6][3] = 0
+CYCLE=165 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][3] += A[2][7] * B[7][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=166 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][4] += A[2][0] * B[0][4] = 0
+CYCLE=167 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][4] += A[2][1] * B[1][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=168 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][4] += A[2][2] * B[2][4] = 0
+CYCLE=169 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][4] += A[2][3] * B[3][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=170 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][4] += A[2][4] * B[4][4] = 0
+CYCLE=171 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][4] += A[2][5] * B[5][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=172 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][4] += A[2][6] * B[6][4] = 0
+CYCLE=173 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][4] += A[2][7] * B[7][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=174 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][5] += A[2][0] * B[0][5] = 0
+CYCLE=175 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][5] += A[2][1] * B[1][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=176 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][5] += A[2][2] * B[2][5] = 0
+CYCLE=177 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][5] += A[2][3] * B[3][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=178 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][5] += A[2][4] * B[4][5] = 0
+CYCLE=179 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][5] += A[2][5] * B[5][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=180 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][5] += A[2][6] * B[6][5] = 0
+CYCLE=181 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][5] += A[2][7] * B[7][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=182 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][6] += A[2][0] * B[0][6] = 0
+CYCLE=183 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][6] += A[2][1] * B[1][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=184 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][6] += A[2][2] * B[2][6] = 0
+CYCLE=185 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][6] += A[2][3] * B[3][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=186 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][6] += A[2][4] * B[4][6] = 0
+CYCLE=187 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][6] += A[2][5] * B[5][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=188 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][6] += A[2][6] * B[6][6] = 0
+CYCLE=189 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][6] += A[2][7] * B[7][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=190 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][7] += A[2][0] * B[0][7] = 0
+CYCLE=191 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][7] += A[2][1] * B[1][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=192 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][7] += A[2][2] * B[2][7] = 0
+CYCLE=193 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][7] += A[2][3] * B[3][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=194 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][7] += A[2][4] * B[4][7] = 0
+CYCLE=195 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][7] += A[2][5] * B[5][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=196 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[2][7] += A[2][6] * B[6][7] = 0
+CYCLE=197 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[2][7] += A[2][7] * B[7][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=198 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][0] += A[3][0] * B[0][0] = 0
+CYCLE=199 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][0] += A[3][1] * B[1][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=200 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][0] += A[3][2] * B[2][0] = 0
+CYCLE=201 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][0] += A[3][3] * B[3][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=202 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][0] += A[3][4] * B[4][0] = 0
+CYCLE=203 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][0] += A[3][5] * B[5][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=204 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][0] += A[3][6] * B[6][0] = 0
+CYCLE=205 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][0] += A[3][7] * B[7][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=206 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][1] += A[3][0] * B[0][1] = 0
+CYCLE=207 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][1] += A[3][1] * B[1][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=208 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][1] += A[3][2] * B[2][1] = 0
+CYCLE=209 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][1] += A[3][3] * B[3][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=210 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][1] += A[3][4] * B[4][1] = 0
+CYCLE=211 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][1] += A[3][5] * B[5][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=212 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][1] += A[3][6] * B[6][1] = 0
+CYCLE=213 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][1] += A[3][7] * B[7][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=214 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][2] += A[3][0] * B[0][2] = 0
+CYCLE=215 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][2] += A[3][1] * B[1][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=216 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][2] += A[3][2] * B[2][2] = 0
+CYCLE=217 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][2] += A[3][3] * B[3][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=218 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][2] += A[3][4] * B[4][2] = 0
+CYCLE=219 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][2] += A[3][5] * B[5][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=220 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][2] += A[3][6] * B[6][2] = 0
+CYCLE=221 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][2] += A[3][7] * B[7][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=222 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][3] += A[3][0] * B[0][3] = 0
+CYCLE=223 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][3] += A[3][1] * B[1][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=224 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][3] += A[3][2] * B[2][3] = 0
+CYCLE=225 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][3] += A[3][3] * B[3][3] = 9
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=226 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][3] += A[3][4] * B[4][3] = 0
+CYCLE=227 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][3] += A[3][5] * B[5][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=228 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][3] += A[3][6] * B[6][3] = 0
+CYCLE=229 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][3] += A[3][7] * B[7][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=230 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][4] += A[3][0] * B[0][4] = 0
+CYCLE=231 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][4] += A[3][1] * B[1][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=232 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][4] += A[3][2] * B[2][4] = 0
+CYCLE=233 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][4] += A[3][3] * B[3][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=234 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][4] += A[3][4] * B[4][4] = 0
+CYCLE=235 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][4] += A[3][5] * B[5][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=236 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][4] += A[3][6] * B[6][4] = 0
+CYCLE=237 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][4] += A[3][7] * B[7][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=238 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][5] += A[3][0] * B[0][5] = 0
+CYCLE=239 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][5] += A[3][1] * B[1][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=240 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][5] += A[3][2] * B[2][5] = 0
+CYCLE=241 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][5] += A[3][3] * B[3][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=242 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][5] += A[3][4] * B[4][5] = 0
+CYCLE=243 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][5] += A[3][5] * B[5][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=244 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][5] += A[3][6] * B[6][5] = 0
+CYCLE=245 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][5] += A[3][7] * B[7][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=246 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][6] += A[3][0] * B[0][6] = 0
+CYCLE=247 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][6] += A[3][1] * B[1][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=248 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][6] += A[3][2] * B[2][6] = 0
+CYCLE=249 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][6] += A[3][3] * B[3][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=250 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][6] += A[3][4] * B[4][6] = 0
+CYCLE=251 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][6] += A[3][5] * B[5][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=252 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][6] += A[3][6] * B[6][6] = 0
+CYCLE=253 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][6] += A[3][7] * B[7][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=254 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][7] += A[3][0] * B[0][7] = 0
+CYCLE=255 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][7] += A[3][1] * B[1][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=256 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][7] += A[3][2] * B[2][7] = 0
+CYCLE=257 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][7] += A[3][3] * B[3][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=258 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][7] += A[3][4] * B[4][7] = 0
+CYCLE=259 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][7] += A[3][5] * B[5][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=260 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[3][7] += A[3][6] * B[6][7] = 0
+CYCLE=261 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[3][7] += A[3][7] * B[7][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=262 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][0] += A[4][0] * B[0][0] = 0
+CYCLE=263 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][0] += A[4][1] * B[1][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=264 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][0] += A[4][2] * B[2][0] = 0
+CYCLE=265 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][0] += A[4][3] * B[3][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=266 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][0] += A[4][4] * B[4][0] = 0
+CYCLE=267 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][0] += A[4][5] * B[5][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=268 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][0] += A[4][6] * B[6][0] = 0
+CYCLE=269 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][0] += A[4][7] * B[7][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=270 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][1] += A[4][0] * B[0][1] = 0
+CYCLE=271 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][1] += A[4][1] * B[1][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=272 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][1] += A[4][2] * B[2][1] = 0
+CYCLE=273 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][1] += A[4][3] * B[3][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=274 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][1] += A[4][4] * B[4][1] = 0
+CYCLE=275 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][1] += A[4][5] * B[5][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=276 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][1] += A[4][6] * B[6][1] = 0
+CYCLE=277 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][1] += A[4][7] * B[7][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=278 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][2] += A[4][0] * B[0][2] = 0
+CYCLE=279 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][2] += A[4][1] * B[1][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=280 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][2] += A[4][2] * B[2][2] = 0
+CYCLE=281 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][2] += A[4][3] * B[3][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=282 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][2] += A[4][4] * B[4][2] = 0
+CYCLE=283 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][2] += A[4][5] * B[5][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=284 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][2] += A[4][6] * B[6][2] = 0
+CYCLE=285 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][2] += A[4][7] * B[7][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=286 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][3] += A[4][0] * B[0][3] = 0
+CYCLE=287 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][3] += A[4][1] * B[1][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=288 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][3] += A[4][2] * B[2][3] = 0
+CYCLE=289 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][3] += A[4][3] * B[3][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=290 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][3] += A[4][4] * B[4][3] = 0
+CYCLE=291 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][3] += A[4][5] * B[5][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=292 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][3] += A[4][6] * B[6][3] = 0
+CYCLE=293 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][3] += A[4][7] * B[7][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=294 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][4] += A[4][0] * B[0][4] = 0
+CYCLE=295 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][4] += A[4][1] * B[1][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=296 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][4] += A[4][2] * B[2][4] = 0
+CYCLE=297 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][4] += A[4][3] * B[3][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=298 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][4] += A[4][4] * B[4][4] = 16
+CYCLE=299 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][4] += A[4][5] * B[5][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=300 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][4] += A[4][6] * B[6][4] = 0
+CYCLE=301 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][4] += A[4][7] * B[7][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=302 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][5] += A[4][0] * B[0][5] = 0
+CYCLE=303 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][5] += A[4][1] * B[1][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=304 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][5] += A[4][2] * B[2][5] = 0
+CYCLE=305 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][5] += A[4][3] * B[3][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=306 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][5] += A[4][4] * B[4][5] = 0
+CYCLE=307 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][5] += A[4][5] * B[5][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=308 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][5] += A[4][6] * B[6][5] = 0
+CYCLE=309 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][5] += A[4][7] * B[7][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=310 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][6] += A[4][0] * B[0][6] = 0
+CYCLE=311 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][6] += A[4][1] * B[1][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=312 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][6] += A[4][2] * B[2][6] = 0
+CYCLE=313 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][6] += A[4][3] * B[3][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=314 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][6] += A[4][4] * B[4][6] = 0
+CYCLE=315 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][6] += A[4][5] * B[5][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=316 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][6] += A[4][6] * B[6][6] = 0
+CYCLE=317 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][6] += A[4][7] * B[7][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=318 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][7] += A[4][0] * B[0][7] = 0
+CYCLE=319 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][7] += A[4][1] * B[1][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=320 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][7] += A[4][2] * B[2][7] = 0
+CYCLE=321 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][7] += A[4][3] * B[3][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=322 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][7] += A[4][4] * B[4][7] = 0
+CYCLE=323 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][7] += A[4][5] * B[5][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=324 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[4][7] += A[4][6] * B[6][7] = 0
+CYCLE=325 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[4][7] += A[4][7] * B[7][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=326 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][0] += A[5][0] * B[0][0] = 0
+CYCLE=327 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][0] += A[5][1] * B[1][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=328 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][0] += A[5][2] * B[2][0] = 0
+CYCLE=329 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][0] += A[5][3] * B[3][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=330 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][0] += A[5][4] * B[4][0] = 0
+CYCLE=331 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][0] += A[5][5] * B[5][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=332 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][0] += A[5][6] * B[6][0] = 0
+CYCLE=333 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][0] += A[5][7] * B[7][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=334 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][1] += A[5][0] * B[0][1] = 0
+CYCLE=335 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][1] += A[5][1] * B[1][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=336 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][1] += A[5][2] * B[2][1] = 0
+CYCLE=337 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][1] += A[5][3] * B[3][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=338 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][1] += A[5][4] * B[4][1] = 0
+CYCLE=339 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][1] += A[5][5] * B[5][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=340 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][1] += A[5][6] * B[6][1] = 0
+CYCLE=341 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][1] += A[5][7] * B[7][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=342 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][2] += A[5][0] * B[0][2] = 0
+CYCLE=343 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][2] += A[5][1] * B[1][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=344 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][2] += A[5][2] * B[2][2] = 0
+CYCLE=345 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][2] += A[5][3] * B[3][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=346 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][2] += A[5][4] * B[4][2] = 0
+CYCLE=347 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][2] += A[5][5] * B[5][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=348 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][2] += A[5][6] * B[6][2] = 0
+CYCLE=349 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][2] += A[5][7] * B[7][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=350 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][3] += A[5][0] * B[0][3] = 0
+CYCLE=351 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][3] += A[5][1] * B[1][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=352 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][3] += A[5][2] * B[2][3] = 0
+CYCLE=353 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][3] += A[5][3] * B[3][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=354 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][3] += A[5][4] * B[4][3] = 0
+CYCLE=355 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][3] += A[5][5] * B[5][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=356 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][3] += A[5][6] * B[6][3] = 0
+CYCLE=357 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][3] += A[5][7] * B[7][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=358 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][4] += A[5][0] * B[0][4] = 0
+CYCLE=359 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][4] += A[5][1] * B[1][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=360 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][4] += A[5][2] * B[2][4] = 0
+CYCLE=361 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][4] += A[5][3] * B[3][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=362 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][4] += A[5][4] * B[4][4] = 0
+CYCLE=363 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][4] += A[5][5] * B[5][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=364 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][4] += A[5][6] * B[6][4] = 0
+CYCLE=365 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][4] += A[5][7] * B[7][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=366 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][5] += A[5][0] * B[0][5] = 0
+CYCLE=367 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][5] += A[5][1] * B[1][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=368 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][5] += A[5][2] * B[2][5] = 0
+CYCLE=369 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][5] += A[5][3] * B[3][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=370 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][5] += A[5][4] * B[4][5] = 0
+CYCLE=371 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][5] += A[5][5] * B[5][5] = 25
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=372 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][5] += A[5][6] * B[6][5] = 0
+CYCLE=373 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][5] += A[5][7] * B[7][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=374 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][6] += A[5][0] * B[0][6] = 0
+CYCLE=375 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][6] += A[5][1] * B[1][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=376 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][6] += A[5][2] * B[2][6] = 0
+CYCLE=377 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][6] += A[5][3] * B[3][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=378 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][6] += A[5][4] * B[4][6] = 0
+CYCLE=379 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][6] += A[5][5] * B[5][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=380 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][6] += A[5][6] * B[6][6] = 0
+CYCLE=381 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][6] += A[5][7] * B[7][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=382 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][7] += A[5][0] * B[0][7] = 0
+CYCLE=383 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][7] += A[5][1] * B[1][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=384 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][7] += A[5][2] * B[2][7] = 0
+CYCLE=385 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][7] += A[5][3] * B[3][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=386 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][7] += A[5][4] * B[4][7] = 0
+CYCLE=387 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][7] += A[5][5] * B[5][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=388 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[5][7] += A[5][6] * B[6][7] = 0
+CYCLE=389 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[5][7] += A[5][7] * B[7][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=390 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][0] += A[6][0] * B[0][0] = 0
+CYCLE=391 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][0] += A[6][1] * B[1][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=392 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][0] += A[6][2] * B[2][0] = 0
+CYCLE=393 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][0] += A[6][3] * B[3][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=394 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][0] += A[6][4] * B[4][0] = 0
+CYCLE=395 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][0] += A[6][5] * B[5][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=396 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][0] += A[6][6] * B[6][0] = 0
+CYCLE=397 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][0] += A[6][7] * B[7][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=398 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][1] += A[6][0] * B[0][1] = 0
+CYCLE=399 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][1] += A[6][1] * B[1][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=400 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][1] += A[6][2] * B[2][1] = 0
+CYCLE=401 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][1] += A[6][3] * B[3][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=402 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][1] += A[6][4] * B[4][1] = 0
+CYCLE=403 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][1] += A[6][5] * B[5][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=404 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][1] += A[6][6] * B[6][1] = 0
+CYCLE=405 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][1] += A[6][7] * B[7][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=406 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][2] += A[6][0] * B[0][2] = 0
+CYCLE=407 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][2] += A[6][1] * B[1][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=408 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][2] += A[6][2] * B[2][2] = 0
+CYCLE=409 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][2] += A[6][3] * B[3][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=410 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][2] += A[6][4] * B[4][2] = 0
+CYCLE=411 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][2] += A[6][5] * B[5][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=412 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][2] += A[6][6] * B[6][2] = 0
+CYCLE=413 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][2] += A[6][7] * B[7][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=414 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][3] += A[6][0] * B[0][3] = 0
+CYCLE=415 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][3] += A[6][1] * B[1][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=416 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][3] += A[6][2] * B[2][3] = 0
+CYCLE=417 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][3] += A[6][3] * B[3][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=418 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][3] += A[6][4] * B[4][3] = 0
+CYCLE=419 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][3] += A[6][5] * B[5][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=420 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][3] += A[6][6] * B[6][3] = 0
+CYCLE=421 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][3] += A[6][7] * B[7][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=422 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][4] += A[6][0] * B[0][4] = 0
+CYCLE=423 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][4] += A[6][1] * B[1][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=424 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][4] += A[6][2] * B[2][4] = 0
+CYCLE=425 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][4] += A[6][3] * B[3][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=426 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][4] += A[6][4] * B[4][4] = 0
+CYCLE=427 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][4] += A[6][5] * B[5][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=428 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][4] += A[6][6] * B[6][4] = 0
+CYCLE=429 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][4] += A[6][7] * B[7][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=430 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][5] += A[6][0] * B[0][5] = 0
+CYCLE=431 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][5] += A[6][1] * B[1][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=432 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][5] += A[6][2] * B[2][5] = 0
+CYCLE=433 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][5] += A[6][3] * B[3][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=434 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][5] += A[6][4] * B[4][5] = 0
+CYCLE=435 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][5] += A[6][5] * B[5][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=436 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][5] += A[6][6] * B[6][5] = 0
+CYCLE=437 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][5] += A[6][7] * B[7][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=438 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][6] += A[6][0] * B[0][6] = 0
+CYCLE=439 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][6] += A[6][1] * B[1][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=440 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][6] += A[6][2] * B[2][6] = 0
+CYCLE=441 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][6] += A[6][3] * B[3][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=442 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][6] += A[6][4] * B[4][6] = 0
+CYCLE=443 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][6] += A[6][5] * B[5][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=444 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][6] += A[6][6] * B[6][6] = 36
+CYCLE=445 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][6] += A[6][7] * B[7][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=446 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][7] += A[6][0] * B[0][7] = 0
+CYCLE=447 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][7] += A[6][1] * B[1][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=448 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][7] += A[6][2] * B[2][7] = 0
+CYCLE=449 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][7] += A[6][3] * B[3][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=450 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][7] += A[6][4] * B[4][7] = 0
+CYCLE=451 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][7] += A[6][5] * B[5][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=452 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[6][7] += A[6][6] * B[6][7] = 0
+CYCLE=453 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[6][7] += A[6][7] * B[7][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=454 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][0] += A[7][0] * B[0][0] = 0
+CYCLE=455 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][0] += A[7][1] * B[1][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=456 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][0] += A[7][2] * B[2][0] = 0
+CYCLE=457 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][0] += A[7][3] * B[3][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=458 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][0] += A[7][4] * B[4][0] = 0
+CYCLE=459 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][0] += A[7][5] * B[5][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=460 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][0] += A[7][6] * B[6][0] = 0
+CYCLE=461 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][0] += A[7][7] * B[7][0] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=462 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][1] += A[7][0] * B[0][1] = 0
+CYCLE=463 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][1] += A[7][1] * B[1][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=464 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][1] += A[7][2] * B[2][1] = 0
+CYCLE=465 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][1] += A[7][3] * B[3][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=466 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][1] += A[7][4] * B[4][1] = 0
+CYCLE=467 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][1] += A[7][5] * B[5][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=468 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][1] += A[7][6] * B[6][1] = 0
+CYCLE=469 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][1] += A[7][7] * B[7][1] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=470 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][2] += A[7][0] * B[0][2] = 0
+CYCLE=471 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][2] += A[7][1] * B[1][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=472 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][2] += A[7][2] * B[2][2] = 0
+CYCLE=473 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][2] += A[7][3] * B[3][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=474 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][2] += A[7][4] * B[4][2] = 0
+CYCLE=475 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][2] += A[7][5] * B[5][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=476 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][2] += A[7][6] * B[6][2] = 0
+CYCLE=477 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][2] += A[7][7] * B[7][2] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=478 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][3] += A[7][0] * B[0][3] = 0
+CYCLE=479 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][3] += A[7][1] * B[1][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=480 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][3] += A[7][2] * B[2][3] = 0
+CYCLE=481 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][3] += A[7][3] * B[3][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=482 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][3] += A[7][4] * B[4][3] = 0
+CYCLE=483 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][3] += A[7][5] * B[5][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=484 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][3] += A[7][6] * B[6][3] = 0
+CYCLE=485 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][3] += A[7][7] * B[7][3] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=486 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][4] += A[7][0] * B[0][4] = 0
+CYCLE=487 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][4] += A[7][1] * B[1][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=488 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][4] += A[7][2] * B[2][4] = 0
+CYCLE=489 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][4] += A[7][3] * B[3][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=490 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][4] += A[7][4] * B[4][4] = 0
+CYCLE=491 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][4] += A[7][5] * B[5][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=492 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][4] += A[7][6] * B[6][4] = 0
+CYCLE=493 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][4] += A[7][7] * B[7][4] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=494 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][5] += A[7][0] * B[0][5] = 0
+CYCLE=495 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][5] += A[7][1] * B[1][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=496 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][5] += A[7][2] * B[2][5] = 0
+CYCLE=497 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][5] += A[7][3] * B[3][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=498 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][5] += A[7][4] * B[4][5] = 0
+CYCLE=499 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][5] += A[7][5] * B[5][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=500 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][5] += A[7][6] * B[6][5] = 0
+CYCLE=501 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][5] += A[7][7] * B[7][5] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=502 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][6] += A[7][0] * B[0][6] = 0
+CYCLE=503 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][6] += A[7][1] * B[1][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=504 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][6] += A[7][2] * B[2][6] = 0
+CYCLE=505 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][6] += A[7][3] * B[3][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=506 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][6] += A[7][4] * B[4][6] = 0
+CYCLE=507 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][6] += A[7][5] * B[5][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=508 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][6] += A[7][6] * B[6][6] = 0
+CYCLE=509 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][6] += A[7][7] * B[7][6] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=510 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][7] += A[7][0] * B[0][7] = 0
+CYCLE=511 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][7] += A[7][1] * B[1][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=512 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][7] += A[7][2] * B[2][7] = 0
+CYCLE=513 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][7] += A[7][3] * B[3][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=514 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][7] += A[7][4] * B[4][7] = 0
+CYCLE=515 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][7] += A[7][5] * B[5][7] = 0
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=516 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+MAC: C[7][7] += A[7][6] * B[6][7] = 0
+CYCLE=517 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+MAC: C[7][7] += A[7][7] * B[7][7] = 49
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=518 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=1|
+IFID: captured pc_in=00000018 instr_in=xxxxxxxx at time 5205000
+
+=================================
+ MATRIX MULTIPLICATION COMPLETE 
+=================================
+
+Matrix A:
+   0    0    0    0    0    0    0    0
+   0    1    0    0    0    0    0    0
+   0    0    2    0    0    0    0    0
+   0    0    0    3    0    0    0    0
+   0    0    0    0    4    0    0    0
+   0    0    0    0    0    5    0    0
+   0    0    0    0    0    0    6    0
+   0    0    0    0    0    0    0    7
+
+Matrix B:
+   0    0    0    0    0    0    0    0
+   0    1    0    0    0    0    0    0
+   0    0    2    0    0    0    0    0
+   0    0    0    3    0    0    0    0
+   0    0    0    0    4    0    0    0
+   0    0    0    0    0    5    0    0
+   0    0    0    0    0    0    6    0
+   0    0    0    0    0    0    0    7
+
+Matrix C = A x B:
+   0    0    0    0    0    0    0    0
+   0    1    0    0    0    0    0    0
+   0    0    4    0    0    0    0    0
+   0    0    0    9    0    0    0    0
+   0    0    0    0   16    0    0    0
+   0    0    0    0    0   25    0    0
+   0    0    0    0    0    0   36    0
+   0    0    0    0    0    0    0   49
+
+Verification:
+PASS: C[0][0] = 0
+PASS: C[1][1] = 1
+PASS: C[2][2] = 4
+PASS: C[3][3] = 9
+PASS: C[4][4] = 16
+PASS: C[5][5] = 25
+PASS: C[6][6] = 36
+PASS: C[7][7] = 49
+
+AXB = C VERIFIED
+=================================
+
+mem_wb: time=5205000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+CYCLE=519 | PC=00000018 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+T=5205000 | PC=0000001c | INSTR=xxxxxxxx | ALU=xxxxxxxx
+mem_wb: time=5215000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+IFID: captured pc_in=0000001c instr_in=xxxxxxxx at time 5215000
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=520 | PC=0000001c | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+T=5215000 | PC=00000020 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+IFID: captured pc_in=00000020 instr_in=xxxxxxxx at time 5225000
+mem_wb: time=5225000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+CYCLE=521 | PC=00000020 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+T=5225000 | PC=00000024 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+mem_wb: time=5235000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+IFID: captured pc_in=00000024 instr_in=xxxxxxxx at time 5235000
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=522 | PC=00000024 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+T=5235000 | PC=00000028 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+IFID: captured pc_in=00000028 instr_in=xxxxxxxx at time 5245000
+mem_wb: time=5245000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+CYCLE=523 | PC=00000028 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+T=5245000 | PC=0000002c | INSTR=xxxxxxxx | ALU=xxxxxxxx
+mem_wb: time=5255000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+IFID: captured pc_in=0000002c instr_in=xxxxxxxx at time 5255000
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=524 | PC=0000002c | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+T=5255000 | PC=00000030 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+IFID: captured pc_in=00000030 instr_in=xxxxxxxx at time 5265000
+mem_wb: time=5265000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+CYCLE=525 | PC=00000030 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+T=5265000 | PC=00000034 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+mem_wb: time=5275000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+IFID: captured pc_in=00000034 instr_in=xxxxxxxx at time 5275000
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=526 | PC=00000034 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+T=5275000 | PC=00000038 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+IFID: captured pc_in=00000038 instr_in=xxxxxxxx at time 5285000
+mem_wb: time=5285000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+CYCLE=527 | PC=00000038 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+T=5285000 | PC=0000003c | INSTR=xxxxxxxx | ALU=xxxxxxxx
+mem_wb: time=5295000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+IFID: captured pc_in=0000003c instr_in=xxxxxxxx at time 5295000
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=528 | PC=0000003c | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+T=5295000 | PC=00000040 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+IFID: captured pc_in=00000040 instr_in=xxxxxxxx at time 5305000
+mem_wb: time=5305000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+CYCLE=529 | PC=00000040 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+T=5305000 | PC=00000044 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+mem_wb: time=5315000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+IFID: captured pc_in=00000044 instr_in=xxxxxxxx at time 5315000
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=530 | PC=00000044 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+T=5315000 | PC=00000048 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+IFID: captured pc_in=00000048 instr_in=xxxxxxxx at time 5325000
+mem_wb: time=5325000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+CYCLE=531 | PC=00000048 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+T=5325000 | PC=0000004c | INSTR=xxxxxxxx | ALU=xxxxxxxx
+mem_wb: time=5335000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+IFID: captured pc_in=0000004c instr_in=xxxxxxxx at time 5335000
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=532 | PC=0000004c | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+T=5335000 | PC=00000050 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+IFID: captured pc_in=00000050 instr_in=xxxxxxxx at time 5345000
+mem_wb: time=5345000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+CYCLE=533 | PC=00000050 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+T=5345000 | PC=00000054 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+mem_wb: time=5355000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+IFID: captured pc_in=00000054 instr_in=xxxxxxxx at time 5355000
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=534 | PC=00000054 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+T=5355000 | PC=00000058 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+IFID: captured pc_in=00000058 instr_in=xxxxxxxx at time 5365000
+mem_wb: time=5365000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+CYCLE=535 | PC=00000058 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+T=5365000 | PC=0000005c | INSTR=xxxxxxxx | ALU=xxxxxxxx
+mem_wb: time=5375000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+IFID: captured pc_in=0000005c instr_in=xxxxxxxx at time 5375000
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=536 | PC=0000005c | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+T=5375000 | PC=00000060 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+IFID: captured pc_in=00000060 instr_in=xxxxxxxx at time 5385000
+mem_wb: time=5385000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+CYCLE=537 | PC=00000060 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+T=5385000 | PC=00000064 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+mem_wb: time=5395000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+IFID: captured pc_in=00000064 instr_in=xxxxxxxx at time 5395000
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=538 | PC=00000064 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+T=5395000 | PC=00000068 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+IFID: captured pc_in=00000068 instr_in=xxxxxxxx at time 5405000
+mem_wb: time=5405000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+CYCLE=539 | PC=00000068 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+T=5405000 | PC=0000006c | INSTR=xxxxxxxx | ALU=xxxxxxxx
+mem_wb: time=5415000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+IFID: captured pc_in=0000006c instr_in=xxxxxxxx at time 5415000
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=540 | PC=0000006c | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+T=5415000 | PC=00000070 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+IFID: captured pc_in=00000070 instr_in=xxxxxxxx at time 5425000
+mem_wb: time=5425000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+CYCLE=541 | PC=00000070 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+T=5425000 | PC=00000074 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+mem_wb: time=5435000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+IFID: captured pc_in=00000074 instr_in=xxxxxxxx at time 5435000
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=542 | PC=00000074 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+T=5435000 | PC=00000078 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+IFID: captured pc_in=00000078 instr_in=xxxxxxxx at time 5445000
+mem_wb: time=5445000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+CYCLE=543 | PC=00000078 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+T=5445000 | PC=0000007c | INSTR=xxxxxxxx | ALU=xxxxxxxx
+mem_wb: time=5455000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+IFID: captured pc_in=0000007c instr_in=xxxxxxxx at time 5455000
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=544 | PC=0000007c | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+T=5455000 | PC=00000080 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+IFID: captured pc_in=00000080 instr_in=xxxxxxxx at time 5465000
+mem_wb: time=5465000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+CYCLE=545 | PC=00000080 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+T=5465000 | PC=00000084 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+mem_wb: time=5475000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+IFID: captured pc_in=00000084 instr_in=xxxxxxxx at time 5475000
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=546 | PC=00000084 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+T=5475000 | PC=00000088 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+IFID: captured pc_in=00000088 instr_in=xxxxxxxx at time 5485000
+mem_wb: time=5485000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+CYCLE=547 | PC=00000088 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+T=5485000 | PC=0000008c | INSTR=xxxxxxxx | ALU=xxxxxxxx
+mem_wb: time=5495000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+IFID: captured pc_in=0000008c instr_in=xxxxxxxx at time 5495000
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=548 | PC=0000008c | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+T=5495000 | PC=00000090 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+IFID: captured pc_in=00000090 instr_in=xxxxxxxx at time 5505000
+mem_wb: time=5505000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+CYCLE=549 | PC=00000090 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+T=5505000 | PC=00000094 | INSTR=xxxxxxxx | ALU=xxxxxxxx
+mem_wb: time=5515000 mem_data_in=00000000 alu_result_in=xxxxxxxx rd_in=x mem_to_reg=x reg_write=x
+IFID: captured pc_in=00000094 instr_in=xxxxxxxx at time 5515000
+EXMEM_CAPTURE alu_result_ex=xxxxxxxx exmem_alu=xxxxxxxx
+CYCLE=550 | PC=00000094 | INSTR=xxxxxxxx | ALU=xxxxxxxx | R1=00001000 | R2=00000001 | R3=00000000 | R4=00000000 |BUSY=0|
 
 ================ SIMULATION END =====================
 
+tb/riscv_pipeline_tb.v:73: $finish called at 5515000 (1ps)
+T=5515000 | PC=00000098 | INSTR=xxxxxxxx | ALU=xxxxxxxx

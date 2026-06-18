@@ -27,7 +27,9 @@ module riscv_pipeline (
 
     wire [4:0]  memwb_rd;
     wire        memwb_reg_write;
-
+    wire mmul_result_valid;
+    wire [31:0] branch_rs1_val; //BEQ CONTROL SIGNALS
+    wire [31:0] branch_rs2_val; //BEQ CONTROL SIGNALS
     // ============================================================
     // HAZARD DETECTION WIRES
     // ============================================================
@@ -123,10 +125,31 @@ module riscv_pipeline (
     wire id_branch = (id_opcode == 7'b1100011); //BEQ BRANCHING ADDED
 
     // ============================================================
+    // MMUL CONTROL SIGNALS
+    // ============================================================
+    wire [31:0] mmul_read_addr;
+    wire reading_mmul_result;
+    wire accel_raw_hazard;
+
+    assign mmul_read_addr =
+    branch_rs1_val + id_imm;
+
+    assign reading_mmul_result =
+    id_mem_read &&
+    (mmul_read_addr == 32'h00001008);
+
+    assign accel_raw_hazard =
+    reading_mmul_result &&
+    !mmul_result_valid;
+
+    always @(*) begin
+    if (accel_raw_hazard)
+        $display("ACCEL RAW HAZARD DETECTED");
+    end
+
+    // ============================================================
     // BEQ CONTROL SIGNALS
     // ============================================================
-    wire [31:0] branch_rs1_val;
-    wire [31:0] branch_rs2_val;
     assign branch_rs1_val =
 
     (exmem_mem_read &&
@@ -259,6 +282,17 @@ end
 
     assign dbg_alu = alu_result_ex;
 
+    always @(*) begin
+    if (idex_mem_read)
+        $display(
+            "LOAD_EX_DEBUG rs1=%08h imm=%08h alu_b=%08h result=%08h",
+            forwarded_rs1,
+            idex_imm,
+            alu_b,
+            forwarded_rs1 + alu_b
+        );
+    end
+
     // ============================================================
     // EX / MEM
     // ============================================================
@@ -287,6 +321,12 @@ end
         .reg_write_out(exmem_reg_write)
     );
 
+    always @(posedge clk) begin
+    $display("EXMEM_CAPTURE alu_result_ex=%08h exmem_alu=%08h",
+             alu_result_ex,
+             exmem_alu);
+    end
+
     // ============================================================
     // MEM stage + MMUL
     // ============================================================
@@ -305,19 +345,24 @@ end
     );
 
 
+    wire [31:0] mmul_rdata;
     mmul_mem mmul_inst (
         .clk(clk),
         .rst(rst),
         .addr(exmem_alu),
         .wdata(exmem_rs2),
+        .mmul_result_valid(mmul_result_valid),
         .we(exmem_mem_write & mmul_sel),
         .mmul_busy(mmul_busy),
-        .mmul_done(mmul_done)
+        .mmul_done(mmul_done),
+        .rdata(mmul_rdata)
     );
 
     assign dbg_accel_busy = mmul_busy;
 
-    wire [31:0] mem_rdata = dmem_rdata;
+    wire [31:0] mem_rdata =
+    mmul_sel ? mmul_rdata :
+               dmem_rdata;
     assign dbg_dmem_load = mem_rdata;
 
     // ============================================================

@@ -52,11 +52,11 @@ module riscv_pipeline_tb;
         rst = 0;
 
         // Run simulation
-        repeat (50) begin
+        repeat (550) begin
             @(posedge clk);
             cycle = cycle + 1;
 
-            $display("CYCLE=%0d | PC=%h | INSTR=%h | ALU=%h | R1=%h | R2=%h | R3=%h | R4=%h |BUSY=%b",
+            $display("CYCLE=%0d | PC=%h | INSTR=%h | ALU=%h | R1=%h | R2=%h | R3=%h | R4=%h |BUSY=%b|",
                 cycle,
                 dbg_pc,
                 dbg_instr,
