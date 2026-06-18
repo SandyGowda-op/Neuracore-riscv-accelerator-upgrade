@@ -13,6 +13,11 @@ module riscv_pipeline (
     output wire [31:0] dbg_r2,
     output wire [31:0] dbg_r3,
     output wire [31:0] dbg_r4,
+    output wire [31:0] dbg_r5,
+    output wire [31:0] dbg_r6,
+    output wire [31:0] dbg_r7,
+    output wire [31:0] dbg_r8,
+    output wire [31:0] dbg_r9,
     output wire        dbg_accel_busy
 );
     // ============================================================
@@ -38,10 +43,17 @@ module riscv_pipeline (
     wire idex_flush;
 
     // ============================================================
+    // MMIO HAZARD DETECTION WIRES
+    // ============================================================
+    wire final_pc_write;
+    wire final_ifid_write;
+    wire final_idex_flush;
+
+    // ============================================================
     // PC wires instantiation
     // ============================================================
     reg [31:0] pc_reg;
-    wire cpu_stall = dbg_accel_busy;
+    wire cpu_stall = 1'b0; //STALLING FOR HAZARD DETECTION
 
     // ============================================================
     // IF stage
@@ -60,7 +72,7 @@ module riscv_pipeline (
     if_id if_id_inst (
         .clk(clk),
         .rst(rst),
-        .enable(!cpu_stall && ifid_write),   // 🔒 STALL HERE
+        .enable(final_ifid_write),   // 🔒 STALL HERE
         .flush(ifid_flush),
         .pc_in(pc_reg),
         .instr_in(instr_fetched),
@@ -98,7 +110,11 @@ module riscv_pipeline (
         .dbg_r2(dbg_r2),
         .dbg_r3(dbg_r3),
         .dbg_r4(dbg_r4),
-        .dbg_r5()
+        .dbg_r5(dbg_r5),
+        .dbg_r6(dbg_r6),
+        .dbg_r7(dbg_r7),
+        .dbg_r8(dbg_r8),
+        .dbg_r9(dbg_r9)
     );
 
     // ============================================================
@@ -226,7 +242,7 @@ end
     id_ex id_ex_inst (
         .clk(clk),
         .rst(rst),
-        .flush(idex_flush),
+        .flush(final_idex_flush),
 
         .pc_in(ifid_pc_out),
         .rs1_data_in(rf_rs1_data),
@@ -433,15 +449,32 @@ end
     // ============================================================
     // PC WORKING SHIFTED FOR SYNTAX PURPOSES
     // ============================================================  
-        always @(posedge clk or posedge rst) begin
-        if (rst)
-            pc_reg <= 32'd0;
-        else if (branch_taken && pc_write)
+    always @(posedge clk or posedge rst) begin
+    if (rst)
+        pc_reg <= 32'd0;
+
+    else if (final_pc_write) begin
+
+        if (branch_taken)
             pc_reg <= branch_target;
-        else if (!cpu_stall && pc_write)
+        else
             pc_reg <= pc_reg + 32'd4;
+
     end
+end
 
     assign dbg_pc = pc_reg;
+
+    // ============================================================
+    // MMIO HAZARD DETECTION LOGIC
+    // ============================================================
+    assign final_pc_write =
+    pc_write & ~accel_raw_hazard;
+
+    assign final_ifid_write =
+    ifid_write & ~accel_raw_hazard;
+
+    assign final_idex_flush =
+    idex_flush | accel_raw_hazard;
 
 endmodule

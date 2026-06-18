@@ -1845,3 +1845,4 @@ This will convert the MMUL from a blocking coprocessor into a non-blocking memor
 Milestone Achieved:
 
 **Successful implementation and verification of decode-stage MMUL RAW hazard detection using forwarded register values.**
+

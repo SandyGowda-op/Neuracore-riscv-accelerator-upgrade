@@ -171,7 +171,7 @@ module mmul_mem (
                      mmul_busy};
 
         32'h00001008:
-            rdata = 32'hDEADBEEF;   
+            rdata = C[0][0];   
 
         default:
             rdata = 32'b0;

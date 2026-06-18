@@ -13,7 +13,11 @@ module register_file (
     output wire [31:0] dbg_r2,
     output wire [31:0] dbg_r3,
     output wire [31:0] dbg_r4,
-    output wire [31:0] dbg_r5
+    output wire [31:0] dbg_r5,
+    output wire [31:0] dbg_r6,
+    output wire [31:0] dbg_r7,
+    output wire [31:0] dbg_r8,
+    output wire [31:0] dbg_r9
 );
     reg [31:0] regs [0:31];
     integer i;
@@ -35,4 +39,8 @@ module register_file (
     assign dbg_r3 = regs[3];
     assign dbg_r4 = regs[4];
     assign dbg_r5 = regs[5];
+    assign dbg_r6 = regs[6];
+    assign dbg_r7 = regs[7];
+    assign dbg_r8 = regs[8];
+    assign dbg_r9 = regs[9];
 endmodule

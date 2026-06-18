@@ -345,28 +345,146 @@ Purpose
 
 Verify forwarding of memory data directly into the branch comparator and elimination of load-to-branch RAW hazards.
 
-# Test 5 – Reserved for Data Memory Verification
+# STATUS Register Verification
+
+## Purpose:
+
+Verify MMIO status register operation.
+
+Assembly:
+
+lui x1,0x1
+lw  x3,4(x1)
+jal x0,0
+
+Address:
+
+0x1004
+
+Expected:
+
+R3 = 0
 
 Status:
 
-Not yet implemented.
+PASS
 
----
+# RESULT Register Verification
 
-# Test 6 – Reserved for Full Pipeline Regression
+## Purpose:
+
+Verify MMIO result path.
+
+Temporary RTL:
+
+rdata = 32'hDEADBEEF;
+
+Assembly:
+
+lui x1,0x1
+lw  x3,8(x1)
+jal x0,0
+
+Expected:
+
+R3 = DEADBEEF
 
 Status:
 
-Not yet implemented.
+PASS
 
----
+# Accelerator RAW Hazard Detection
 
-# Change Log
+## Purpose:
 
-| Date       | Test Added                    | Notes                          |
-| ---------- | ----------------------------- | ------------------------------ |
-| 2026-06-13 | MMUL Accelerator Trigger Test | Initial accelerator validation |
-| 2026-06-13 | Forwarding Verification Test  | First RAW hazard validation    |
+Verify detection of premature MMUL result consumption.
 
-```
-```
+Assembly:
+
+lui  x1,0x1
+addi x2,x0,1
+sw   x2,0(x1)
+lw   x3,8(x1)
+jal  x0,0
+
+Expected:
+
+ACCEL RAW HAZARD DETECTED
+
+Status:
+
+PASS
+
+# CPU/MMUL Concurrent Execution
+
+## Purpose:
+
+Verify CPU executes while MMUL computes.
+
+Assembly:
+
+lui  x1,0x1
+addi x2,x0,1
+sw   x2,0(x1)
+
+addi x5,x0,5
+addi x6,x0,6
+addi x7,x0,7
+addi x8,x0,8
+addi x9,x0,9
+
+jal  x0,0
+
+Expected:
+
+BUSY = 1
+
+R5 = 5
+R6 = 6
+R7 = 7
+R8 = 8
+R9 = 9
+
+Status:
+
+PASS
+
+# Accelerator-Aware Synchronization
+
+## Purpose:
+
+Verify targeted stall and automatic release.
+
+Assembly:
+
+lui  x1,0x1
+addi x2,x0,1
+sw   x2,0(x1)
+
+addi x5,x0,5
+addi x6,x0,6
+addi x7,x0,7
+
+lw   x3,8(x1)
+
+jal  x0,0
+
+Expected:
+
+MMUL START
+↓
+CPU executes ADDI instructions
+↓
+ACCEL RAW HAZARD DETECTED
+↓
+PC stalls
+↓
+MMUL completes
+↓
+Pipeline resumes
+↓
+R3 updated
+
+Status:
+
+PASS
