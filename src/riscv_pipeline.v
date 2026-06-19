@@ -35,6 +35,9 @@ module riscv_pipeline (
     wire mmul_result_valid;
     wire [31:0] branch_rs1_val; //BEQ CONTROL SIGNALS
     wire [31:0] branch_rs2_val; //BEQ CONTROL SIGNALS
+    wire id_is_fmac; //CUSTOM ISA EXTENSION CONTROL SIGNALS
+    wire id_is_relu; //CUSTOM ISA EXTENSION CONTROL SIGNALS
+    wire [31:0] relu_result; //RELU RESULT WIRE
     // ============================================================
     // HAZARD DETECTION WIRES
     // ============================================================
@@ -86,6 +89,7 @@ module riscv_pipeline (
     // ID stage
     // ============================================================
     wire [6:0] id_opcode = ifid_instr_out[6:0];
+    wire [2:0] id_funct3 = ifid_instr_out[14:12];
     wire [4:0] id_rs1    = ifid_instr_out[19:15];
     wire [4:0] id_rs2    = ifid_instr_out[24:20];
     wire [4:0] id_rd     = ifid_instr_out[11:7];
@@ -134,12 +138,35 @@ module riscv_pipeline (
     wire id_reg_write  = (id_opcode == 7'b0110011) |
                           (id_opcode == 7'b0010011) |
                           (id_opcode == 7'b0000011) |
-                          (id_opcode == 7'b0110111);
+                          (id_opcode == 7'b0110111) |
+                     id_is_fmac |
+                     id_is_relu;
 
     wire id_mem_to_reg = (id_opcode == 7'b0000011);
     wire id_alu_src    = (id_opcode != 7'b0110011);
     wire id_branch = (id_opcode == 7'b1100011); //BEQ BRANCHING ADDED
 
+    // ============================================================
+    // CUSTOM ISA EXTENSION CONTROL SIGNALS
+    // ============================================================
+
+    assign id_is_fmac =
+    (id_opcode == 7'b0001011) &&
+    (id_funct3 == 3'b000);
+
+    assign id_is_relu =
+    (id_opcode == 7'b0001011) &&
+    (id_funct3 == 3'b001);
+
+    always @(*) begin
+
+    //if (id_is_fmac)
+    //    $display("CUSTOM ISA: FMAC DETECTED");
+
+    //if (id_is_relu)
+    //    $display("CUSTOM ISA: RELU DETECTED");
+
+    end
     // ============================================================
     // MMUL CONTROL SIGNALS
     // ============================================================
@@ -248,6 +275,7 @@ module riscv_pipeline (
     wire [4:0]  idex_rd;
     wire [6:0]  idex_opcode;
     wire        idex_mem_read, idex_mem_write, idex_mem_to_reg, idex_reg_write, idex_alu_src;
+    wire [2:0] idex_funct3;
 
     id_ex id_ex_inst (
         .clk(clk),
@@ -262,6 +290,7 @@ module riscv_pipeline (
         .rs2_in(id_rs2),
         .rd_in(id_rd),
         .opcode_in(id_opcode),
+        .funct3_in(id_funct3),
 
         .alu_src_in(id_alu_src),
         .mem_read_in(id_mem_read),
@@ -277,7 +306,7 @@ module riscv_pipeline (
         .rs2_addr_out(idex_rs2_addr),
         .rd_out(idex_rd),
         .opcode_out(idex_opcode),
-
+        .funct3_out(idex_funct3),
         .alu_src_out(idex_alu_src),
         .mem_read_out(idex_mem_read),
         .mem_write_out(idex_mem_write),
@@ -290,6 +319,15 @@ module riscv_pipeline (
     // ============================================================
     // EX stage (LUI FIX PRESERVED)(FORWARDING DONE)
     // ============================================================
+
+    wire idex_is_fmac =             //relu ex stage
+    (idex_opcode == 7'b0001011) &&
+    (idex_funct3 == 3'b000);
+
+    wire idex_is_relu =
+    (idex_opcode == 7'b0001011) &&
+    (idex_funct3 == 3'b001);      //relu ex stage end
+
     assign forwarded_rs1 =
     (forward_a == 2'b10) ? exmem_alu :
     (forward_a == 2'b01) ? wb_data   :
@@ -302,23 +340,43 @@ module riscv_pipeline (
 
     wire [31:0] alu_b = idex_alu_src ? idex_imm : forwarded_rs2;
 
-    wire [31:0] alu_result_ex =
-        (idex_opcode == 7'b0110111) ? idex_imm :
-                                      (forwarded_rs1 + alu_b);
+    wire [31:0] normal_alu_result =
+    (idex_opcode == 7'b0110111) ?
+        idex_imm :
+        (forwarded_rs1 + alu_b);
 
+    wire [31:0] alu_result_ex =
+    idex_is_relu ?
+        relu_result :
+        normal_alu_result;
     assign dbg_alu = alu_result_ex;
 
-    always @(*) begin
-    if (idex_mem_read)
-        $display(
-            "LOAD_EX_DEBUG rs1=%08h imm=%08h alu_b=%08h result=%08h",
-            forwarded_rs1,
-            idex_imm,
-            alu_b,
-            forwarded_rs1 + alu_b
-        );
-    end
 
+    always @(*) begin
+    if (idex_is_relu)
+        $display(
+            "RELU_EX rs1=%h result=%h",
+            forwarded_rs1,
+            relu_result
+        );
+end
+
+    always @(*) begin
+
+    if (idex_is_fmac)
+        $display("FMAC_START EXECUTING");
+
+end
+
+    //=============================================================
+    // RELU UNIT INSTANTIATION
+    //=============================================================
+
+    relu_unit relu_inst (
+        .in_data(forwarded_rs1),
+        .out_data(relu_result)
+    );
+    
     // ============================================================
     // EX / MEM
     // ============================================================
@@ -370,6 +428,25 @@ module riscv_pipeline (
         .read_data(dmem_rdata)
     );
 
+    //===================================================
+    // MMUL INSTATIATION
+    //===================================================
+
+    //FMAC START PULSE GENERATION
+
+    wire mmul_start_mmio;
+    wire mmul_start_fmac;
+    wire mmul_we;
+
+    assign mmul_start_mmio =
+    exmem_mem_write & mmul_sel;
+
+    assign mmul_start_fmac =
+    idex_is_fmac;
+
+    assign mmul_we =
+    mmul_start_mmio |
+    mmul_start_fmac;
 
     wire [31:0] mmul_rdata;
     mmul_mem mmul_inst (
@@ -378,7 +455,7 @@ module riscv_pipeline (
         .addr(exmem_alu),
         .wdata(exmem_rs2),
         .mmul_result_valid(mmul_result_valid),
-        .we(exmem_mem_write & mmul_sel),
+        .we(mmul_we),
         .mmul_busy(mmul_busy),
         .mmul_done(mmul_done),
         .rdata(mmul_rdata)

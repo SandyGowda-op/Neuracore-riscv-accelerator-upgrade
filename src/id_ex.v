@@ -11,6 +11,7 @@ module id_ex (
     input  wire [4:0]  rs2_in,
     input  wire [4:0]  rd_in,
     input  wire [6:0]  opcode_in,
+    input wire  [2:0] funct3_in,
 
     input  wire        alu_src_in,
     input  wire        mem_read_in,
@@ -26,6 +27,7 @@ module id_ex (
     output reg  [4:0]  rs2_addr_out,
     output reg  [4:0]  rd_out,
     output reg  [6:0]  opcode_out,
+    output reg  [2:0] funct3_out,
 
     output reg         alu_src_out,
     output reg         mem_read_out,
@@ -54,6 +56,7 @@ module id_ex (
             mem_write_out  <= 1'b0;
             mem_to_reg_out <= 1'b0;
             reg_write_out  <= 1'b0;
+            funct3_out     <= 3'd0;
         end
 
         // Synchronous pipeline flush
@@ -74,6 +77,7 @@ module id_ex (
             mem_write_out  <= 1'b0;
             mem_to_reg_out <= 1'b0;
             reg_write_out  <= 1'b0;
+            funct3_out    <= 3'd0;
         end
 
         // Normal pipeline transfer
@@ -94,6 +98,7 @@ module id_ex (
             mem_write_out  <= mem_write_in;
             mem_to_reg_out <= mem_to_reg_in;
             reg_write_out  <= reg_write_in;
+            funct3_out     <= funct3_in;
         end
     end
 

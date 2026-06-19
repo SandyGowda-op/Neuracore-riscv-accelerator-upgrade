@@ -520,3 +520,81 @@ Git Tag:
 
 Outcome:
 Pipeline now resolves major RAW hazards without software-inserted NOPs.
+
+Phase 2A Complete
+-----------------
+Custom ISA decode infrastructure implemented.
+
+Features:
+- custom-0 opcode reserved
+- funct3-based instruction differentiation
+- FMAC decode verified
+- RELU decode verified
+
+Status:
+PASS
+
+Next:
+Phase 2B - RELU Execution Unit
+
+## Phase 2B Complete – RELU Custom Instruction
+
+Date:
+19 June 2026
+
+Objective:
+
+Implement the first fully functional custom ISA instruction.
+
+Instruction:
+
+```assembly
+relu rd, rs1
+```
+
+Architecture Changes:
+
+* Added funct3 propagation through ID/EX pipeline register.
+* Added dedicated RELU execution unit.
+* Added custom instruction execution selection logic.
+* Integrated RELU result into existing writeback path.
+
+Verification:
+
+Input:
+
+```assembly
+addi x1,x0,-1
+relu x2,x1
+```
+
+Output:
+
+```text
+x2 = 0
+```
+
+Input:
+
+```assembly
+addi x3,x0,7
+relu x4,x3
+```
+
+Output:
+
+```text
+x4 = 7
+```
+
+Result:
+
+PASS
+
+Project Status:
+
+Phase 2B Complete
+
+Next Milestone:
+
+Phase 2C – FMAC_START Instruction
