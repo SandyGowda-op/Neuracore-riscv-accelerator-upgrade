@@ -488,3 +488,82 @@ R3 updated
 Status:
 
 PASS
+
+
+# Test 008A
+
+## MMUL Busy Protection
+
+Purpose:
+
+Verify that additional MMUL start requests are ignored while the accelerator is busy.
+
+Assembly:
+
+```assembly
+lui  x1,0x1
+addi x2,x0,1
+
+sw   x2,0(x1)
+sw   x2,0(x1)
+
+jal  x0,0
+```
+
+Expected:
+
+```text
+START count    = 1
+COMPLETE count = 1
+```
+
+Result:
+
+PASS
+
+---
+
+# Test 008B
+
+## MMUL Restart Using Polling
+
+Purpose:
+
+Verify MMUL restart after completion.
+
+Assembly:
+
+```assembly
+lui  x1,0x1
+addi x2,x0,1
+
+sw   x2,0(x1)
+
+poll:
+lw   x3,4(x1)
+beq  x3,x0,poll
+
+sw   x2,0(x1)
+
+jal  x0,0
+```
+
+Result:
+
+INCONCLUSIVE
+
+Cause:
+
+Incorrect hand-encoded BEQ immediate.
+
+Observed:
+
+```text
+PC = 0x10
+IMM = 0x08
+TARGET = 0x18
+```
+
+Hardware Status:
+
+MMUL hardware unaffected.

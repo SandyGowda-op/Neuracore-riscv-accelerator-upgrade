@@ -1846,3 +1846,94 @@ Milestone Achieved:
 
 **Successful implementation and verification of decode-stage MMUL RAW hazard detection using forwarded register values.**
 
+# Engineering Journal Entry
+
+## 19 June 2026
+
+### Objective
+
+Finalize MMIO accelerator verification.
+
+---
+
+### Test 008A – Busy Protection
+
+Objective:
+
+Verify that MMUL ignores additional start requests while busy.
+
+Result:
+
+PASS
+
+Observation:
+
+```verilog
+if (we && !mmul_busy)
+```
+
+correctly prevented re-entry into the accelerator.
+
+---
+
+### Test 008B – Polling Restart Investigation
+
+Objective:
+
+Verify restart capability using status register polling.
+
+Result:
+
+INCONCLUSIVE
+
+Investigation:
+
+Status register correctly returned:
+
+```text
+0
+```
+
+and was successfully written into x3.
+
+Branch debug revealed:
+
+```text
+PC     = 0x10
+IMM    = 0x08
+TARGET = 0x18
+```
+
+The branch target skipped the polling loop.
+
+Root Cause:
+
+Incorrect hand-encoded BEQ immediate.
+
+MMUL hardware functionality was not implicated.
+
+---
+
+### Conclusion
+
+MMIO accelerator verification completed.
+
+Verified Features:
+
+* MMUL Start
+* MMUL Completion
+* Result Register
+* Status Register
+* CPU/MMUL Concurrency
+* Accelerator RAW Hazard Detection
+* Automatic Stall Release
+* Busy Protection
+
+Project Status:
+
+MMIO Architecture Frozen
+
+Next Phase:
+
+Custom ISA Extensions
+(FMAC + ReLU)

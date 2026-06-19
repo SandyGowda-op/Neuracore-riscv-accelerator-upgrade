@@ -220,7 +220,17 @@ module riscv_pipeline (
             branch_rs2_val,
             branch_taken
         );
-end
+    end
+
+    always @(*) begin
+    if (id_opcode == 7'b1100011)
+        $display(
+            "BEQ_DEBUG PC=%h IMM=%h TARGET=%h",
+            ifid_pc_out,
+            id_imm,
+            branch_target
+        );
+    end
     
 
     // ============================================================
