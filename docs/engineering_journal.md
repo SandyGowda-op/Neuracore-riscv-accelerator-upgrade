@@ -1937,3 +1937,41 @@ Next Phase:
 
 Custom ISA Extensions
 (FMAC + ReLU)
+
+
+Date: <today>
+
+Objective:
+Complete custom accelerator ISA integration.
+
+Work Completed:
+
+1. Implemented FMAC_START instruction.
+2. Implemented FMAC_READ instruction.
+3. Added direct accelerator result interface.
+4. Integrated FMAC_READ into EX/MEM/WB path.
+5. Extended accelerator RAW hazard logic to support ISA instructions.
+6. Verified automatic synchronization behavior.
+7. Verified register writeback using non-zero accelerator result (12 decimal).
+
+Results:
+
+FMAC_START:
+PASS
+
+FMAC_READ:
+PASS
+
+FMAC_READ RAW Hazard:
+PASS
+
+CPU/MMUL Concurrency:
+PASS
+
+Outcome:
+
+Phase 2 Custom Accelerator ISA completed successfully.
+
+Next Phase:
+
+Performance characterization and ISA-vs-MMIO comparison.

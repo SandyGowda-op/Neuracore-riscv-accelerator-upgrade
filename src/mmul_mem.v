@@ -9,6 +9,7 @@ module mmul_mem (
     input  wire        we,
 
     output reg  [31:0] rdata,
+    output wire [31:0] result_out,
 
     output reg         mmul_busy,
     output reg         mmul_done,
@@ -41,7 +42,10 @@ module mmul_mem (
                 C[r][c] = 0;
             end
         end
+        A[0][0] = 3;
+        B[0][0] = 4;
     end
+
 
     // ============================================================
     // FSM: MMUL CONTROL
@@ -179,5 +183,7 @@ module mmul_mem (
     endcase
 
 end
+
+assign result_out = C[0][0];
 
 endmodule

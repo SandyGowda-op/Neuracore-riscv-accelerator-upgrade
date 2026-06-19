@@ -567,3 +567,89 @@ TARGET = 0x18
 Hardware Status:
 
 MMUL hardware unaffected.
+
+## TEST-ISA-01 : FMAC_START Verification
+
+Program:
+
+fmac x0,x0,x0
+jal x0,0
+
+Expected:
+
+FMAC_START EXECUTING
+MMUL START
+
+Result:
+
+PASS
+
+---
+
+## TEST-ISA-02 : RELU Verification
+
+Program:
+
+relu x3,x1
+
+Input:
+
+x1 = -1
+
+Expected:
+
+x3 = 0
+
+Result:
+
+PASS
+
+---
+
+## TEST-ISA-03 : FMAC_READ Datapath Verification
+
+Program:
+
+fmac x0,x0,x0
+fmacrd x5
+jal x0,0
+
+Expected:
+
+x5 receives accelerator result
+
+Observed:
+
+x5 = 0x0000000C
+
+Result:
+
+PASS
+
+---
+
+## TEST-ISA-04 : FMAC_READ RAW Hazard Verification
+
+Program:
+
+fmac x0,x0,x0
+fmacrd x5
+jal x0,0
+
+Expected:
+
+Pipeline stall
+
+MMUL completion
+
+Automatic resume
+
+Observed:
+
+ACCEL RAW HAZARD DETECTED
+
+Result correctly written
+
+Result:
+
+PASS

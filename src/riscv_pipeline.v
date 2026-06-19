@@ -37,7 +37,10 @@ module riscv_pipeline (
     wire [31:0] branch_rs2_val; //BEQ CONTROL SIGNALS
     wire id_is_fmac; //CUSTOM ISA EXTENSION CONTROL SIGNALS
     wire id_is_relu; //CUSTOM ISA EXTENSION CONTROL SIGNALS
+    wire id_is_fmac_read; //CUSTOM ISA EXTENSION CONTROL SIGNALS
     wire [31:0] relu_result; //RELU RESULT WIRE
+    wire [31:0] mmul_rdata; //MMUL RESULT READ DATA WIRE
+    wire [31:0] mmul_result_direct; //DIRECT WIRE FROM MMUL TO EX STAGE FOR FMAC READS
     // ============================================================
     // HAZARD DETECTION WIRES
     // ============================================================
@@ -140,7 +143,8 @@ module riscv_pipeline (
                           (id_opcode == 7'b0000011) |
                           (id_opcode == 7'b0110111) |
                      id_is_fmac |
-                     id_is_relu;
+                     id_is_relu|
+                     id_is_fmac_read;
 
     wire id_mem_to_reg = (id_opcode == 7'b0000011);
     wire id_alu_src    = (id_opcode != 7'b0110011);
@@ -158,7 +162,11 @@ module riscv_pipeline (
     (id_opcode == 7'b0001011) &&
     (id_funct3 == 3'b001);
 
-    always @(*) begin
+    assign id_is_fmac_read =
+    (id_opcode == 7'b0001011) &&
+    (id_funct3 == 3'b010);
+
+    //always @(*) begin
 
     //if (id_is_fmac)
     //    $display("CUSTOM ISA: FMAC DETECTED");
@@ -166,13 +174,17 @@ module riscv_pipeline (
     //if (id_is_relu)
     //    $display("CUSTOM ISA: RELU DETECTED");
 
-    end
+    //end
     // ============================================================
     // MMUL CONTROL SIGNALS
     // ============================================================
     wire [31:0] mmul_read_addr;
     wire reading_mmul_result;
     wire accel_raw_hazard;
+    wire reading_fmac_result;
+
+    assign reading_fmac_result =
+    id_is_fmac_read;
 
     assign mmul_read_addr =
     branch_rs1_val + id_imm;
@@ -182,12 +194,19 @@ module riscv_pipeline (
     (mmul_read_addr == 32'h00001008);
 
     assign accel_raw_hazard =
-    reading_mmul_result &&
+    (reading_mmul_result || reading_fmac_result) &&
     !mmul_result_valid;
 
     always @(*) begin
+
     if (accel_raw_hazard)
-        $display("ACCEL RAW HAZARD DETECTED");
+        $display(
+            "ACCEL RAW HAZARD DETECTED valid=%b fmacrd=%b mmio=%b",
+            mmul_result_valid,
+            reading_fmac_result,
+            reading_mmul_result
+        );
+
     end
 
     // ============================================================
@@ -328,6 +347,10 @@ module riscv_pipeline (
     (idex_opcode == 7'b0001011) &&
     (idex_funct3 == 3'b001);      //relu ex stage end
 
+    wire idex_is_fmac_read =
+    (idex_opcode == 7'b0001011) &&
+    (idex_funct3 == 3'b010);
+
     assign forwarded_rs1 =
     (forward_a == 2'b10) ? exmem_alu :
     (forward_a == 2'b01) ? wb_data   :
@@ -348,6 +371,10 @@ module riscv_pipeline (
     wire [31:0] alu_result_ex =
     idex_is_relu ?
         relu_result :
+
+    idex_is_fmac_read ?
+        mmul_result_direct :
+
         normal_alu_result;
     assign dbg_alu = alu_result_ex;
 
@@ -448,7 +475,6 @@ end
     mmul_start_mmio |
     mmul_start_fmac;
 
-    wire [31:0] mmul_rdata;
     mmul_mem mmul_inst (
         .clk(clk),
         .rst(rst),
@@ -458,7 +484,8 @@ end
         .we(mmul_we),
         .mmul_busy(mmul_busy),
         .mmul_done(mmul_done),
-        .rdata(mmul_rdata)
+        .rdata(mmul_rdata),
+        .result_out(mmul_result_direct)
     );
 
     assign dbg_accel_busy = mmul_busy;

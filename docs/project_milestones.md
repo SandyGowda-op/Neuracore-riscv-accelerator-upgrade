@@ -598,3 +598,28 @@ Phase 2B Complete
 Next Milestone:
 
 Phase 2C – FMAC_START Instruction
+
+## Milestone M8 — Custom Accelerator ISA Complete
+
+Date: <today>
+
+Completed:
+
+- FMAC_START custom instruction
+- RELU custom instruction
+- FMAC_READ custom instruction
+- FMAC_READ RAW hazard detection
+- Accelerator result register interface
+- Direct accelerator result retrieval
+
+Verification:
+
+PASS
+
+Impact:
+
+Accelerator functionality can now be accessed entirely through ISA extensions without MMIO software sequences.
+
+Status:
+
+COMPLETE
