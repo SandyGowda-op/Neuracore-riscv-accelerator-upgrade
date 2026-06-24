@@ -9,7 +9,7 @@ module data_memory (
 );
     reg [31:0] mem [0:1023]; // 4KB
     integer i;
-    `ifndef YOSYS
+    `ifndef SYNTHESIS
 initial begin
     $display("data_memory: attempting to load init file 'data_memory.mem' ...");
     $readmemh("data_memory.mem", mem);

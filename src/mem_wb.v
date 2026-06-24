@@ -14,6 +14,7 @@ module mem_wb (
     output reg         mem_to_reg_out,
     output reg         reg_write_out
 );
+    `ifndef SYNTHESIS
     always @(posedge clk or posedge rst) begin
         if (rst) begin
             mem_data_out <= 32'd0;
@@ -29,8 +30,11 @@ module mem_wb (
             reg_write_out <= reg_write_in;
 
             // DEBUG: print WB inputs each cycle when enable
+            
             $display("mem_wb: time=%0t mem_data_in=%08h alu_result_in=%08h rd_in=%0d mem_to_reg=%0d reg_write=%0d",
                      $time, mem_data_in, alu_result_in, rd_in, mem_to_reg_in, reg_write_in);
+            
         end
     end
+    `endif
 endmodule

@@ -197,8 +197,8 @@ module riscv_pipeline (
     (reading_mmul_result || reading_fmac_result) &&
     !mmul_result_valid;
 
+    `ifndef SYNTHESIS
     always @(*) begin
-
     if (accel_raw_hazard)
         $display(
             "ACCEL RAW HAZARD DETECTED valid=%b fmacrd=%b mmio=%b",
@@ -208,6 +208,7 @@ module riscv_pipeline (
         );
 
     end
+    `endif
 
     // ============================================================
     // BEQ CONTROL SIGNALS
@@ -257,6 +258,7 @@ module riscv_pipeline (
     assign ifid_flush = //FLUSH SIGNAL FOR BEQ
     branch_taken && pc_write;
 
+    `ifndef SYNTHESIS
     always @(*) begin
     if (id_branch)
         $display(
@@ -267,9 +269,12 @@ module riscv_pipeline (
             branch_taken
         );
     end
+    `endif
 
+    `ifndef SYNTHESIS
     always @(*) begin
     if (id_opcode == 7'b1100011)
+        
         $display(
             "BEQ_DEBUG PC=%h IMM=%h TARGET=%h",
             ifid_pc_out,
@@ -277,6 +282,7 @@ module riscv_pipeline (
             branch_target
         );
     end
+    `endif
     
 
     // ============================================================
@@ -378,22 +384,25 @@ module riscv_pipeline (
         normal_alu_result;
     assign dbg_alu = alu_result_ex;
 
-
+    `ifndef SYNTHESIS
     always @(*) begin
     if (idex_is_relu)
+    
         $display(
             "RELU_EX rs1=%h result=%h",
             forwarded_rs1,
             relu_result
         );
 end
-
+`endif
+`ifndef SYNTHESIS
     always @(*) begin
 
     if (idex_is_fmac)
         $display("FMAC_START EXECUTING");
 
 end
+`endif 
 
     //=============================================================
     // RELU UNIT INSTANTIATION
@@ -431,13 +440,13 @@ end
         .mem_to_reg_out(exmem_mem_to_reg),
         .reg_write_out(exmem_reg_write)
     );
-
+    `ifndef SYNTHESIS
     always @(posedge clk) begin
     $display("EXMEM_CAPTURE alu_result_ex=%08h exmem_alu=%08h",
              alu_result_ex,
              exmem_alu);
     end
-
+`endif
     // ============================================================
     // MEM stage + MMUL
     // ============================================================

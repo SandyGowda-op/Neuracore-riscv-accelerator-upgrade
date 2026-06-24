@@ -5,7 +5,7 @@ module instr_mem (
 
     reg [31:0] mem [0:1023];
 
-   `ifndef YOSYS
+   `ifndef SYNTHESIS
 initial begin
     $display("instr_mem: attempting to load instruction_memory.mem...");
     $readmemh("instruction_memory.mem", mem);

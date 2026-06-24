@@ -1,0 +1,129 @@
+# Dataset B3 – Hazard Synchronization Analysis
+
+## Objective
+
+Evaluate accelerator-aware hazard detection and automatic synchronization mechanisms for MMIO and ISA accelerator interfaces.
+
+---
+
+## MMIO Architecture
+
+### Benchmark Program
+
+```assembly
+lui  x1,0x1
+addi x2,x0,1
+
+sw   x2,0(x1)
+
+addi x5,x0,5
+addi x6,x0,6
+addi x7,x0,7
+
+lw   x3,8(x1)
+
+jal  x0,0
+```
+
+### Results
+
+Hazard Detection Events:
+
+1
+
+Evidence:
+
+ACCEL RAW HAZARD DETECTED
+
+Result Register Write:
+
+REGFILE WRITE:
+we_addr = 3
+
+Result Value:
+
+0x00000000
+
+Result Write Time:
+
+5245000 ns
+
+Status:
+
+PASS
+
+---
+
+## ISA Architecture
+
+### Benchmark Program
+
+```assembly
+fmac x0,x0,x0
+
+addi x5,x0,5
+addi x6,x0,6
+addi x7,x0,7
+
+fmacrd x3
+
+jal x0,0
+```
+
+### Results
+
+Hazard Detection Messages:
+
+2
+
+Evidence:
+
+ACCEL RAW HAZARD DETECTED
+
+Result Register Write:
+
+REGFILE WRITE:
+we_addr = 3
+
+Result Value:
+
+0x0000000C
+
+Result Write Time:
+
+5215000 ns
+
+Status:
+
+PASS
+
+---
+
+## Interpretation
+
+The MMIO implementation generates a single hazard detection event when software attempts to read accelerator output before completion.
+
+The ISA implementation generates two hazard detection messages because the FMAC_READ instruction remains resident in the decode stage while the accelerator result is unavailable.
+
+The duplicate messages correspond to repeated evaluation of the same dependency and do not indicate multiple independent hazards.
+
+Both architectures correctly:
+
+* Stall when accelerator data is unavailable
+* Preserve independent instruction execution
+* Resume automatically when data becomes available
+* Deliver results without software polling
+
+---
+
+## Conclusion
+
+Accelerator-aware synchronization operates correctly in both implementations.
+
+The ISA approach integrates synchronization directly into the instruction stream through FMAC_READ, while the MMIO implementation performs synchronization through a memory-mapped load operation.
+
+No functional correctness issues were observed.
+
+Dataset Status:
+
+VERIFIED

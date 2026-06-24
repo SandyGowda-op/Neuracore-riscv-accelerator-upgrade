@@ -42,10 +42,10 @@ module mmul_mem (
                 C[r][c] = 0;
             end
         end
+
         A[0][0] = 3;
         B[0][0] = 4;
     end
-
 
     // ============================================================
     // FSM: MMUL CONTROL
@@ -65,7 +65,7 @@ module mmul_mem (
                     C[r][c] <= 0;
         end
         else begin
-            mmul_done <= 1'b0; // default
+            mmul_done <= 1'b0;
 
             // ====================================================
             // START
@@ -81,7 +81,9 @@ module mmul_mem (
                     for (c = 0; c < 8; c = c + 1)
                         C[r][c] <= 0;
 
+`ifndef SYNTHESIS
                 $display("\n=== MMUL 8x8 START ===");
+`endif
             end
 
             // ====================================================
@@ -90,21 +92,26 @@ module mmul_mem (
             else if (mmul_busy) begin
                 C[i][j] <= C[i][j] + A[i][k] * B[k][j];
 
-                $display("MAC: C[%0d][%0d] += A[%0d][%0d] * B[%0d][%0d] = %0d",
-                         i, j, i, k, k, j, A[i][k] * B[k][j]);
+`ifndef SYNTHESIS
+                $display(
+                    "MAC: C[%0d][%0d] += A[%0d][%0d] * B[%0d][%0d] = %0d",
+                    i, j, i, k, k, j, A[i][k] * B[k][j]
+                );
+`endif
 
                 if (k < 7)
                     k <= k + 1;
                 else begin
                     k <= 0;
+
                     if (j < 7)
                         j <= j + 1;
                     else begin
                         j <= 0;
+
                         if (i < 7)
                             i <= i + 1;
                         else begin
-                            // LAST MAC issued → wait 1 cycle
                             mmul_busy <= 1'b0;
                             finish_pending <= 1'b1;
                         end
@@ -113,12 +120,14 @@ module mmul_mem (
             end
 
             // ====================================================
-            // FINISH (1 cycle later - IMPORTANT)
+            // FINISH
             // ====================================================
             if (finish_pending) begin
                 finish_pending <= 1'b0;
                 mmul_result_valid <= 1'b1;
                 mmul_done <= 1'b1;
+
+`ifndef SYNTHESIS
 
                 $display("\n=================================");
                 $display(" MATRIX MULTIPLICATION COMPLETE ");
@@ -158,6 +167,8 @@ module mmul_mem (
 
                 $display("\nAXB = C VERIFIED");
                 $display("=================================\n");
+
+`endif
             end
         end
     end
@@ -166,24 +177,22 @@ module mmul_mem (
     // READ LOGIC
     //------------------------------------------------
     always @(*) begin
+        case (addr)
 
-    case (addr)
+            32'h00001004:
+                rdata = {30'b0,
+                         mmul_result_valid,
+                         mmul_busy};
 
-        32'h00001004:
-            rdata = {30'b0,
-                     mmul_result_valid,
-                     mmul_busy};
+            32'h00001008:
+                rdata = C[0][0];
 
-        32'h00001008:
-            rdata = C[0][0];   
+            default:
+                rdata = 32'b0;
 
-        default:
-            rdata = 32'b0;
+        endcase
+    end
 
-    endcase
-
-end
-
-assign result_out = C[0][0];
+    assign result_out = C[0][0];
 
 endmodule
