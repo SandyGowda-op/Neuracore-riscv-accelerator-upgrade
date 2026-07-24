@@ -1,0 +1,37 @@
+Startpoint: ex_mem_inst/_223_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: dmem/_194548_ (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: max
+
+    Cap    Slew   Delay    Time   Description
+-----------------------------------------------------------------------
+           0.00    0.00    0.00   clock clk (rise edge)
+                   0.00    0.00   clock network delay (ideal)
+           0.00    0.00    0.00 ^ ex_mem_inst/_223_/CK (DFFR_X1)
+40736.98   92.89   97.35   97.35 ^ ex_mem_inst/_223_/Q (DFFR_X1)
+          92.89    0.00   97.35 ^ dmem/_114948_/A (INV_X1)
+26348.86 4849.72 12253.11 12350.46 v dmem/_114948_/ZN (INV_X1)
+        4849.72    0.00 12350.46 v dmem/_160117_/A1 (NOR2_X1)
+   8.29  820.08 1622.50 13972.96 ^ dmem/_160117_/ZN (NOR2_X1)
+         820.08    0.00 13972.96 ^ dmem/_160188_/A2 (NAND2_X1)
+  50.39   88.28  223.35 14196.31 v dmem/_160188_/ZN (NAND2_X1)
+          88.28    0.00 14196.31 v dmem/_192006_/A1 (NOR2_X1)
+  84.86    0.34   90.05 14286.36 ^ dmem/_192006_/ZN (NOR2_X1)
+           0.34    0.00 14286.36 ^ dmem/_192037_/S (MUX2_X1)
+   1.37    0.05    0.06 14286.42 v dmem/_192037_/Z (MUX2_X1)
+           0.05    0.00 14286.42 v dmem/_194548_/D (DFF_X1)
+                        14286.42   data arrival time
+
+           0.00   10.00   10.00   clock clk (rise edge)
+                   0.00   10.00   clock network delay (ideal)
+                   0.00   10.00   clock reconvergence pessimism
+                          10.00 ^ dmem/_194548_/CK (DFF_X1)
+                  -0.06    9.94   library setup time
+                           9.94   data required time
+-----------------------------------------------------------------------
+                           9.94   data required time
+                        -14286.42   data arrival time
+-----------------------------------------------------------------------
+                        -14276.48   slack (VIOLATED)
+
+

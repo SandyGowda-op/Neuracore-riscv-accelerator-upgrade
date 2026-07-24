@@ -623,3 +623,16 @@ Accelerator functionality can now be accessed entirely through ISA extensions wi
 Status:
 
 COMPLETE
+
+## Descriptor Fetch Unit
+
+✓ RTL Skeleton Completed
+
+Features
+
+- Parameterized module
+- Package-based architecture
+- Clean port interface
+- Shadow register architecture
+- Three-process FSM framework
+- Compiles successfully using Icarus Verilog
