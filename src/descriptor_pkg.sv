@@ -24,7 +24,7 @@
  * They DO NOT generate hardware.
  *
  ******************************************************************************/
-
+`timescale 1ns/1ps
 package descriptor_pkg;
 
     //======================================================================
@@ -35,7 +35,7 @@ package descriptor_pkg;
 
     parameter int NUM_DESCRIPTORS      = 128;
 
-    parameter int WORDS_PER_DESCRIPTOR = 10;
+    parameter int WORDS_PER_DESCRIPTOR = 8;
 
 
     //======================================================================
@@ -74,39 +74,33 @@ package descriptor_pkg;
     //
     // Descriptor Layout
     //
-    // Word 0 : Source A Address
-    // Word 1 : Source B Address
-    // Word 2 : Destination Address
-    // Word 3 : Rows | Cols
-    // Word 4 : K | Stride A
-    // Word 5 : Stride B | Stride C
-    // Word 6 : Datatype
-    // Word 7 : Flags
-    // Word 8 : Status
-    // Word 9 : Reserved
+    // Word 0 : srcA_addr
+    // Word 1 : srcB_addr
+    // Word 2 : metadata_addr
+    // Word 3 : dst_addr
+    // Word 4 : rows, cols
+    // Word 5 : k, strideA  
+    // Word 6 : strideB, strideC
+    // Word 7 : flags
     //======================================================================
 
-    typedef enum logic [3:0] {
+    typedef enum logic [2:0] {
 
-        DESC_WORD_SRCA       = 4'd0,
+        DESC_WORD_SRCA       = 3'd0,
 
-        DESC_WORD_SRCB       = 4'd1,
+        DESC_WORD_SRCB       = 3'd1,
 
-        DESC_WORD_DST        = 4'd2,
+        DESC_WORD_METADATA   = 3'd2,
 
-        DESC_WORD_ROWS_COLS  = 4'd3,
+        DESC_WORD_DST        = 3'd3,
 
-        DESC_WORD_K_STRIDEA  = 4'd4,
+        DESC_WORD_ROWS_COLS  = 3'd4,
 
-        DESC_WORD_STRIDEB_C  = 4'd5,
+        DESC_WORD_K_STRIDEA  = 3'd5,
 
-        DESC_WORD_DATATYPE   = 4'd6,
+        DESC_WORD_STRIDEB_C  = 3'd6,
 
-        DESC_WORD_FLAGS      = 4'd7,
-
-        DESC_WORD_STATUS     = 4'd8,
-
-        DESC_WORD_RESERVED   = 4'd9
+        DESC_WORD_FLAGS      = 3'd7
 
     } descriptor_word_index_t;
 
@@ -133,24 +127,6 @@ package descriptor_pkg;
 
     } dfu_state_t;
 
-
-    //======================================================================
-    // Supported Matrix Datatypes
-    //======================================================================
-
-    typedef enum logic [1:0] {
-
-        DATA_INT8      = 2'b00,
-
-        DATA_INT16     = 2'b01,
-
-        DATA_FP16      = 2'b10,
-
-        DATA_RESERVED  = 2'b11
-
-    } datatype_t;
-
-
     //======================================================================
     // Descriptor Structure
     //
@@ -168,8 +144,22 @@ package descriptor_pkg;
 
         logic [31:0] srcB_addr;
 
-        logic [31:0] dst_addr;
+//--------------------------------------------------------------
+// Metadata Address
+//
+// Used only when Sparse Mode is enabled.
+//
+// Dense Mode:
+//     Ignored.
+//
+// Sparse Mode:
+//     Points to the compressed metadata associated with
+//     Source Matrix A.
+//--------------------------------------------------------------
 
+       logic [31:0] metadata_addr;
+
+       logic [31:0] dst_addr;
 
         //------------------------------------------------------------------
         // Matrix Dimensions
@@ -193,30 +183,61 @@ package descriptor_pkg;
         logic [15:0] strideC;
 
 
-        //------------------------------------------------------------------
-        // Datatype
-        //------------------------------------------------------------------
+//------------------------------------------------------------------
+// bit0 : Sparse Scheduler Enable
+//
+// bit1 : Interrupt on Completion
+//
+// bit2 : Transpose Matrix A
+//
+// bit3 : Transpose Matrix B
+//
+// bit4 : Accumulate into Destination
+//
+// bit5-31 : Reserved
+//------------------------------------------------------------------
 
-        datatype_t datatype;
+logic [31:0] flags;
 
-        logic [29:0] reserved0;
+} descriptor_t;
 
+//==============================================================
+// Descriptor Error Codes
+//==============================================================
 
-        //------------------------------------------------------------------
-        // Control
-        //------------------------------------------------------------------
+typedef enum logic [3:0]
+{
+    DESC_NO_ERROR,
 
-        logic [31:0] flags;
+    DESC_ERR_ROWS_ZERO,
 
-        logic [31:0] status;
+    DESC_ERR_COLS_ZERO,
 
+    DESC_ERR_K_ZERO
 
-        //------------------------------------------------------------------
-        // Reserved
-        //------------------------------------------------------------------
+} descriptor_error_t;
 
-        logic [31:0] reserved1;
+//======================================================================
+// Descriptor Flag Bit Definitions
+//======================================================================
+//
+// flags[0] : Sparse Scheduler Enable
+// flags[1] : Interrupt on Completion
+// flags[2] : Transpose Matrix A
+// flags[3] : Transpose Matrix B
+// flags[4] : Accumulate into Destination
+//
 
-    } descriptor_t;
+localparam int FLAG_SPARSE_ENABLE = 0;
+
+localparam int FLAG_INTERRUPT     = 1;
+
+localparam int FLAG_TRANSPOSE_A   = 2;
+
+localparam int FLAG_TRANSPOSE_B   = 3;
+
+localparam int FLAG_ACCUMULATE    = 4;
+
+localparam int FLAG_RELU_ENABLE = 5;
 
 endpackage
