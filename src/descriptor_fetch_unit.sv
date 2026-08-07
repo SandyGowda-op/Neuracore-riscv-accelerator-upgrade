@@ -71,7 +71,13 @@ module descriptor_fetch_unit
     output logic done,
 
     output descriptor_t
-                 descriptor_out
+                 descriptor_out,
+    
+    output logic descriptor_valid,
+
+    output logic descriptor_error,
+
+    output logic [3:0] descriptor_error_code
 
 );
 
@@ -113,7 +119,7 @@ module descriptor_fetch_unit
     descriptor_t descriptor_out_reg;
 
     logic done_reg;
-
+    
     //==========================================================
     // Helper Signals
     //==========================================================
@@ -222,12 +228,19 @@ begin
                 //--------------------------------------------------
                 // Word 2
                 //--------------------------------------------------
+                
+                DESC_WORD_METADATA:
+                    working_desc.metadata_addr <= dfu_rdata;
+
+                //--------------------------------------------------
+                // Word 3
+                //--------------------------------------------------
 
                 DESC_WORD_DST:
                     working_desc.dst_addr <= dfu_rdata;
 
                 //--------------------------------------------------
-                // Word 3
+                // Word 4
                 //--------------------------------------------------
 
                 DESC_WORD_ROWS_COLS:
@@ -237,7 +250,7 @@ begin
                 end
 
                 //--------------------------------------------------
-                // Word 4
+                // Word 5
                 //--------------------------------------------------
 
                 DESC_WORD_K_STRIDEA:
@@ -247,7 +260,7 @@ begin
                 end
 
                 //--------------------------------------------------
-                // Word 5
+                // Word 6
                 //--------------------------------------------------
 
                 DESC_WORD_STRIDEB_C:
@@ -256,20 +269,6 @@ begin
                     working_desc.strideC <= dfu_rdata[15:0];
                 end
 
-                //--------------------------------------------------
-                // Word 6
-                //--------------------------------------------------
-
-                DESC_WORD_DATATYPE:
-                begin
-
-                    working_desc.datatype <=
-                        datatype_t'(dfu_rdata[1:0]);
-
-                    working_desc.reserved0 <=
-                        dfu_rdata[31:2];
-
-                end
 
                 //--------------------------------------------------
                 // Word 7
@@ -277,20 +276,6 @@ begin
 
                 DESC_WORD_FLAGS:
                     working_desc.flags <= dfu_rdata;
-
-                //--------------------------------------------------
-                // Word 8
-                //--------------------------------------------------
-
-                DESC_WORD_STATUS:
-                    working_desc.status <= dfu_rdata;
-
-                //--------------------------------------------------
-                // Word 9
-                //--------------------------------------------------
-
-                DESC_WORD_RESERVED:
-                    working_desc.reserved1 <= dfu_rdata;
 
                 default:
                 begin
@@ -518,6 +503,62 @@ begin
     begin
 
         dfu_re = 1'b1;
+
+    end
+
+end
+
+//==========================================================
+// Descriptor Validation
+//==========================================================
+
+always_comb
+begin
+
+    //------------------------------------------------------
+    // Defaults
+    //------------------------------------------------------
+
+    descriptor_valid      = 1'b1;
+
+    descriptor_error      = 1'b0;
+
+    descriptor_error_code = DESC_NO_ERROR;
+
+    //------------------------------------------------------
+    // Validation Checks
+    //------------------------------------------------------
+
+    if(descriptor_out_reg.rows == 16'd0)
+    begin
+
+        descriptor_valid      = 1'b0;
+
+        descriptor_error      = 1'b1;
+
+        descriptor_error_code = DESC_ERR_ROWS_ZERO;
+
+    end
+
+    else if(descriptor_out_reg.cols == 16'd0)
+    begin
+
+        descriptor_valid      = 1'b0;
+
+        descriptor_error      = 1'b1;
+
+        descriptor_error_code = DESC_ERR_COLS_ZERO;
+
+    end
+
+    else if(descriptor_out_reg.k == 16'd0)
+    begin
+
+        descriptor_valid      = 1'b0;
+
+        descriptor_error      = 1'b1;
+
+        descriptor_error_code = DESC_ERR_K_ZERO;
 
     end
 
