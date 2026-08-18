@@ -347,6 +347,6 @@ Design decisions in this project were informed by:
 
 ---
 
-*Sandesh R Gowda — Pre-final year Electronics Engineering, BMS College of Engineering, Bengaluru*  
+*Sandesh R Gowda — Final year Electronics Engineering, BMS College of Engineering, Bengaluru*  
 *Research interests: computer architecture · AI accelerator design · hardware–software co-design · design verification*  
 *GitHub: [SandyGowda-op](https://github.com/SandyGowda-op)*
