@@ -39,7 +39,7 @@ module tile_generator
     logic [15:0] remaining_rows;
     logic [15:0] remaining_cols;
     logic [15:0] remaining_k;
-
+    
     //----------------------------------------------------------
     // Address Calculation Variables
     //----------------------------------------------------------
@@ -181,16 +181,34 @@ module tile_generator
             tile_request.k_size = remaining_k;
 
         //------------------------------------------------------
-        // Transfer Size
+        // Tile Strides
         //------------------------------------------------------
 
-        // Dense Tile Generator currently transfers Matrix A.
-        // Matrix A tile dimensions = rows × k_size.
+        tile_request.stride_a =
+            descriptor.strideA;
 
-        tile_request.transfer_bytes =
-            tile_request.rows *
-            tile_request.k_size *
-            descriptor.bytes_per_element;
+        tile_request.stride_b =
+            descriptor.strideB;
+
+        //------------------------------------------------------
+// Transfer Size
+//------------------------------------------------------
+
+// Matrix A tile:
+// rows × k_size × bytes_per_element
+
+tile_request.transfer_bytes =
+    tile_request.rows *
+    tile_request.k_size *
+    descriptor.bytes_per_element;
+
+// Matrix B tile:
+// k_size × cols × bytes_per_element
+
+tile_request.transfer_bytes_b =
+    tile_request.k_size *
+    tile_request.cols *
+    descriptor.bytes_per_element;
 
         //------------------------------------------------------
         // Tile Context

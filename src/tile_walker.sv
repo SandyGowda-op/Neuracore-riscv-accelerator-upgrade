@@ -151,49 +151,47 @@ begin
             end
 
             //--------------------------------------------------
+            // K Dimension Complete
             // Advance Column
+            //--------------------------------------------------
+
+            else if (tile_reg.tile_col < max_col_index)
+            begin
+
+                tile_reg.tile_k   <= 16'd0;
+                tile_reg.tile_col <= tile_reg.tile_col + 16'd1;
+
+            end
+
+            //--------------------------------------------------
+            // K and Column Complete
+            // Advance Row
+            //--------------------------------------------------
+
+            else if (tile_reg.tile_row < max_row_index)
+            begin
+
+                tile_reg.tile_k   <= 16'd0;
+                tile_reg.tile_col <= 16'd0;
+                tile_reg.tile_row <= tile_reg.tile_row + 16'd1;
+
+            end
+
+            //--------------------------------------------------
+            // Already At Final Tile
+            //--------------------------------------------------
+            //
+            // IMPORTANT:
+            // Do not modify tile_reg here.
+            //
+            // The walker remains positioned on the final tile
+            // while done is asserted.
             //--------------------------------------------------
 
             else
             begin
 
-                tile_reg.tile_k <= 16'd0;
-
-                if (tile_reg.tile_col < max_col_index)
-                begin
-
-                    tile_reg.tile_col <= tile_reg.tile_col + 16'd1;
-
-                end
-
-            //--------------------------------------------------
-            // Advance Row
-            //--------------------------------------------------
-
-                else
-                begin
-
-                    tile_reg.tile_col <= 16'd0;
-
-                    if (tile_reg.tile_row < max_row_index)
-                    begin
-
-                        tile_reg.tile_row <= tile_reg.tile_row + 16'd1;
-
-                    end
-
-            //--------------------------------------------------
-            // Traversal Complete
-            //--------------------------------------------------
-
-                    else
-                    begin
-
-                        done_reg <= 1'b1;
-
-                    end
-
-                end
+                done_reg <= 1'b1;
 
             end
 

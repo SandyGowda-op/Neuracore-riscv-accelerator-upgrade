@@ -7,9 +7,11 @@
  *
  * Responsibilities:
  *      - Compute tile traversal limits
- *      - Control Tile Walker
+ *      - Start and advance Tile Walker
  *      - Accept generated tile requests
+ *      - Hold accepted tile request during transfer/compute
  *      - Handshake with Transfer Engine
+ *      - Launch Compute Controller
  *      - Signal descriptor completion
  *
  ******************************************************************************/
@@ -72,46 +74,81 @@ module dense_scheduler
     // Transfer Engine
     //--------------------------------------------------
 
-    input logic transfer_ready,
+    input  logic          transfer_ready,
+    input  logic          transfer_done,
 
-    output tile_request_t transfer_request
+    output logic          transfer_valid,
+    output tile_request_t transfer_request,
+
+    //--------------------------------------------------
+    // Compute Controller
+    //--------------------------------------------------
+    
+    output logic          compute_start,
+    input  logic          compute_done,
+
+    output tile_request_t  compute_request
+
 );
 
 
-//------------------------------------------------------
+//==============================================================================
 // Scheduler State Machine
-//------------------------------------------------------
+//==============================================================================
 
-typedef enum logic [2:0]
+typedef enum logic [3:0]
 {
     IDLE,
+
     START_WALKER,
+
     ISSUE_TILE,
-    WAIT_READY,
+
+    WAIT_TRANSFER,
+
+    WAIT_TRANSFER_DONE,
+
+    START_COMPUTE,
+
+    WAIT_COMPUTE_DONE,
+
+    ADVANCE_TILE,
+
     COMPLETE
 
 } dense_state_t;
+
 
 dense_state_t state;
 dense_state_t next_state;
 
 
-//------------------------------------------------------
+//==============================================================================
+// Latched Tile Request
+//==============================================================================
+//
+// Once a transfer handshake occurs, the request is preserved here.
+//
+// This is important because the Tile Generator / Tile Walker may move
+// to another tile while the current tile is still being transferred
+// or computed.
+//
+//==============================================================================
+
+tile_request_t current_request;
+
+
+//==============================================================================
 // Tile Count Calculation
-//------------------------------------------------------
+//==============================================================================
+//
+// Number of tiles required in each dimension:
 //
 // ceil(rows / TILE_M)
 // ceil(cols / TILE_N)
-// ceil(k / TILE_K)
+// ceil(k    / TILE_K)
 //
-// Example:
-//
-// rows = 130
-// TILE_M = 64
-//
-// (130 + 63) / 64 = 3 tiles
-//
-//------------------------------------------------------
+//==============================================================================
 
 always_comb
 begin
@@ -128,39 +165,60 @@ begin
 end
 
 
-//------------------------------------------------------
+//==============================================================================
 // State Register
-//------------------------------------------------------
+//==============================================================================
 
 always_ff @(posedge clk or negedge rst_n)
 begin
 
     if (!rst_n)
+    begin
+
         state <= IDLE;
 
+        current_request <= '0;
+
+    end
+
     else
+    begin
+
         state <= next_state;
+
+        //--------------------------------------------------------------
+        // Capture tile request when transfer handshake occurs.
+        //--------------------------------------------------------------
+
+        if (((state == ISSUE_TILE) ||
+            (state == WAIT_TRANSFER)) &&
+            transfer_valid &&
+            transfer_ready)
+        begin
+
+            current_request <= generated_request;
+
+        end
+
+    end
 
 end
 
-//------------------------------------------------------
+
+//==============================================================================
 // Next-State Logic
-//------------------------------------------------------
+//==============================================================================
 
 always_comb
 begin
-
-    //--------------------------------------------------
-    // Default
-    //--------------------------------------------------
 
     next_state = state;
 
     case (state)
 
-        //--------------------------------------------------
-        // Wait for a descriptor
-        //--------------------------------------------------
+        //======================================================================
+        // IDLE
+        //======================================================================
 
         IDLE:
         begin
@@ -171,83 +229,144 @@ begin
         end
 
 
-        //--------------------------------------------------
-        // Initialize Tile Walker
-        //--------------------------------------------------
+        //======================================================================
+        // START_WALKER
+        //======================================================================
 
         START_WALKER:
         begin
-
-            //--------------------------------------------------
-            // Tile Walker receives a one-cycle start pulse.
-            // The Tile Generator immediately computes the
-            // request for tile (0,0,0).
-            //--------------------------------------------------
 
             next_state = ISSUE_TILE;
 
         end
 
 
-        //--------------------------------------------------
-        // Allow Tile Generator to settle
-        //--------------------------------------------------
+        //======================================================================
+        // ISSUE_TILE
+        //======================================================================
+        //
+        // One cycle allowing the generated tile request to become visible.
+        //
+        //======================================================================
 
         ISSUE_TILE:
+begin
+
+    if (generated_request.valid && transfer_ready)
+        next_state = WAIT_TRANSFER_DONE;
+
+    else
+        next_state = WAIT_TRANSFER;
+
+end
+
+
+        //======================================================================
+        // WAIT_TRANSFER
+        //======================================================================
+        //
+        // Hold transfer_valid and transfer_request until the Transfer
+        // Engine accepts the request.
+        //
+        //======================================================================
+
+        WAIT_TRANSFER:
         begin
 
-            //--------------------------------------------------
-            // Tile Generator is purely combinational.
-            // Move directly to the transfer handshake.
-            //--------------------------------------------------
-
-            next_state = WAIT_READY;
-
-        end
-
-
-        //--------------------------------------------------
-        // Wait until Transfer Engine accepts request
-        //--------------------------------------------------
-
-        WAIT_READY:
-        begin
-
-            if (transfer_ready)
+            if (generated_request.valid &&
+                transfer_ready)
             begin
 
-                //--------------------------------------------------
-                // Current tile accepted.
-                //--------------------------------------------------
-
-                if (last_tile)
-                    next_state = COMPLETE;
-
-                else
-                    next_state = ISSUE_TILE;
+                next_state = WAIT_TRANSFER_DONE;
 
             end
 
         end
 
 
-        //--------------------------------------------------
-        // Descriptor Completed
-        //--------------------------------------------------
+        //======================================================================
+        // WAIT_TRANSFER_DONE
+        //======================================================================
+        //
+        // Transfer Engine has accepted the request.
+        //
+        // Wait until the actual data movement is complete.
+        //
+        //======================================================================
+
+        WAIT_TRANSFER_DONE:
+        begin
+
+            if (transfer_done)
+                next_state = START_COMPUTE;
+
+        end
+
+
+        //======================================================================
+        // START_COMPUTE
+        //======================================================================
+        //
+        // One-cycle pulse to Compute Controller.
+        //
+        //======================================================================
+
+        START_COMPUTE:
+        begin
+
+            next_state = WAIT_COMPUTE_DONE;
+
+        end
+
+
+        //======================================================================
+        // WAIT_COMPUTE_DONE
+        //======================================================================
+        //
+        // Hold the current tile request while computation is occurring.
+        //
+        //======================================================================
+
+        WAIT_COMPUTE_DONE:
+        begin
+
+            if (compute_done)
+                next_state = ADVANCE_TILE;
+
+        end
+
+
+        //======================================================================
+        // ADVANCE_TILE
+        //======================================================================
+
+        ADVANCE_TILE:
+        begin
+
+            if (current_request.last_tile)
+                next_state = COMPLETE;
+
+            else
+                next_state = ISSUE_TILE;
+
+        end
+
+
+        //======================================================================
+        // COMPLETE
+        //======================================================================
 
         COMPLETE:
         begin
-
-            //--------------------------------------------------
-            // Raise completion for one cycle.
-            //--------------------------------------------------
 
             next_state = IDLE;
 
         end
 
 
-        //--------------------------------------------------
+        //======================================================================
+        // Safety
+        //======================================================================
 
         default:
         begin
@@ -260,94 +379,156 @@ begin
 
 end
 
-//------------------------------------------------------
+
+//==============================================================================
 // Output Logic
-//------------------------------------------------------
+//==============================================================================
 
 always_comb
 begin
 
-    //--------------------------------------------------
-    // Default Outputs
-    //--------------------------------------------------
+    //--------------------------------------------------------------
+    // Default outputs
+    //--------------------------------------------------------------
 
-    walker_start     = 1'b0;
-    walker_next      = 1'b0;
+    walker_start = 1'b0;
+    walker_next  = 1'b0;
 
-    dense_done       = 1'b0;
+    compute_request = '0;
 
+    dense_done = 1'b0;
+
+    transfer_valid   = 1'b0;
     transfer_request = '0;
 
-    //--------------------------------------------------
-    // State Outputs
-    //--------------------------------------------------
+    compute_start = 1'b0;
+
 
     case (state)
 
-        //--------------------------------------------------
-        // Initialize Tile Walker
-        //--------------------------------------------------
+        //======================================================================
+        // START_WALKER
+        //======================================================================
 
         START_WALKER:
         begin
-
-            //--------------------------------------------------
-            // One-cycle pulse to initialize traversal
-            //--------------------------------------------------
 
             walker_start = 1'b1;
 
         end
 
 
-        //--------------------------------------------------
-        // Tile Generator Output
-        //--------------------------------------------------
+        //======================================================================
+        // ISSUE_TILE
+        //======================================================================
 
         ISSUE_TILE:
         begin
 
-            //--------------------------------------------------
-            // Tile Generator is purely combinational.
-            // Forward its generated request.
-            //--------------------------------------------------
-
             transfer_request = generated_request;
+
+            transfer_valid =
+                generated_request.valid;
 
         end
 
 
-        //--------------------------------------------------
-        // Wait for Transfer Engine
-        //--------------------------------------------------
+        //======================================================================
+        // WAIT_TRANSFER
+        //======================================================================
+        //
+        // Request remains stable while waiting for ready.
+        //
+        //======================================================================
 
-        WAIT_READY:
+        WAIT_TRANSFER:
         begin
 
-            //--------------------------------------------------
-            // Hold request until accepted.
-            //--------------------------------------------------
-
             transfer_request = generated_request;
 
-            if (transfer_ready)
-            begin
-
-                //--------------------------------------------------
-                // Advance Tile Walker only if more tiles remain.
-                //--------------------------------------------------
-
-                if (!last_tile)
-                    walker_next = 1'b1;
-
-            end
+            transfer_valid =
+                generated_request.valid;
 
         end
 
 
-        //--------------------------------------------------
-        // Descriptor Complete
-        //--------------------------------------------------
+        //======================================================================
+        // WAIT_TRANSFER_DONE
+        //======================================================================
+        //
+        // Transfer has been accepted.
+        //
+        // Keep the accepted request visible.
+        //
+        //======================================================================
+
+        WAIT_TRANSFER_DONE:
+        begin
+
+            transfer_request = current_request;
+
+        end
+
+
+        //======================================================================
+        // START_COMPUTE
+        //======================================================================
+        //
+        // Launch compute for the accepted tile.
+        //
+        // Keep current_request visible.
+        //
+        //======================================================================
+
+        START_COMPUTE:
+        begin
+
+            compute_start = 1'b1;
+            compute_request = current_request;
+
+        end
+
+
+        //======================================================================
+        // WAIT_COMPUTE_DONE
+        //======================================================================
+        //
+        // Compute Controller is processing this tile.
+        //
+        // Keep current request available.
+        //
+        //======================================================================
+
+        WAIT_COMPUTE_DONE:
+        begin
+
+            compute_request = current_request;
+
+            transfer_request = current_request;
+
+        end
+
+
+        //======================================================================
+        // ADVANCE_TILE
+        //======================================================================
+
+        ADVANCE_TILE:
+        begin
+
+            compute_request = current_request;
+
+            transfer_request = current_request;
+
+            if (!current_request.last_tile)
+                walker_next = 1'b1;
+
+        end
+
+
+        //======================================================================
+        // COMPLETE
+        //======================================================================
 
         COMPLETE:
         begin
@@ -357,7 +538,9 @@ begin
         end
 
 
-        //--------------------------------------------------
+        //======================================================================
+        // Default
+        //======================================================================
 
         default:
         begin
@@ -367,5 +550,36 @@ begin
     endcase
 
 end
+
+
+//==============================================================================
+// Simulation Instrumentation
+//==============================================================================
+
+`ifndef SYNTHESIS
+
+always_ff @(posedge clk)
+begin
+
+    $display(
+        "[SCHED_DEBUG] t=%0t state=%0d start=%0b walker_start=%0b walker_next=%0b transfer_valid=%0b transfer_ready=%0b transfer_done=%0b compute_start=%0b compute_done=%0b last_tile=%0b dense_done=%0b",
+        $time,
+        state,
+        start,
+        walker_start,
+        walker_next,
+        transfer_valid,
+        transfer_ready,
+        transfer_done,
+        compute_start,
+        compute_done,
+        current_request.last_tile,
+        dense_done
+    );
+
+end
+
+`endif
+
 
 endmodule

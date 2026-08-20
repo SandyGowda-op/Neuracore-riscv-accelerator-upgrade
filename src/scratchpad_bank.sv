@@ -136,6 +136,15 @@ always_ff @(posedge clk) begin
 
         if (compute_en) begin
 
+            `ifndef SYNTHESIS
+    $display(
+        "[SPAD_INTERNAL] t=%0t addr=%0d mem=%0d",
+        $time,
+        compute_addr,
+        $signed(mem[compute_addr])
+    );
+`endif
+
             // READ_FIRST behavior
             compute_rdata_stage1 <= mem[compute_addr];
 

@@ -5,12 +5,12 @@
  * Description :
  *      Generic DMA Transfer Engine
  *
- * Responsibilities:
- *      - Accept tile requests from the scheduler
- *      - Generate burst requests to main memory
- *      - Receive burst data
- *      - Write received data into the scratchpad
- *      - Report DMA completion
+ *      Current implementation transfers one dense tile in two phases:
+ *
+ *          Phase A : Main Memory A -> Scratchpad bank_a
+ *          Phase B : Main Memory B -> Scratchpad bank_b
+ *
+ *      The external scheduler transaction remains one tile_request_t.
  *
  ******************************************************************************/
 
@@ -49,6 +49,8 @@ module transfer_engine
     output logic [31:0] mem_req_addr,
     output logic [31:0] mem_req_bytes,
 
+    output logic mem_rready,
+
     //----------------------------------------------------------
     // Main Memory Read Data Interface
     //----------------------------------------------------------
@@ -76,156 +78,222 @@ module transfer_engine
     output logic transfer_done
 );
 
-localparam integer BYTES_PER_BEAT = DATA_WIDTH / 8;
+    localparam integer BYTES_PER_BEAT = DATA_WIDTH / 8;
 
-//----------------------------------------------------------
-// Burst Generator
-//----------------------------------------------------------
+    //----------------------------------------------------------
+    // Transfer Phase
+    //----------------------------------------------------------
 
-logic [31:0] burst_bytes;
+    typedef enum logic
+    {
+        TRANSFER_A,
+        TRANSFER_B
+    }
+    transfer_phase_t;
 
-//----------------------------------------------------------
-// Transfer Engine FSM
-//----------------------------------------------------------
+    transfer_phase_t transfer_phase;
 
-typedef enum logic [2:0]
-{
-    IDLE,
+    //----------------------------------------------------------
+    // Transfer Engine FSM
+    //----------------------------------------------------------
 
-    REQUEST_BURST,
+    typedef enum logic [2:0]
+    {
+        IDLE,
+        REQUEST_BURST,
+        WAIT_REQUEST_ACCEPT,
+        WAIT_DATA,
+        COMPLETE
+    }
+    transfer_state_t;
 
-    WAIT_REQUEST_ACCEPT,
+    transfer_state_t state;
+    transfer_state_t next_state;
 
-    WAIT_DATA,
+    //----------------------------------------------------------
+    // Latched Tile Request
+    //----------------------------------------------------------
 
-    COMPLETE
+    tile_request_t current_request;
 
-} transfer_state_t;
+    //----------------------------------------------------------
+    // DMA Working Registers
+    //----------------------------------------------------------
 
-transfer_state_t state;
-transfer_state_t next_state;
+    logic [31:0] current_address;
+    logic [31:0] bytes_remaining;
 
-//----------------------------------------------------------
-// Latched Tile Request
-//----------------------------------------------------------
+    // Scratchpad DMA address is a BYTE address.
+// scratchpad_controller converts byte address -> 32-bit word address.
+    logic [31:0] current_spad_write_addr;
 
-tile_request_t current_request;
+    logic [31:0] current_burst_bytes;
 
-//----------------------------------------------------------
-// DMA Working Registers
-//----------------------------------------------------------
+    //----------------------------------------------------------
+    // Burst Generator
+    //----------------------------------------------------------
 
-logic [31:0] current_address;
+    logic [31:0] burst_bytes;
 
-logic [31:0] bytes_remaining;
-
-logic [31:0] current_spad_address;
-
-logic [15:0] current_burst_bytes;
-
-logic [31:0] current_spad_write_addr;
-
-//----------------------------------------------------------
-// FSM Register
-//----------------------------------------------------------
-
-always_ff @(posedge clk)
-begin
-
-    if (rst)
+    always_comb
     begin
 
-        state <= IDLE;
-
-        current_request <= '0;
-
-        current_address <= '0;
-
-        bytes_remaining <= '0;
-
-        current_spad_address <= '0;
-
-        current_burst_bytes <= '0;
-
-        current_spad_write_addr <= '0;
+        if (bytes_remaining >= BURST_BYTES)
+            burst_bytes = BURST_BYTES;
+        else
+            burst_bytes = bytes_remaining;
 
     end
 
-    else
+    //----------------------------------------------------------
+    // FSM Sequential Logic
+    //----------------------------------------------------------
+
+    always_ff @(posedge clk)
     begin
 
-        //--------------------------------------------------
-        // State Register
-        //--------------------------------------------------
-
-        state <= next_state;
-
-        //--------------------------------------------------
-        // Latch Tile Request
-        //--------------------------------------------------
-
-        if(state == IDLE &&
-           tile_request_valid &&
-           tile_request_ready)
+        if (rst)
         begin
 
-            current_request <= tile_request;
+            state <= IDLE;
 
-            current_address <= tile_request.addr_a;
+            current_request <= '0;
 
-            bytes_remaining <= tile_request.transfer_bytes;
+            transfer_phase <= TRANSFER_A;
 
-            current_spad_address <= '0;
+            current_address <= '0;
+            bytes_remaining <= '0;
 
             current_spad_write_addr <= '0;
 
-            $display("[%0t] REQUEST LATCHED",$time);
-            $display("transfer_bytes = %0d",
-                     tile_request.transfer_bytes);
-            $display("addr_a         = %08h",
-                     tile_request.addr_a);
-
+            current_burst_bytes <= '0;
         end
 
-        //--------------------------------------------------
-        // Latch Burst Size
-        //--------------------------------------------------
-
-        if(state == REQUEST_BURST)
+        else
         begin
 
-            current_burst_bytes <= burst_bytes;
+            //------------------------------------------------------
+            // State register
+            //------------------------------------------------------
 
-        end
+            state <= next_state;
 
-        //--------------------------------------------------
-        // Consume Memory Beat
-        //--------------------------------------------------
+            //------------------------------------------------------
+            // Latch incoming tile request
+            //------------------------------------------------------
 
-        if(state == WAIT_DATA &&
-        mem_rvalid &&
-        spad_ready)
-        begin
-
-            if(mem_rlast)
+            if (state == IDLE &&
+                tile_request_valid &&
+                tile_request_ready)
             begin
 
-                current_address <= current_address + current_burst_bytes;
+                current_request <= tile_request;
 
-                bytes_remaining <= bytes_remaining - current_burst_bytes;
+                //--------------------------------------------------
+                // Begin with Matrix A
+                //--------------------------------------------------
 
-                current_spad_address <=
-                    current_spad_address + current_burst_bytes;
+                transfer_phase <= TRANSFER_A;
+
+                current_address <=
+                    tile_request.addr_a;
+
+                bytes_remaining <=
+                    tile_request.transfer_bytes;
 
                 current_spad_write_addr <=
-                    current_spad_address + current_burst_bytes;
+                    '0;
 
             end
-            else
+
+            //------------------------------------------------------
+            // Latch burst size
+            //------------------------------------------------------
+
+            if (state == REQUEST_BURST)
             begin
 
-                current_spad_write_addr <=
-                    current_spad_write_addr + BYTES_PER_BEAT;
+                current_burst_bytes <=
+                    burst_bytes;
+
+            end
+
+            //------------------------------------------------------
+            // Consume memory beat
+            //------------------------------------------------------
+
+            if (state == WAIT_DATA &&
+                mem_rvalid &&
+                mem_rready)
+            begin
+
+                //--------------------------------------------------
+                // Write current memory beat
+                //--------------------------------------------------
+
+                if (mem_rlast)
+                begin
+
+                    current_spad_write_addr <=
+                        current_spad_write_addr +
+                        current_burst_bytes;
+
+                    //--------------------------------------------------
+                    // A transfer completed
+                    //--------------------------------------------------
+
+                    if (transfer_phase == TRANSFER_A &&
+                        bytes_remaining == current_burst_bytes)
+                    begin
+
+                        //--------------------------------------------------
+                        // Start B phase
+                        //--------------------------------------------------
+
+                        transfer_phase <=
+                            TRANSFER_B;
+
+                        current_address <=
+                            current_request.addr_b;
+
+                        bytes_remaining <=
+                            current_request.transfer_bytes_b;
+
+                        current_spad_write_addr <=
+                            '0;
+
+                    end
+
+                    //--------------------------------------------------
+                    // B transfer completed
+                    //--------------------------------------------------
+
+                    else
+                    begin
+
+                        current_address <=
+                            current_address +
+                            current_burst_bytes;
+
+                        bytes_remaining <=
+                            bytes_remaining -
+                            current_burst_bytes;
+                    end
+
+                end
+
+                //--------------------------------------------------
+                // Intermediate beat
+                //--------------------------------------------------
+
+                else
+                begin
+
+                    current_spad_write_addr <=
+                        current_spad_write_addr +
+                        BYTES_PER_BEAT;
+
+                end
 
             end
 
@@ -233,261 +301,338 @@ begin
 
     end
 
-end
+    //----------------------------------------------------------
+    // Next State Logic
+    //----------------------------------------------------------
 
-//----------------------------------------------------------
-// Next State Logic
-//----------------------------------------------------------
+    always_comb
+    begin
 
-always_comb
-begin
+        next_state = state;
 
-    next_state = state;
+        case (state)
 
-    case(state)
+            //------------------------------------------------------
+            // Wait for scheduler
+            //------------------------------------------------------
 
-        //--------------------------------------------------
-        // Wait for Scheduler
-        //--------------------------------------------------
-
-        IDLE:
-        begin
-
-            if(tile_request_valid &&
-               tile_request_ready)
+            IDLE:
             begin
 
-                next_state = REQUEST_BURST;
-
-            end
-
-        end
-
-        //--------------------------------------------------
-        // Issue exactly one memory request
-        //--------------------------------------------------
-
-        REQUEST_BURST:
-        begin
-
-            if(mem_req_ready)
-            begin
-
-                next_state = WAIT_DATA;
-
-            end
-            else
-            begin
-
-                next_state = WAIT_REQUEST_ACCEPT;
-
-            end
-
-        end
-
-        //--------------------------------------------------
-        // Wait until memory accepts request
-        //--------------------------------------------------
-
-        WAIT_REQUEST_ACCEPT:
-        begin
-
-            if(mem_req_ready)
-            begin
-
-                next_state = WAIT_DATA;
-
-            end
-
-        end
-
-        //--------------------------------------------------
-        // Wait for memory data
-        //--------------------------------------------------
-
-        WAIT_DATA:
-        begin
-
-            if(mem_rvalid && spad_ready)
-            begin
-
-                if(mem_rlast)
+                if (tile_request_valid &&
+                    tile_request_ready)
                 begin
 
-                    if(bytes_remaining == current_burst_bytes)
-                        next_state = COMPLETE;
-                    else
-                        next_state = REQUEST_BURST;
+                    //--------------------------------------------------
+                    // Protect against an empty A transfer.
+                    //--------------------------------------------------
 
+                    if (tile_request.transfer_bytes == 0)
+                    begin
+
+                        if (tile_request.transfer_bytes_b == 0)
+                            next_state = COMPLETE;
+                        else
+                            next_state = REQUEST_BURST;
+
+                    end
+                    else
+                    begin
+                        next_state = REQUEST_BURST;
+                    end
+
+                end
+
+            end
+
+            //------------------------------------------------------
+            // Issue memory request
+            //------------------------------------------------------
+
+            REQUEST_BURST:
+            begin
+
+                if (bytes_remaining == 0)
+                begin
+
+                    //--------------------------------------------------
+                    // No data remains.
+                    //
+                    // This can occur when transitioning from A to B
+                    // for a zero-length B tile.
+                    //--------------------------------------------------
+
+                    if (transfer_phase == TRANSFER_A &&
+                        current_request.transfer_bytes_b != 0)
+                    begin
+
+                        next_state = REQUEST_BURST;
+                    end
+                    else
+                    begin
+                        next_state = COMPLETE;
+                    end
+
+                end
+                else if (mem_req_ready)
+                begin
+
+                    next_state = WAIT_DATA;
                 end
                 else
                 begin
 
+                    next_state = WAIT_REQUEST_ACCEPT;
+                end
+
+            end
+
+            //------------------------------------------------------
+            // Hold memory request until accepted
+            //------------------------------------------------------
+
+            WAIT_REQUEST_ACCEPT:
+            begin
+
+                if (mem_req_ready)
+                begin
                     next_state = WAIT_DATA;
+                end
+
+            end
+
+            //------------------------------------------------------
+            // Receive memory data
+            //------------------------------------------------------
+
+            WAIT_DATA:
+            begin
+
+                if (mem_rvalid && mem_rready)
+                begin
+
+                    if (mem_rlast)
+                    begin
+
+                        //--------------------------------------------------
+                        // Final burst of current phase
+                        //--------------------------------------------------
+
+                        if (bytes_remaining == current_burst_bytes)
+                        begin
+
+                            if (transfer_phase == TRANSFER_A)
+                            begin
+
+                                //--------------------------------------------------
+                                // A complete -> B starts
+                                //--------------------------------------------------
+
+                                if (current_request.transfer_bytes_b != 0)
+                                    next_state = REQUEST_BURST;
+                                else
+                                    next_state = COMPLETE;
+
+                            end
+                            else
+                            begin
+
+                                //--------------------------------------------------
+                                // B complete -> tile complete
+                                //--------------------------------------------------
+
+                                next_state = COMPLETE;
+
+                            end
+
+                        end
+                        else
+                        begin
+
+                            //--------------------------------------------------
+                            // More bursts remain in current phase
+                            //--------------------------------------------------
+
+                            next_state = REQUEST_BURST;
+
+                        end
+
+                    end
+                    else
+                    begin
+
+                        next_state = WAIT_DATA;
+                    end
 
                 end
 
             end
 
-        end
+            //------------------------------------------------------
+            // DMA completion pulse
+            //------------------------------------------------------
 
-        //--------------------------------------------------
-        // DMA Complete
-        //--------------------------------------------------
+            COMPLETE:
+            begin
+                next_state = IDLE;
+            end
 
-        COMPLETE:
-        begin
+            //------------------------------------------------------
+            // Recovery
+            //------------------------------------------------------
 
-            next_state = IDLE;
+            default:
+            begin
+                next_state = IDLE;
+            end
 
-        end
+        endcase
 
-        //--------------------------------------------------
+    end
 
-        default:
-        begin
+    //----------------------------------------------------------
+    // Output Logic
+    //----------------------------------------------------------
 
-            next_state = IDLE;
+    always_comb
+    begin
 
-        end
+        //------------------------------------------------------
+        // Defaults
+        //------------------------------------------------------
 
-    endcase
+        tile_request_ready = 1'b0;
 
-end
+        mem_req_valid = 1'b0;
+        mem_req_addr  = '0;
+        mem_req_bytes = '0;
 
-//----------------------------------------------------------
-// Output Logic
-//----------------------------------------------------------
+        mem_rready         = 1'b0;
 
-always_comb
-begin
+        spad_write_enable = 1'b0;
+        spad_bank         = '0;
+        spad_address      = '0;
+        spad_write_data   = '0;
 
-    //------------------------------------------------------
-    // Defaults
-    //------------------------------------------------------
+        transfer_busy = 1'b0;
+        transfer_done = 1'b0;
 
-    tile_request_ready = 1'b0;
+        //------------------------------------------------------
+        // State-dependent outputs
+        //------------------------------------------------------
 
-    mem_req_valid = 1'b0;
-    mem_req_addr  = '0;
-    mem_req_bytes = '0;
+        case (state)
 
-    spad_write_enable = 1'b0;
-    spad_bank         = '0;
-    spad_address      = '0;
-    spad_write_data   = '0;
+            //--------------------------------------------------
+            // Idle
+            //--------------------------------------------------
 
-    transfer_busy = 1'b0;
-    transfer_done = 1'b0;
-
-    //------------------------------------------------------
-    // State Outputs
-    //------------------------------------------------------
-
-    case(state)
-
-        //--------------------------------------------------
-        // Waiting for Scheduler
-        //--------------------------------------------------
-
-        IDLE:
-        begin
-            tile_request_ready = 1'b1;
-        end
-
-        //--------------------------------------------------
-        // Issue Request
-        //--------------------------------------------------
-
-        REQUEST_BURST:
-        begin
-
-            transfer_busy = 1'b1;
-
-            mem_req_valid = 1'b1;
-            mem_req_addr  = current_address;
-            mem_req_bytes = burst_bytes;
-
-        end
-
-        //--------------------------------------------------
-        // Hold request until accepted
-        //--------------------------------------------------
-
-        WAIT_REQUEST_ACCEPT:
-        begin
-
-            transfer_busy = 1'b1;
-
-            mem_req_valid = 1'b1;
-            mem_req_addr  = current_address;
-            mem_req_bytes = burst_bytes;
-
-        end
-
-        //--------------------------------------------------
-        // Waiting for memory data
-        //--------------------------------------------------
-
-        WAIT_DATA:
-        begin
-
-            transfer_busy = 1'b1;
-
-            if(mem_rvalid && spad_ready)
+            IDLE:
             begin
 
-                spad_write_enable = 1'b1;
+                tile_request_ready = 1'b1;
 
-                spad_write_data = mem_rdata;
+            end
 
-                spad_address = current_spad_write_addr;
+            //--------------------------------------------------
+            // Memory request
+            //--------------------------------------------------
 
-                spad_bank = current_request.bank_a;
+            REQUEST_BURST:
+            begin
 
-           end
+                transfer_busy = 1'b1;
 
-        end
+                if (bytes_remaining != 0)
+                begin
 
-        //--------------------------------------------------
-        // DMA Complete
-        //--------------------------------------------------
+                    mem_req_valid = 1'b1;
 
-        COMPLETE:
-        begin
+                    mem_req_addr =
+                        current_address;
 
-            transfer_done = 1'b1;
+                    mem_req_bytes =
+                        burst_bytes;
 
-        end
+                end
 
-        default:
-        begin
-        end
+            end
 
-    endcase
+            //--------------------------------------------------
+            // Memory request stalled
+            //--------------------------------------------------
 
-end
+            WAIT_REQUEST_ACCEPT:
+            begin
 
-//----------------------------------------------------------
-// Burst Generator
-//----------------------------------------------------------
+                transfer_busy = 1'b1;
 
-always_comb
-begin
+                mem_req_valid = 1'b1;
 
-    if (bytes_remaining >= BURST_BYTES)
-    begin
+                mem_req_addr =
+                    current_address;
 
-        burst_bytes = BURST_BYTES;
+                mem_req_bytes =
+                    burst_bytes;
+
+            end
+
+            //--------------------------------------------------
+            // Memory data
+            //--------------------------------------------------
+
+            WAIT_DATA:
+            begin
+
+                transfer_busy = 1'b1;
+
+                mem_rready = 1'b1;
+
+                //--------------------------------------------------
+                // Preserve existing scratchpad handshake behavior.
+                //
+                // NOTE:
+                // Scratchpad backpressure remains a known limitation
+                // and is intentionally NOT redesigned here.
+                //--------------------------------------------------
+
+                if (mem_rvalid && mem_rready)
+                begin
+
+                    spad_write_enable = 1'b1;
+
+                    spad_write_data =
+                        mem_rdata;
+
+                    spad_address =
+                        current_spad_write_addr;
+
+                    if (transfer_phase == TRANSFER_A)
+                        spad_bank = current_request.bank_a;
+                    else
+                        spad_bank = current_request.bank_b;
+
+                end
+
+            end
+
+            //--------------------------------------------------
+            // Completion
+            //--------------------------------------------------
+
+            COMPLETE:
+            begin
+
+                transfer_done = 1'b1;
+
+            end
+
+            default:
+            begin
+            end
+
+        endcase
 
     end
-    else
-    begin
-
-        burst_bytes = bytes_remaining;
-
-    end
-
-end
 
 endmodule

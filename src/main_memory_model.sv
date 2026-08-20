@@ -46,16 +46,43 @@ module main_memory_model
 
     output logic        mem_rvalid,
     output logic [63:0] mem_rdata,
-    output logic        mem_rlast
+    output logic        mem_rlast,
+
+    input logic mem_rready
 );
 
 localparam integer BYTES_PER_BEAT = DATA_WIDTH / 8;
 
 //----------------------------------------------------------
-// Simulated DRAM Base Address
+// Simulated Architectural Memory Map
+//----------------------------------------------------------
+//
+// The descriptor uses architectural addresses:
+//
+//     0x1000_0000 : Matrix A
+//     0x2000_0000 : Matrix B
+//     0x3000_0000 : Matrix C
+//
+// These are NOT physical indices into the behavioral array.
+//
+// The behavioral memory remains compact and maps the regions:
+//
+//     A -> memory[0   ...]
+//     B -> memory[256 ...]
+//
+// This allows us to preserve the descriptor-defined address space
+// without allocating hundreds of megabytes of simulation memory.
 //----------------------------------------------------------
 
-localparam logic [31:0] DRAM_BASE = 32'h1000_0000;
+localparam logic [31:0] MATRIX_A_BASE = 32'h1000_0000;
+localparam logic [31:0] MATRIX_B_BASE = 32'h2000_0000;
+localparam logic [31:0] MATRIX_C_BASE = 32'h3000_0000;
+
+localparam integer MATRIX_REGION_SIZE = 256;
+
+localparam integer MATRIX_A_OFFSET = 0;
+localparam integer MATRIX_B_OFFSET = MATRIX_REGION_SIZE;
+localparam integer MATRIX_C_OFFSET = 2 * MATRIX_REGION_SIZE;
 
 //----------------------------------------------------------
 // Behavioral Memory
@@ -179,7 +206,7 @@ begin
         //--------------------------------------------------
 
         if(state == STREAM_DATA &&
-        mem_rvalid)
+        mem_rvalid && mem_rready)
         begin
 
             if(!mem_rlast)
@@ -248,7 +275,7 @@ begin
         STREAM_DATA:
         begin
 
-            if (mem_rvalid && mem_rlast)
+            if (mem_rvalid && mem_rlast && mem_rready)
             begin
 
                 next_state = COMPLETE;
@@ -398,12 +425,48 @@ begin
     begin
 
         //--------------------------------------------------
-        // Translate CPU Address -> Local DRAM Address
-        //--------------------------------------------------
+// Architectural address translation
+//--------------------------------------------------
+//
+// Translate descriptor-visible addresses into the
+// compact behavioral memory array.
+//
 
-        beat_address =
-            (current_address - DRAM_BASE) +
-            (beat_counter * BYTES_PER_BEAT);
+if ((current_address >= MATRIX_A_BASE) &&
+    (current_address < (MATRIX_A_BASE + MATRIX_REGION_SIZE)))
+begin
+
+    beat_address =
+        MATRIX_A_OFFSET +
+        (current_address - MATRIX_A_BASE) +
+        (beat_counter * BYTES_PER_BEAT);
+
+end
+
+else if ((current_address >= MATRIX_B_BASE) &&
+         (current_address < (MATRIX_B_BASE + MATRIX_REGION_SIZE)))
+begin
+
+    beat_address =
+        MATRIX_B_OFFSET +
+        (current_address - MATRIX_B_BASE) +
+        (beat_counter * BYTES_PER_BEAT);
+
+end
+
+else
+begin
+
+    //--------------------------------------------------
+    // Unsupported architectural address.
+    //
+    // Force an out-of-range local address so the
+    // existing protection below returns zero.
+    //--------------------------------------------------
+
+    beat_address = MEMORY_SIZE;
+
+end
 
         //--------------------------------------------------
         // Assemble one beat

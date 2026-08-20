@@ -15,9 +15,9 @@ package tile_pkg;
     // Tile Configuration
     //----------------------------------------------------------
 
-    localparam int TILE_M = 64;
-    localparam int TILE_N = 64;
-    localparam int TILE_K = 64;
+    localparam int TILE_M = 8;
+    localparam int TILE_N = 8;
+    localparam int TILE_K = 8;
 
     //----------------------------------------------------------
     // Tile Context
@@ -36,29 +36,35 @@ package tile_pkg;
     //----------------------------------------------------------
 
     typedef struct packed
-    {
-        logic valid;
+{
+    logic valid;
 
-        logic last_tile;
+    logic last_tile;
 
-        tile_context_t tile_context;
+    tile_context_t tile_context;
 
-        logic [31:0] addr_a;
-        logic [31:0] addr_b;
-        logic [31:0] addr_c;
+    logic [31:0] addr_a;
+    logic [31:0] addr_b;
+    logic [31:0] addr_c;
 
-        logic [31:0] transfer_bytes;
+    // Matrix A transfer size
+    logic [31:0] transfer_bytes;
 
-        logic [15:0] rows;
-        logic [15:0] cols;
-        logic [15:0] k_size;
+    // Matrix B transfer size
+    logic [31:0] transfer_bytes_b;
 
-        logic [3:0] bank_a;
-        logic [3:0] bank_b;
-        logic [3:0] bank_c;
+    logic [15:0] rows;
+    logic [15:0] cols;
+    logic [15:0] k_size;
 
+    logic [15:0] stride_a;
+    logic [15:0] stride_b;
 
-    } tile_request_t;
+    logic [3:0] bank_a;
+    logic [3:0] bank_b;
+    logic [3:0] bank_c;
+
+} tile_request_t;
 
 //----------------------------------------------------------
 // Sparse Tile Request
@@ -105,6 +111,9 @@ typedef struct packed
     logic [15:0] cols;
 
     logic [15:0] k_size;
+
+    logic [15:0] stride_a;
+    logic [15:0] stride_b;
 
     //------------------------------------------------------
     // Scratchpad Banks
